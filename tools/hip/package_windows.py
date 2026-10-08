@@ -88,23 +88,32 @@ def main() -> int:
     ap.add_argument("--out", required=True, type=Path)
     ap.add_argument("--vision-cpu", type=Path, help="strata-vision.exe built for the CPU (tools/vision, STRATA_PORTABLE=ON)")
     ap.add_argument("--vision-hip", type=Path, help="strata-vision-hip.exe built for the same archs (STRATA_VISION_HIP=ON)")
+    ap.add_argument("--network", action="store_true", help="include the LAN expert worker library and checker")
     a = ap.parse_args()
+    a.out = a.out.resolve()
     archs = [x for x in re.split(r"[;, ]+", a.archs) if x]
     rbin = a.rocm / "bin"
     objdump = a.rocm / "lib" / "llvm" / "bin" / "llvm-objdump.exe"
     stage = a.out / "strata-windows-x64-hip"
+    if not stage.resolve().is_relative_to(a.out) or stage.is_symlink() or getattr(stage, "is_junction", lambda: False)():
+        sys.exit("refusing to replace a HIP staging directory that redirects outside the output directory")
     shutil.rmtree(stage, ignore_errors=True)
     (stage / "rocm" / "bin").mkdir(parents=True)
 
-    for p in PROGRAMS:
+    programs = PROGRAMS + (("strata_network_backend.dll", "strata-network-check.exe") if a.network else ())
+    for p in programs:
         shutil.copy2(a.build / p, stage / p)
     readers = [(src, src.name) for src in (a.vision_cpu, a.vision_hip) if src is not None]
     for src, name in readers:
         shutil.copy2(src, stage / name)
+    if a.network:
+        (stage / "tools").mkdir()
+        for name in ("network_worker.py", "gguf_reader.py", "cluster_config.py"):
+            shutil.copy2(ROOT / "tools" / name, stage / "tools" / name)
 
     # the ROCm DLLs: the programs' imports, followed through the ROCm DLLs themselves
     rocm_dlls = {p.name.lower(): p for p in rbin.glob("*.dll")}
-    need, todo, crt = [], [stage / p for p in PROGRAMS] + [stage / n for _, n in readers] + [rbin / d for d in DYNAMIC], set()
+    need, todo, crt = [], [stage / p for p in programs] + [stage / n for _, n in readers] + [rbin / d for d in DYNAMIC], set()
     while todo:
         f = todo.pop()
         for name in imports(objdump, f):
