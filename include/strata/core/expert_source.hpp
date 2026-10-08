@@ -47,6 +47,7 @@ namespace strata::core {
 
 class PeerExperts;   // multi-GPU: the second GPU's expert tier (peer_experts.hpp)
 class RemoteExperts;
+class NetworkExperts;
 struct LoadStats;
 
 namespace detail {
@@ -272,6 +273,8 @@ struct GpuPlanSink {
 
 /// The adapter's own state.  One per session, reused every layer so the token path allocates nothing (P2.T10).
 struct ExpertDispatch {
+    NetworkExperts* network = nullptr;     ///< optional authenticated LAN expert workers
+    int64_t network_entries = 0;
     strata::kernels::cpu::ExpertPool* pool = nullptr;
     ExpertSource* src = nullptr;
     RouterLookahead* lookahead = nullptr;   ///< CS-T: warms the next layer's predicted file-tier experts
