@@ -35,7 +35,7 @@ ROOT = Path(__file__).resolve().parents[2]
 ASSET = "strata-windows-x64-hip.zip"
 PROGRAMS = ("strata.exe", "strata-device.exe")
 DYNAMIC = ("amd_comgr.dll",)                     # LoadLibrary'd by amdhip64_7.dll: not in any import table
-CRT = ("msvcp140.dll", "msvcp140_1.dll", "msvcp140_2.dll", "vcruntime140.dll", "vcruntime140_1.dll")
+CRT = ("msvcp140.dll", "msvcp140_1.dll", "msvcp140_2.dll", "msvcp140_atomic_wait.dll", "vcruntime140.dll", "vcruntime140_1.dll")
 KPACKS = ("blas_lib",)       # rocblas.dll's own device code; rocSOLVER's (27 MB per arch) is never launched by Strata
 LICENSES = ("rocblas", "rocsolver", "hipblas", "hipblas-common", "hipblaslt", "amd_comgr", "rocm-core")
 NOTICE = """Strata's Windows HIP engine ships these AMD ROCm components unmodified, from AMD's TheRock Python wheels
@@ -72,20 +72,29 @@ def main() -> int:
     ap.add_argument("--archs", required=True, help="the archs the engine was compiled for, ';'-separated")
     ap.add_argument("--rocm-version", required=True)
     ap.add_argument("--out", required=True, type=Path)
+    ap.add_argument("--network", action="store_true", help="include the LAN expert worker library and checker")
     a = ap.parse_args()
+    a.out = a.out.resolve()
     archs = [x for x in re.split(r"[;, ]+", a.archs) if x]
     rbin = a.rocm / "bin"
     objdump = a.rocm / "lib" / "llvm" / "bin" / "llvm-objdump.exe"
     stage = a.out / "strata-windows-x64-hip"
+    if not stage.resolve().is_relative_to(a.out) or stage.is_symlink() or getattr(stage, "is_junction", lambda: False)():
+        sys.exit("refusing to replace a HIP staging directory that redirects outside the output directory")
     shutil.rmtree(stage, ignore_errors=True)
     (stage / "rocm" / "bin").mkdir(parents=True)
 
-    for p in PROGRAMS:
+    programs = PROGRAMS + (("strata_network_backend.dll", "strata-network-check.exe") if a.network else ())
+    for p in programs:
         shutil.copy2(a.build / p, stage / p)
+    if a.network:
+        (stage / "tools").mkdir()
+        for name in ("network_worker.py", "gguf_reader.py", "cluster_config.py"):
+            shutil.copy2(ROOT / "tools" / name, stage / "tools" / name)
 
     # the ROCm DLLs: the programs' imports, followed through the ROCm DLLs themselves
     rocm_dlls = {p.name.lower(): p for p in rbin.glob("*.dll")}
-    need, todo, crt = [], [stage / p for p in PROGRAMS] + [rbin / d for d in DYNAMIC], set()
+    need, todo, crt = [], [stage / p for p in programs] + [rbin / d for d in DYNAMIC], set()
     while todo:
         f = todo.pop()
         for name in imports(objdump, f):

@@ -50,6 +50,7 @@ namespace strata::core {
 
 class PeerExperts;   // multi-GPU: the second GPU's expert tier (peer_experts.hpp)
 class RemoteExperts;
+class NetworkExperts;
 struct LoadStats;
 
 namespace detail {
@@ -436,6 +437,8 @@ struct ForesightSwap;
 
 struct ExpertDispatch {
     ForesightSwap* fs = nullptr;   ///< Foresight swap space (STRATA_FS_SLOTS; null = off)
+    NetworkExperts* network = nullptr;     ///< optional authenticated LAN expert workers
+    int64_t network_entries = 0;
     strata::kernels::cpu::ExpertPool* pool = nullptr;
     ExpertSource* src = nullptr;
     RouterLookahead* lookahead = nullptr;   ///< CS-T: warms the next layer's predicted file-tier experts
