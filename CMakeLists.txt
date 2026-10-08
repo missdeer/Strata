@@ -473,12 +473,16 @@ if(STRATA_ENABLE_CUDA OR STRATA_ENABLE_HIP)
   # library is the honest shape of the dependency graph: core knows about devices and weights, kernels know
   # about arithmetic, and this one knows the ORDER the arithmetic happens in.
   add_library(strata_engine STATIC src/core/layer.cpp src/core/session.cpp src/core/expert_source.cpp src/core/remote_experts.cpp
+    src/core/network_experts.cpp
     src/core/remote_expert_opt.cu
     src/core/expert_cache.cpp src/core/native_head.cpp src/core/native_dense.cpp src/core/verify.cpp src/core/mtp.cpp
     src/core/conversation_snapshot.cpp src/core/conversation_state.cpp src/core/conversation_memory.cpp src/core/peer_experts.cpp
     src/core/arch_defaults.cpp src/core/vmm.cpp src/core/conversation_file.cpp)
   target_include_directories(strata_engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
   target_link_libraries(strata_engine PUBLIC strata_core strata_kernels strata_kernels_cpu ${_strata_gpu_runtime_target})
+  if(WIN32)
+    target_link_libraries(strata_engine PUBLIC ws2_32)
+  endif()
   if(STRATA_BUILD_TESTS AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/core/exchange_storage_test.cpp")
     add_executable(exchange_storage_test tests/core/exchange_storage_test.cpp)
     target_include_directories(exchange_storage_test PRIVATE include)
@@ -1167,6 +1171,11 @@ target_include_directories(strata_kernels_cpu PUBLIC include)
 # and the engine picks the kernels at run time (cpu_avx512_ok).
 if(MSVC)
   set_source_files_properties(src/kernels/cpu/expert.cpp PROPERTIES COMPILE_OPTIONS "/arch:AVX512")
+  if(CMAKE_CXX_COMPILER_ID MATCHES "^(Clang|IntelLLVM)$")
+    # clang-cl/icx-cl's /arch:AVX512 does not include VNNI or VBMI, both used by this kernel.
+    set_property(SOURCE src/kernels/cpu/expert.cpp APPEND PROPERTY COMPILE_OPTIONS
+                 /clang:-mavx512vnni /clang:-mavx512vbmi)
+  endif()
   set_source_files_properties(src/kernels/cpu/q2_avx2.cpp PROPERTIES COMPILE_OPTIONS "/arch:AVX2")
 else()
   # GCC/Clang spell it differently, and `-mavx512vnni` alone is not enough: VBMI is a separate feature bit.
@@ -1305,6 +1314,24 @@ if(STRATA_NATIVE_EXPERTS)
   endif()
   target_link_libraries(strata_kernels_cpu PUBLIC ggml-cpu ggml-base)
   target_compile_definitions(strata_kernels_cpu PUBLIC STRATA_NATIVE_EXPERTS=1)
+  # The helper PCs load only expert kernels through this C ABI, with no engine/session allocations.
+  option(STRATA_BUILD_NETWORK_BACKEND "Build the LAN expert worker library" ON)
+  if(STRATA_BUILD_NETWORK_BACKEND)
+    set_target_properties(strata_kernels_cpu PROPERTIES POSITION_INDEPENDENT_CODE ON)
+    add_library(strata_network_backend SHARED src/program/network_backend.cpp)
+    target_link_libraries(strata_network_backend PRIVATE strata_kernels_cpu strata_warnings)
+    if(STRATA_ENABLE_CUDA OR STRATA_ENABLE_HIP)
+      set_target_properties(strata_kernels strata_core PROPERTIES POSITION_INDEPENDENT_CODE ON)
+      target_compile_definitions(strata_network_backend PRIVATE STRATA_NETWORK_GPU=1)
+      target_include_directories(strata_network_backend PRIVATE ${_strata_gpu_include_directories})
+      target_link_libraries(strata_network_backend PRIVATE strata_kernels ${_strata_gpu_runtime_target})
+    endif()
+    add_executable(strata-network-check tools/network_check.cpp src/core/network_experts.cpp)
+    target_link_libraries(strata-network-check PRIVATE strata_network_backend strata_kernels_cpu strata_warnings)
+    if(WIN32)
+      target_link_libraries(strata-network-check PRIVATE ws2_32)
+    endif()
+  endif()
   if(STRATA_BUILD_TESTS)
     # the Q5_1 block dequantizer (a Q5_1 PLE table) against ggml's, synthetic blocks: no model, no GPU
     add_executable(dequant_q5_1_test tests/core/dequant_q5_1_test.cpp)
