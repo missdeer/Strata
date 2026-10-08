@@ -61,3 +61,12 @@ build-vision-cuda12.bat
 
 /.ccache/
 /.rocm-win/
+
+# Local SDK downloads, generated smoke binaries and cluster credentials.
+/tmp/hip-pip-cache/
+/tmp/cluster-hip-preflight/
+/tmp/cluster-hip-build/
+/tmp/*.exe*
+/tmp/dual-host-test/*.key
+/tmp/dual-host-test/*.pid
+/tmp/commit_message.txt

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "cluster_id": "strata-iq3-s-lan",
+  "revision": 3,
+  "model": {"name": "qwen3.8-flash-next-iq3_s", "layers": 48, "experts": 512},
+  "scheduler": {"policy": "expert-ranges", "local_gpu_cache_first": true, "timeout_ms": 5000},
+  "nodes": [
+    {
+      "id": "host16", "online": true, "role": "coordinator", "host": "172.16.0.16",
+      "server_config": "D:/Projects/Strata/strata-iq3_s.json",
+      "engine": "D:/Projects/Strata/build-intel/strata.exe",
+      "context": 16384, "prefill": 512
+    },
+    {
+      "id": "host11", "online": true, "role": "expert-worker", "host": "172.16.0.11", "port": 18500,
+      "backend": "cpu", "device": 0, "workers": 7, "ram_cache_mib": 24576, "gpu_cache_mib": 4096,
+      "pack": "D:/Strata-data/packs/iq3_s",
+      "native": "D:/Strata-data/models/IQ3_S/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_S-00001-of-00002.gguf",
+      "library": "D:/Strata/build-network-cpu/strata_network_backend.dll",
+      "expert_ranges": [[0, 255]]
+    },
+    {
+      "id": "host17", "online": true, "role": "expert-worker", "host": "172.16.0.17", "port": 18500,
+      "backend": "gpu", "device": 0, "workers": 0, "ram_cache_mib": 8192, "gpu_cache_mib": 4096,
+      "pack": "D:/Strata-data/packs/iq3_s",
+      "native": "D:/Strata-data/models/IQ3_S/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_S-00001-of-00002.gguf",
+      "library": "D:/Strata/engine-hip/strata_network_backend.dll",
+      "expert_ranges": [[256, 383]]
+    },
+    {
+      "id": "host18", "online": true, "role": "expert-worker", "host": "172.16.0.18", "port": 18500,
+      "backend": "cpu", "device": 0, "workers": 0, "ram_cache_mib": 8192, "gpu_cache_mib": 4096,
+      "pack": "D:/Strata-data/packs/iq3_s",
+      "native": "D:/Strata-data/models/IQ3_S/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_S-00001-of-00002.gguf",
+      "library": "D:/Strata/build-network-cpu/strata_network_backend.dll",
+      "expert_ranges": [[384, 511]]
+    }
+  ]
+}

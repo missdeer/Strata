@@ -1,5 +1,8 @@
 # Strata on two or more GPUs (layer split)
 
+Cards in different PCs use a separate experimental LAN expert-worker path:
+[MULTI_HOST.md](MULTI_HOST.md). The layer split on this page shares RAM inside one PC.
+
 One model can run across several NVIDIA cards in one PC. The layers are split into contiguous ranges, one per GPU:
 the first card runs layers 0 to K-1, the next card runs K onward, and so on; the last card also runs the output head
 and the draft (MTP) layer. Each card keeps an expert cache for **its own layers only**, so two cards hold about twice

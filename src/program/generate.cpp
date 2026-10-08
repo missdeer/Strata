@@ -30,6 +30,7 @@
 #include "strata/core/foresight_swap.hpp"
 #include "strata/core/pinned.hpp"
 #include "strata/core/remote_experts.hpp"
+#include "strata/core/network_experts.hpp"
 #include "strata/core/on_device.hpp"
 #include "strata/core/peer_experts.hpp"
 #include "strata/core/layer.hpp"
@@ -321,6 +322,9 @@ bool resident_stage_swaps(strata::core::FileExpertSource& src, const std::vector
 }
 
 struct Options {
+    std::string network_workers;
+    std::string network_assignment, network_config_id;
+    int network_timeout_ms = 5000;
     std::string pack = "pack/full";
     std::vector<int64_t> tokens;      // the prompt, PRE-TOKENIZED
     int64_t max_new = 16;
@@ -857,6 +861,9 @@ void usage() {
                  "  --expert-cache-device2 N|auto  fill CUDA2 with more experts\n"
                  "  --expert-cache-device3 N|auto  fill CUDA3 with more experts\n"
                  "  --remote-expert-opt   enable remote-expert decode optimizations (serve mode)\n"
+                 "  --network-workers IPv4:port[,IPv4:port]  LAN expert workers (native pack, serve)\n"
+                 "                       STRATA_NETWORK_KEY authenticates; mmap + local prefill.\n"
+                 "  --network-timeout-ms N  per-layer deadline, default 5000 (100..60000)\n"
                  "  --expert-cache-remote-placement stripe|layer  distribute expert ranks or whole\n"
                  "                       layers across CUDA1..3 (default: stripe)\n"
                  "  --peer-device N      a second GPU as an adaptive expert-cache tier (rows over P2P; it also\n"
@@ -1892,6 +1899,10 @@ int main(int argc, char** argv) {
             o.expert_cache_remote_auto[r] = v == "auto";
             o.expert_cache_remote[r] = v == "auto" ? std::numeric_limits<int>::max() : std::atoi(v.c_str());
         }
+        else if (a == "--network-workers") o.network_workers = next("--network-workers");
+        else if (a == "--network-timeout-ms") o.network_timeout_ms = std::atoi(next("--network-timeout-ms"));
+        else if (a == "--network-assignment") o.network_assignment = next("--network-assignment");
+        else if (a == "--network-config-id") o.network_config_id = next("--network-config-id");
         else if (a == "--remote-expert-opt") o.remote_expert_opt = true;
         else if (a == "--expert-cache-remote-placement")
             o.expert_cache_remote_placement = next("--expert-cache-remote-placement");
@@ -2242,6 +2253,24 @@ int main(int argc, char** argv) {
                                  "GPUs, not \"24,12,6,6\" (got \"%s\")\n", n_dev - 1, o.layer_split.c_str());
             return 2;
         }
+    }
+    if (!o.network_workers.empty()) {
+        const char* key = std::getenv("STRATA_NETWORK_KEY");
+        if (!o.serve || o.native_preset.empty() || o.no_pool || !o.layer_split.empty() ||
+            o.peer_device >= 0 || o.expert_cache_remote[0] > 0 || o.batch != 0 || o.pipeline_windows != 0 ||
+            key == nullptr || std::strlen(key) < 16 || std::strlen(key) > 256 ||
+            o.network_timeout_ms < 100 || o.network_timeout_ms > 60000) {
+            std::fprintf(stderr, "strata: --network-workers requires --serve, --native, the expert pool, "
+                                 "single-conversation mode, and STRATA_NETWORK_KEY (16..256 bytes); "
+                                 "no layer split, peer/helper GPU, batch, or pipeline-windows. "
+                                 "Timeout must be 100..60000 ms.\n");
+            return 2;
+        }
+        o.mmap_experts = true;
+        // Network experts own decode misses. A local PCIe probe only measures a competing placement.
+        o.pcie_frac = 0;
+        o.short_read = 0;
+        std::fprintf(stderr, "strata: LAN expert workers enabled; mmap experts, local prefill, PCIe share 0\n");
     }
     bool multi_gpu = !split_devs.empty() && !split_same;   // cleared by --split-skip-if-fits before any stage loads
     bool split_own_auto = false;   // #340: the split keeps own prompt buffers by its rule (not --no-prefill-borrow)
@@ -5377,6 +5406,17 @@ int main(int argc, char** argv) {
     drive.d.src = srcp;
     drive.d.n_expert = g.n_expert;
     drive.d.jobs.resize((size_t) K);
+    strata::core::NetworkExperts network;
+    if (!o.network_workers.empty()) {
+        if (!network.open(o.network_workers, std::getenv("STRATA_NETWORK_KEY"), o.network_timeout_ms,
+                          [&](int64_t l, int64_t e) { return srcp->blob(l, e); }, g.n_layers, g.n_expert, err,
+                          o.network_assignment, o.network_config_id)) {
+            std::fprintf(stderr, "strata: %s\n", err.c_str());
+            return 1;
+        }
+        drive.d.network = &network;
+        std::fprintf(stderr, "strata: network workers connected: %s\n", o.network_workers.c_str());
+    }
     // CS-T: routing-aware prefetch of the file tier (the GGUF in place): the next layer's router on this layer's MoE
     // input predicts its experts and their pages are warmed meanwhile.  It only warms pages; STRATA_LOOKAHEAD=0 is
     // the A/B arm, STRATA_LOOKAHEAD_K the experts per token (default 10).
@@ -5387,7 +5427,7 @@ int main(int argc, char** argv) {
                           [] { const char* v = std::getenv("STRATA_FS_AHEAD"); return v == nullptr || std::atoi(v) != 0; }();
     // STRATA_LOOKAHEAD_STATS=1 (measurement only): run the predictor on any tier and score it against the real routing
     const bool la_stats = srcp != nullptr && [] { const char* v = std::getenv("STRATA_LOOKAHEAD_STATS"); return v != nullptr && std::atoi(v) != 0; }();
-    if (srcp != nullptr && ((srcp == &src && src.warms()) || fs_ahead || la_stats) &&
+    if (o.network_workers.empty() && srcp != nullptr && ((srcp == &src && src.warms()) || fs_ahead || la_stats) &&
         [] { const char* v = std::getenv("STRATA_LOOKAHEAD"); return v == nullptr || std::atoi(v) != 0; }()) {
         std::vector<std::vector<uint16_t>> routers((size_t) g.n_layers);
         bool ok = true;
@@ -10678,7 +10718,8 @@ int main(int argc, char** argv) {
                     std::fprintf(stderr, "strata serve: aux cpus %s for this request%s\n", strata::aux_cpus::enabled() ? "ON" : "off",
                                  want && !strata::aux_cpus::enabled() ? " (asked for, but no CPU is spare: see the start-up line)" : "");
             }
-            drive.d.pcie_num = std::max(0, std::min(256, (int) (req_pcie_frac * 256.0 + 0.5)));
+            drive.d.pcie_num = o.network_workers.empty()
+                ? std::max(0, std::min(256, (int) (req_pcie_frac * 256.0 + 0.5))) : 0;
             // a layer split: CUDA0's share as asked; a later GPU keeps its own (its link) unless the request sets one
             for (int st = 0; st < split_drive.n; ++st)
                 split_drive.pcie_num[st] = (st == 0 || split_same || req_pcie_frac != o.pcie_frac)
@@ -10867,7 +10908,7 @@ int main(int argc, char** argv) {
             // CS-T: the RAM and file tiers of this request (the mmap source; 0 with the arena)
             const int64_t ram0 = src.ram_reads(), files0 = src.file_reads();
             const uint64_t file_bytes0 = src.file_read_bytes();
-            const int64_t decode_look0 = drive.d.cache_hits + drive.d.cache_admitted + drive.d.cache_refused;
+            const int64_t decode_look0 = drive.d.cache_hits + drive.d.cache_admitted + drive.d.cache_refused + drive.d.network_entries;
             const int64_t offload0 = drive.d.offload_entries;   // #588
             pcie_auto.mark(drive.d.ms_run, drive.d.multi_misses);   // the prompt's windows are not the decode's
             if (cancelled) finish = "cancel";
@@ -11857,7 +11898,7 @@ int main(int argc, char** argv) {
                              (unsigned long long) h_pool_full, ss.ple_prev[0], ss.ple_prev[1]);
             }
             const int64_t req_hits = drive.d.cache_hits - decode_hits0;
-            const int64_t req_look = (drive.d.cache_hits + drive.d.cache_admitted + drive.d.cache_refused) - decode_look0;
+            const int64_t req_look = (drive.d.cache_hits + drive.d.cache_admitted + drive.d.cache_refused + drive.d.network_entries) - decode_look0;
             const int64_t req_offload = drive.d.offload_entries - offload0;
             // #471: the prompt tokens this request read - all the fresh ones, or as far as the prompt pass got when a
             // cancel stopped it part-way (a cancelled request used to be logged and counted as having read them all)
@@ -12052,6 +12093,7 @@ int main(int argc, char** argv) {
                                      "of %lld windows\n", (long long) t2_rej[0], (long long) t2_hit[0], (long long) t2_rej[1],
                              (long long) t2_hit[1], (long long) t2_rej[2], (long long) t2_hit[2], (long long) t2_rej[3],
                              (long long) t2_hit[3], (long long) dec_windows);
+            if (!o.network_workers.empty()) network.report();
             for (int r = 0; r < 3; ++r) if (o.expert_cache_remote[(size_t) r] > 0)
                 std::fprintf(stderr, "strata serve: CUDA%d: %lld expert entries, %lld active layer launches, %.1f MiB returned "
                                      "(%.1f MiB with full rows) in this request; host %.0f ms staging+launching, %.0f ms "

@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "cluster_id": "strata-iq3-s-dual-host-test",
+  "revision": 4,
+  "model": {
+    "name": "qwen3.8-flash-next-iq3_s",
+    "layers": 48,
+    "experts": 512
+  },
+  "scheduler": {
+    "policy": "expert-ranges",
+    "local_gpu_cache_first": true,
+    "timeout_ms": 5000
+  },
+  "nodes": [
+    {
+      "id": "host16",
+      "online": true,
+      "role": "coordinator",
+      "host": "192.168.233.136",
+      "server_config": "D:\\Projects\\Strata\\tmp\\dual-host-test\\server.json",
+      "engine": "D:\\Projects\\Strata\\dist\\cluster\\host16\\strata.exe",
+      "context": 131072,
+      "prefill": 512
+    },
+    {
+      "id": "host11",
+      "online": true,
+      "role": "expert-worker",
+      "host": "192.168.233.126",
+      "port": 18500,
+      "backend": "cpu",
+      "device": 0,
+      "workers": 7,
+      "ram_cache_mib": 49152,
+      "preload_experts": true,
+      "gpu_cache_mib": 4096,
+      "pack": "D:/Strata-data/packs/iq3_s",
+      "native": "D:/Strata-data/models/IQ3_S/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_S-00001-of-00002.gguf",
+      "library": "D:/Strata/strata_network_backend.dll",
+      "expert_ranges": [
+        [
+          0,
+          511
+        ]
+      ]
+    }
+  ]
+}

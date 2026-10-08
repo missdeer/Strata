@@ -3,6 +3,7 @@
 #include "strata/core/foresight_swap.hpp"
 #include "strata/core/on_device.hpp"
 #include "strata/platform/aux_cpus.hpp"
+#include "strata/core/network_experts.hpp"
 #include "strata/core/remote_experts.hpp"
 #include "strata/core/peer_experts.hpp"
 #include "strata/kernels/cpu/expert_layout.hpp"
@@ -3719,6 +3720,12 @@ void expert_pool_dispatch_multi(ExpertDispatch& d, const float* x_f, const int32
         }
     }
     static const bool dec_batch = [] { const char* v = std::getenv("STRATA_DEC_BATCH"); return v == nullptr || std::atoi(v) != 0; }();
+    if (d.network != nullptr) {
+        static thread_local std::string network_error;
+        if (!d.network->begin(d.layers, x_f, ids, n_tok, k, kind, network_error)) {
+            d.failed = true; d.fail = network_error.c_str(); d.fail_layer = d.layers; return;
+        }
+    }
     // the GPU's copy_rows_from_mapped zeroes the rows it computed itself (dec_batch); STRATA_VERIFY_DEVICE_PLAN's
     // copy_or_zero_from_mapped copies every row, so there the host still zeroes them
     static const bool device_plan = [] { const char* v = std::getenv("STRATA_VERIFY_DEVICE_PLAN"); return v != nullptr && std::atoi(v) != 0; }();
@@ -3770,6 +3777,7 @@ void expert_pool_dispatch_multi(ExpertDispatch& d, const float* x_f, const int32
             }
             if (kind[i] >= 0) {             // CUDA0, PCIe, or a remote/peer result staged into this row below
                 if (kind[i] == 0) ++d.cache_hits;
+                else if (kind[i] == 3) ++d.network_entries;
                 else ++d.offload_entries;                       // #588: PCIe or another GPU
                 if (kind[i] == 2 && d.peer != nullptr) ++d.peer_entries;
                 // multi-GPU: a direct peer launch is writing this row right now - zeroing it would race it;
@@ -3808,6 +3816,12 @@ void expert_pool_dispatch_multi(ExpertDispatch& d, const float* x_f, const int32
     if (njobs > 0) {
         if (native) d.pool->run_split_multi_native(lay.fmt[(size_t) d.layers], d.jobs_multi.data(), njobs);
         else d.pool->run_split_multi(d.jobs_multi.data(), njobs);
+    }
+    if (d.network != nullptr) {
+        static thread_local std::string network_error;
+        if (!d.network->finish(out, network_error)) {
+            d.failed = true; d.fail = network_error.c_str(); d.fail_layer = d.layers; return;
+        }
     }
     if (d.remote_count > 0) {
         static thread_local std::string remote_error;
