@@ -186,6 +186,8 @@ struct NetworkExperts::Impl {
     int timeout_ms = 5000;
     int64_t layers = 0, experts = 0;
     bool failed = false;
+    bool reduce = false;
+    int64_t tokens = 0;
 };
 NetworkExperts::NetworkExperts() : impl_(std::make_unique<Impl>()) {}
 NetworkExperts::~NetworkExperts() = default;
@@ -193,7 +195,7 @@ NetworkExperts::~NetworkExperts() = default;
 bool NetworkExperts::open(const std::string& endpoints, const std::string& key, int timeout_ms,
                           const std::function<const uint8_t*(int64_t, int64_t)>& blob,
                           int64_t layers, int64_t experts, std::string& error,
-                          const std::string& assignment, const std::string& config_id) {
+                          const std::string& assignment, const std::string& config_id, bool reduce) {
     try {
         if (!impl_->workers.empty()) throw std::runtime_error("network experts: already open");
         if (key.size() < 16 || key.size() > 256 || timeout_ms < 100 || timeout_ms > 60000)
@@ -203,6 +205,7 @@ bool NetworkExperts::open(const std::string& endpoints, const std::string& key, 
         if (!initialized) throw std::runtime_error("network experts: WSAStartup failed");
 #endif
         impl_->timeout_ms = timeout_ms; impl_->layers = layers; impl_->experts = experts;
+        impl_->reduce = reduce;
         std::vector<std::string> peers;
         for (size_t from = 0;;) {
             const auto end = endpoints.find(',', from);
@@ -272,7 +275,7 @@ bool NetworkExperts::open(const std::string& endpoints, const std::string& key, 
                 hello.insert(hello.end(), assignment.begin(), assignment.end());
             }
             hello.insert(hello.end(), key.begin(), key.end());
-            const auto reply = exchange(w->socket, 0, configured ? 3 : 1, std::move(hello), deadline);
+            const auto reply = exchange(w->socket, 0, reduce ? (configured ? 6 : 5) : (configured ? 3 : 1), std::move(hello), deadline);
             if (!reply.empty()) throw std::runtime_error("network experts: invalid handshake result");
             w->start_io();
             impl_->workers.push_back(std::move(w));
@@ -282,12 +285,14 @@ bool NetworkExperts::open(const std::string& endpoints, const std::string& key, 
 }
 
 bool NetworkExperts::begin(int64_t layer, const float* x, const int32_t* ids, int64_t tokens, int64_t k,
-                           int32_t* kind, std::string& error) {
+                           int32_t* kind, std::string& error, const float* weights, const uint8_t* local) {
     try {
         if (impl_->failed) throw std::runtime_error("network experts: connection unusable; restart the engine");
         if (tokens < 1 || tokens > strata::kernels::cpu::MAXT || k < 1 || k > 10 ||
             layer < 0 || layer >= impl_->layers)
             throw std::runtime_error("network experts: invalid task geometry");
+        if (impl_->reduce && !weights) throw std::runtime_error("network experts: reduced tasks require router weights");
+        impl_->tokens = tokens;
         impl_->owned.assign(static_cast<size_t>(tokens * k), 0);
         for (auto& w : impl_->workers) {
             if (w->pending.valid()) throw std::runtime_error("network experts: previous layer still pending");
@@ -296,6 +301,9 @@ bool NetworkExperts::begin(int64_t layer, const float* x, const int32_t* ids, in
         for (int64_t r = 0; r < tokens * k; ++r) {
             if (ids[r] < 0 || ids[r] >= impl_->experts) throw std::runtime_error("network experts: invalid expert id");
             if (kind[r] >= 0) continue;
+            if (local && local[r]) continue;
+            if (impl_->reduce && !std::isfinite(weights[r]))
+                throw std::runtime_error("network experts: non-finite router weight");
             const auto owner = impl_->assignment.empty() ? static_cast<size_t>(ids[r]) % impl_->workers.size()
                 : impl_->assignment[static_cast<size_t>(ids[r])];
             auto& w = impl_->workers[owner];
@@ -308,34 +316,46 @@ bool NetworkExperts::begin(int64_t layer, const float* x, const int32_t* ids, in
             if (w->rows.empty()) continue;
             Bytes task;
             put(task, layer); put(task, tokens); put(task, k); put(task, w->rows.size());
-            for (auto r : w->rows) { put(task, r); put(task, ids[r]); }
+            for (auto r : w->rows) {
+                put(task, r); put(task, ids[r]);
+                if (impl_->reduce) floats(task, weights + r, 1);
+            }
             floats(task, x, static_cast<size_t>(tokens) * strata::kernels::cpu::H);
             w->start = Clock::now(); ++w->requests; w->entries += w->rows.size(); w->tx += task.size() + 24;
             const auto deadline = w->start + std::chrono::milliseconds(impl_->timeout_ms);
             const auto seq = ++w->sequence;
-            w->submit(std::packaged_task<Bytes()>([w, seq, deadline, task = std::move(task)]() mutable {
-                return exchange(w->socket, seq, 2, std::move(task), deadline);
+            const uint32_t type = impl_->reduce ? 4 : 2;
+            w->submit(std::packaged_task<Bytes()>([w, seq, deadline, type, task = std::move(task)]() mutable {
+                return exchange(w->socket, seq, type, std::move(task), deadline);
             }));
         }
         return true;
     } catch (const std::exception& e) { error = e.what(); impl_->failed = true; return false; }
 }
-bool NetworkExperts::finish(float* out, std::string& error) {
+bool NetworkExperts::finish(float* out, std::string& error, float* sum, int32_t* mask) {
     try {
+        if (impl_->reduce && (!sum || !mask))
+            throw std::runtime_error("network experts: missing reduced result buffers");
         for (auto& w : impl_->workers) {
             if (!w->pending.valid()) continue;
             const auto reply = w->pending.get();
-            const size_t expected = w->rows.size() * strata::kernels::cpu::H * 4;
+            const size_t count = impl_->reduce ? static_cast<size_t>(impl_->tokens) : w->rows.size();
+            const size_t expected = count * strata::kernels::cpu::H * 4;
             if (reply.size() != expected) throw std::runtime_error("network experts: wrong result size");
             w->rx += reply.size() + 24;
             w->ms += std::chrono::duration<double, std::milli>(Clock::now() - w->start).count();
-            for (size_t j = 0; j < w->rows.size(); ++j)
+            for (size_t j = 0; j < count; ++j)
                 for (size_t h = 0; h < strata::kernels::cpu::H; ++h) {
                     const uint32_t bits = static_cast<uint32_t>(get(reply.data() + (j * strata::kernels::cpu::H + h) * 4));
                     float v; std::memcpy(&v, &bits, 4);
                     if (!std::isfinite(v)) throw std::runtime_error("network experts: non-finite result");
-                    out[static_cast<size_t>(w->rows[j]) * strata::kernels::cpu::H + h] = v;
+                    if (impl_->reduce) {
+                        float& dst = sum[j * strata::kernels::cpu::H + h];
+                        dst += v;
+                        if (!std::isfinite(dst)) throw std::runtime_error("network experts: non-finite accumulated result");
+                    } else out[static_cast<size_t>(w->rows[j]) * strata::kernels::cpu::H + h] = v;
                 }
+            if (impl_->reduce) for (auto row : w->rows) mask[row] = 1;
         }
         return true;
     } catch (const std::exception& e) { error = e.what(); impl_->failed = true; return false; }

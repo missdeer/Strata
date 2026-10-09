@@ -26,6 +26,22 @@ def base():
 
 
 class PlanTests(unittest.TestCase):
+    def test_network_optimization_settings(self):
+        data = base()
+        original = ClusterConfig(data).digest
+        data['nodes'][0].update(network_reduce=True, network_local_ram_mib=4096)
+        plan = ClusterConfig(data)
+        self.assertNotEqual(original, plan.digest)
+        cfg = make_config({'args': ['--native', 'model', '--network-reduce', '--network-local-ram-mib', '99']},
+                          plan.endpoints, reduce=True, local_ram_mib=4096)
+        self.assertEqual(cfg['args'].count('--network-reduce'), 1)
+        at = cfg['args'].index('--network-local-ram-mib')
+        self.assertEqual(cfg['args'][at + 1], '4096')
+        for key, value in (('network_reduce', 1), ('network_local_ram_mib', True), ('network_local_ram_mib', -1)):
+            bad = base()
+            bad['nodes'][0][key] = value
+            with self.assertRaises(ValueError):
+                ClusterConfig(bad)
     def test_two_hosts(self):
         plan = load_cluster(ROOT / "configs/cluster-2hosts.json")
         self.assertEqual(plan.assignment, "0" * 512)

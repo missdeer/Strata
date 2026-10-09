@@ -24,6 +24,11 @@ HEADER = struct.Struct("<IIQII")
 H, FF, MAXT, MAX_BODY = 2560, 640, 8, 2 << 20
 
 
+def all_finite(data):
+    """Compatibility path for older worker libraries and protocol-only tests."""
+    return all(math.isfinite(v[0]) for v in struct.iter_unpack("<f", data))
+
+
 def available_memory_bytes():
     """Available physical RAM and Windows commit capacity; no driver or machine settings are changed."""
     if os.name == "nt":
@@ -242,6 +247,18 @@ class NativeBackend:
             C.POINTER(C.c_float), C.c_int, C.c_int, C.POINTER(C.c_int32), C.POINTER(C.c_int32),
             C.POINTER(C.c_void_p), C.c_int, C.POINTER(C.c_float)]
         self.lib.strata_network_compute.restype = C.c_int
+        # Older deployed libraries remain usable with the original validation.
+        self._finite = getattr(self.lib, "strata_network_all_finite", None)
+        if self._finite is not None:
+            self._finite.argtypes = [C.c_void_p, C.c_uint64]
+            self._finite.restype = C.c_int
+        self._reduce = getattr(self.lib, "strata_network_reduce", None)
+        if self._reduce is not None:
+            self._reduce.argtypes = [C.POINTER(C.c_float), C.POINTER(C.c_int32), C.POINTER(C.c_float),
+                                     C.c_int, C.c_int, C.c_int, C.POINTER(C.c_float)]
+            self._reduce.restype = C.c_int
+        self.can_reduce = self._reduce is not None
+        self._allocate_buffers()
         self.handle = self.lib.strata_network_create(workers, device, gpu_cache_mib)
         self.failed = False
         if not self.handle:
@@ -255,25 +272,79 @@ class NativeBackend:
             if self.lib.strata_network_format_bytes(gu, down) != size:
                 raise ValueError("backend does not support the pack's expert geometry: " + self.error())
 
-    def compute(self, source, layer, nt, k, entries, activation):
+    def _allocate_buffers(self):
+        # The worker serializes backend calls. Return an immutable snapshot so
+        # a later task can reuse these buffers while an earlier result is sent.
+        self._rows = (C.c_int32 * (MAXT * 10))()
+        self._ids = (C.c_int32 * (MAXT * 10))()
+        self._pointers = (C.c_void_p * (MAXT * 10))()
+        self._input = (C.c_float * (MAXT * H))()
+        self._output = (C.c_float * (MAXT * 10 * H))()
+        self._weights = (C.c_float * (MAXT * 10))()
+        self._sum = (C.c_float * (MAXT * H))()
+        self.last_timings = {}
+
+    def all_finite(self, data):
+        if self._finite is None:
+            return all_finite(data)
+        # c_char_p keeps a reference to bytes without copying. Embedded NULs
+        # are fine: the C ABI receives the explicit byte length.
+        return bool(self._finite(C.cast(C.c_char_p(data), C.c_void_p), len(data)))
+
+    def compute(self, source, layer, nt, k, entries, activation, weights=None):
         if self.failed:
             raise RuntimeError("native backend failed; restart the worker")
+        started = time.perf_counter()
         n = len(entries)
-        rows = (C.c_int32 * n)(*(r for r, _ in entries))
-        ids = (C.c_int32 * n)(*(e for _, e in entries))
+        if not (1 <= nt <= MAXT and 1 <= k <= 10 and 1 <= n <= nt * k
+                and len(activation) == nt * H * 4):
+            raise ValueError("invalid native task geometry")
+        if weights is not None and (not self.can_reduce or len(weights) != n):
+            raise ValueError("native backend cannot reduce this task")
         # Hold each buffer even if a subsequent pointer lookup evicts it from the RAM cache.
         buffers = [source.pointer(layer, e) for _, e in entries]
-        pointers = (C.c_void_p * n)(*(C.addressof(b) for b in buffers))
-        x = (C.c_float * (nt * H)).from_buffer_copy(activation)
-        output = (C.c_float * (n * H))()
+        for i, (row, expert) in enumerate(entries):
+            self._rows[i], self._ids[i] = row, expert
+            self._pointers[i] = C.addressof(buffers[i])
+        C.memmove(self._input, activation, len(activation))
         gu, down = source.layers[layer][:2]
-        if not self.lib.strata_network_compute(self.handle, gu, down, layer, x, nt, n, rows, ids, pointers, k, output):
+        prepared = time.perf_counter()
+        if not self.lib.strata_network_compute(self.handle, gu, down, layer, self._input, nt, n,
+                self._rows, self._ids, self._pointers, k, self._output):
             self.failed = True
             raise RuntimeError(self.error())
-        data = bytes(output)
-        if not all(math.isfinite(v[0]) for v in struct.iter_unpack("<f", data)):
+        computed = time.perf_counter()
+        size = n * H * 4
+        result_buffer = self._output
+        data = None
+        if self._finite is not None:
+            finite = self._finite(self._output, size)
+        else:
+            data = C.string_at(self._output, size)
+            finite = all_finite(data)
+        if not finite:
             self.failed = True
             raise RuntimeError("native backend returned non-finite results")
+        checked = time.perf_counter()
+        reduced = checked
+        if weights is not None:
+            for i, weight in enumerate(weights):
+                self._weights[i] = weight
+            if not self._reduce(self._output, self._rows, self._weights, nt, n, k, self._sum):
+                self.failed = True
+                raise RuntimeError(self.error())
+            result_buffer, size, data = self._sum, nt * H * 4, None
+            reduced = time.perf_counter()
+        if data is None:
+            data = C.string_at(result_buffer, size)
+        returned = time.perf_counter()
+        self.last_timings = dict(prepare_ms=(prepared - started) * 1000,
+                                native_ms=(computed - prepared) * 1000,
+                                validate_ms=(checked - computed) * 1000,
+                                serialize_ms=(returned - checked) * 1000)
+        if weights is not None:
+            self.last_timings.update(reduce_ms=(reduced - checked) * 1000,
+                                     serialize_ms=(returned - reduced) * 1000)
         return data
 
     def close(self):
@@ -309,23 +380,29 @@ def send(conn, seq, kind, body, timeout):
     conn.sendall(HEADER.pack(MAGIC, VERSION, seq, len(body), kind) + body)
 
 
-def task(body, layers, experts, index, count, assignment=None):
+def task(body, layers, experts, index, count, assignment=None, finite_check=all_finite, reduced=False):
     if len(body) < 16:
         raise ValueError("truncated task")
     layer, nt, k, n = struct.unpack_from("<IIII", body)
     if not (0 <= layer < layers and 1 <= nt <= MAXT and 1 <= k <= 10 and 1 <= n <= nt * k):
         raise ValueError("invalid task geometry")
-    if len(body) != 16 + n * 8 + nt * H * 4:
+    stride = 12 if reduced else 8
+    if len(body) != 16 + n * stride + nt * H * 4:
         raise ValueError("invalid task size")
-    entries = list(struct.iter_unpack("<II", body[16:16 + n * 8]))
+    records = list(struct.iter_unpack("<IIf" if reduced else "<II", body[16:16 + n * stride]))
+    entries = [(v[0], v[1]) for v in records]
+    weights = [v[2] for v in records] if reduced else None
+    if weights is not None and not all(math.isfinite(v) for v in weights):
+        raise ValueError("non-finite router weight")
     if (len({r for r, _ in entries}) != n or len({(r // k, e) for r, e in entries}) != n
             or any(r >= nt * k or e >= experts or
                    (assignment[e] if assignment is not None and e < experts else e % count) != index for r, e in entries)):
         raise ValueError("invalid, duplicate, or unowned routing entry")
-    activation = body[16 + n * 8:]
-    if not all(math.isfinite(v[0]) for v in struct.iter_unpack("<f", activation)):
+    activation = body[16 + n * stride:]
+    if not finite_check(activation):
         raise ValueError("non-finite activation")
-    return layer, nt, k, entries, activation
+    args = layer, nt, k, entries, activation
+    return args + (weights,) if reduced else args
 
 
 class Worker:
@@ -344,6 +421,8 @@ class Worker:
         self.fingerprint = source.fingerprint()
         self.lock = threading.Lock()
         self.verbose, self.requests, self.entries = verbose, 0, 0
+        self.profile = os.environ.get("STRATA_NETWORK_PROFILE", "0") == "1"
+        self.finite_check = getattr(backend, "all_finite", all_finite)
 
     def session(self, conn):
         seq = 0
@@ -352,7 +431,8 @@ class Worker:
             seq, kind, hello = frame(conn, self.timeout)
             configured = self.assignment is not None
             key_offset = 28 + 64 + self.source.experts if configured else 28
-            if seq != 0 or kind != (3 if configured else 1) or len(hello) < key_offset:
+            reduced = kind == (6 if configured else 5)
+            if seq != 0 or kind not in ((3, 6) if configured else (1, 5)) or len(hello) < key_offset:
                 raise ValueError("handshake required")
             fingerprint, layers, experts, index, count, hidden = struct.unpack_from("<QIIIII", hello)
             if not hmac.compare_digest(hello[key_offset:], self.key):
@@ -363,7 +443,9 @@ class Worker:
             if (fingerprint, layers, experts, index, count, hidden) != (
                     self.fingerprint, len(self.source.layers), self.source.experts, self.index, self.count, H):
                 raise ValueError("model fingerprint, geometry, or shard assignment mismatch")
-            send(conn, seq, 131 if configured else 129, b"", self.timeout)
+            if reduced and not getattr(self.backend, "can_reduce", False):
+                raise ValueError("worker library lacks reduced results support; update the backend DLL")
+            send(conn, seq, kind + 128, b"", self.timeout)
             expected = 1
             while True:
                 # Idle sessions can remain connected between user requests indefinitely.
@@ -371,17 +453,26 @@ class Worker:
                 if not conn.recv(1, socket.MSG_PEEK):
                     return
                 seq, kind, body = frame(conn, self.timeout)
-                if kind != 2 or seq != expected:
+                if kind != (4 if reduced else 2) or seq != expected:
                     raise ValueError("unexpected task identity")
-                args = task(body, len(self.source.layers), self.source.experts, self.index, self.count, self.assignment)
+                parse_started = time.perf_counter()
+                args = task(body, len(self.source.layers), self.source.experts, self.index, self.count,
+                            self.assignment, self.finite_check, reduced)
                 started = time.perf_counter()
                 with self.lock:
                     result = self.backend.compute(self.source, *args)
-                send(conn, seq, 130, result, self.timeout)
+                    timings = self.backend.last_timings.copy() if self.profile and hasattr(self.backend, "last_timings") else {}
+                computed = time.perf_counter()
+                send(conn, seq, kind + 128, result, self.timeout)
+                sent = time.perf_counter()
                 self.requests += 1; self.entries += len(args[3])
                 if self.verbose:
+                    detail = ""
+                    if self.profile:
+                        timings.update(parse_ms=(started - parse_started) * 1000, send_ms=(sent - computed) * 1000)
+                        detail = " " + " ".join(f"{name}={value:.3f}" for name, value in timings.items())
                     print(f"task={seq} layer={args[0]} entries={len(args[3])} "
-                          f"compute_ms={(time.perf_counter() - started) * 1000:.3f} bytes={len(body) + len(result)}", flush=True)
+                          f"compute_ms={(sent - started) * 1000:.3f} bytes={len(body) + len(result)}{detail}", flush=True)
                 expected += 1
         except (EOFError, ConnectionError):
             pass
@@ -456,6 +547,7 @@ def main():
     try:
         backend = NativeBackend(args.library, args.workers, args.device if args.backend == "gpu" else -1, args.gpu_cache_mib)
         backend.validate(source)
+        print("worker finite checks: " + ("native" if backend._finite is not None else "Python (older library)"), flush=True)
         worker = Worker(source, backend, key, args.index, args.count, args.timeout,
                         assignment=plan.assignment if plan else None, config_id=plan.digest if plan else None)
         if args.preload_experts:
