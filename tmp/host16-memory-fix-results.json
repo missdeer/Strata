@@ -1,0 +1,137 @@
+[
+  {
+    "label": "cold omp hi",
+    "wall_s": 79.714,
+    "usage": {
+      "prompt_tokens": 10258,
+      "completion_tokens": 54,
+      "total_tokens": 10312,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    },
+    "timings": {
+      "cache_n": 0,
+      "prompt_n": 10258,
+      "prompt_ms": 75662.5,
+      "prompt_per_token_ms": 7.376,
+      "prompt_per_second": 135.6,
+      "predicted_n": 54,
+      "predicted_ms": 3991.8,
+      "predicted_per_token_ms": 73.922,
+      "predicted_per_second": 13.5,
+      "draft_n": 58,
+      "draft_n_accepted": 34,
+      "at": 1791519559
+    },
+    "finish_reason": "stop",
+    "message": {
+      "role": "assistant",
+      "content": "Hi! What are we working on in weiqiapps today?",
+      "reasoning_content": "The user just said \"hi.\" A simple greeting. I should respond concisely and ask what they want to do in this weiqiapps project. No tools needed.\n"
+    },
+    "memory": {
+      "used_gib": 9.607,
+      "available_gib": 22.158,
+      "percent": 30.2,
+      "pagefile_used_gib": 0.888,
+      "engines": [
+        {
+          "pid": 10600,
+          "working_set_gib": 4.129,
+          "private_commit_gib": 19.159
+        }
+      ]
+    }
+  },
+  {
+    "label": "same conversation next turn",
+    "wall_s": 7.397,
+    "usage": {
+      "prompt_tokens": 10330,
+      "completion_tokens": 40,
+      "total_tokens": 10370,
+      "prompt_tokens_details": {
+        "cached_tokens": 10313
+      }
+    },
+    "timings": {
+      "cache_n": 10313,
+      "prompt_n": 17,
+      "prompt_ms": 4426.2,
+      "prompt_per_token_ms": 260.365,
+      "prompt_per_second": 3.8,
+      "predicted_n": 40,
+      "predicted_ms": 2922.0,
+      "predicted_per_token_ms": 73.05,
+      "predicted_per_second": 13.7,
+      "draft_n": 42,
+      "draft_n_accepted": 24,
+      "at": 1791519567
+    },
+    "finish_reason": "stop",
+    "message": {
+      "role": "assistant",
+      "content": "你好！有什么需要我在 weiqiapps 项目里做的吗？",
+      "reasoning_content": "The user is asking me to reply briefly in Chinese: \"你好.\" (Hello.) A simple greeting.\n"
+    },
+    "memory": {
+      "used_gib": 9.729,
+      "available_gib": 22.036,
+      "percent": 30.6,
+      "pagefile_used_gib": 0.888,
+      "engines": [
+        {
+          "pid": 10600,
+          "working_set_gib": 4.254,
+          "private_commit_gib": 19.301
+        }
+      ]
+    }
+  },
+  {
+    "label": "new conversation same system and tools",
+    "wall_s": 5.444,
+    "usage": {
+      "prompt_tokens": 10258,
+      "completion_tokens": 54,
+      "total_tokens": 10312,
+      "prompt_tokens_details": {
+        "cached_tokens": 10253
+      }
+    },
+    "timings": {
+      "cache_n": 10253,
+      "prompt_n": 5,
+      "prompt_ms": 1358.7,
+      "prompt_per_token_ms": 271.74,
+      "prompt_per_second": 3.7,
+      "predicted_n": 54,
+      "predicted_ms": 4029.1,
+      "predicted_per_token_ms": 74.613,
+      "predicted_per_second": 13.4,
+      "draft_n": 58,
+      "draft_n_accepted": 34,
+      "at": 1791519573
+    },
+    "finish_reason": "stop",
+    "message": {
+      "role": "assistant",
+      "content": "Hi! What are we working on in weiqiapps today?",
+      "reasoning_content": "The user just said \"hi.\" A simple greeting. I should respond concisely and ask what they want to do in this weiqiapps project. No tools needed.\n"
+    },
+    "memory": {
+      "used_gib": 9.614,
+      "available_gib": 22.151,
+      "percent": 30.3,
+      "pagefile_used_gib": 0.888,
+      "engines": [
+        {
+          "pid": 10600,
+          "working_set_gib": 4.144,
+          "private_commit_gib": 19.192
+        }
+      ]
+    }
+  }
+]

@@ -42,6 +42,9 @@ def main():
     p.add_argument("--config", required=True, help="the identical cluster JSON copied to every node")
     p.add_argument("--node", help="this machine's stable node id; required except with --validate")
     p.add_argument("--validate", action="store_true", help="validate and print the static plan without starting a process")
+    p.add_argument("--no-api-key", action="store_true", help="disable coordinator API authentication on 127.0.0.1")
+    p.add_argument("--prefill", choices=("512", "1024", "2048", "4096", "8192", "auto", "auto:8192"),
+                   help="local coordinator prompt chunk override; does not change the shared worker plan")
     a = p.parse_args()
     try:
         plan = load_cluster(a.config)
@@ -60,13 +63,19 @@ def main():
             p.error("set STRATA_NETWORK_KEY to the same 16..256 byte secret on every node")
         args = command(plan, a.node)
         if node["role"] == "expert-worker":
+            if a.prefill:
+                p.error("--prefill applies only to the coordinator")
             raise SystemExit(run(args))
         source = json.loads(Path(node["server_config"]).read_text(encoding="utf-8"))
         cfg = make_config(source, plan.endpoints, node["context"], node["engine"],
                           node.get("network_reduce", False), node.get("network_local_ram_mib", 0))
+        if a.no_api_key:
+            cfg["host"] = "127.0.0.1"
+            cfg.pop("api_key", None)
+            os.environ.pop("STRATA_API_KEY", None)
         cfg["log"] = str(ROOT / "logs" / f"cluster-{a.node}.log")
         (ROOT / "logs").mkdir(exist_ok=True)
-        cfg["args"] += ["--prefill", str(node["prefill"]), "--network-assignment", plan.assignment,
+        cfg["args"] += ["--prefill", a.prefill or str(node["prefill"]), "--network-assignment", plan.assignment,
                         "--network-config-id", plan.digest, "--network-timeout-ms", str(plan.data["scheduler"]["timeout_ms"])]
         # Runtime config is private to this invocation. The installed config and shared plan are never rewritten.
         with tempfile.TemporaryDirectory(prefix="strata-cluster-") as folder:
