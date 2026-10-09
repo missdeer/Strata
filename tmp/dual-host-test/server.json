@@ -10,7 +10,7 @@
     "--expert-profile",
     "D:\\Projects\\Strata\\data\\expert-profile.bin",
     "--expert-cache",
-    "auto",
+    "2400",
     "--prefill",
     "auto",
     "--spec",
@@ -27,7 +27,11 @@
     "--prompt-cache",
     "0",
     "--adapt-every",
-    "0"
+    "0",
+    "--vram-reserve-mib",
+    "1200",
+    "--pool-affinity",
+    "p-cores"
   ],
   "cwd": "D:\\Projects\\Strata",
   "tokenizer": "D:\\Projects\\Strata-data\\packs\\iq3_s\\tokenizer",
@@ -41,5 +45,8 @@
   "host": "127.0.0.1",
   "gpu": 0,
   "gpus_asked": true,
-  "open_browser": false
+  "open_browser": false,
+  "env": {
+    "STRATA_POOL_SPIN_US": "50"
+  }
 }

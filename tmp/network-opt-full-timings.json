@@ -1,0 +1,21 @@
+{
+  "tasks": 4128,
+  "mean_ms": {
+    "compute_ms": 2.3299,
+    "prepare_ms": 0.0366,
+    "native_ms": 2.0309,
+    "validate_ms": 0.0389,
+    "serialize_ms": 0.0192,
+    "parse_ms": 0.0348,
+    "send_ms": 0.1949
+  },
+  "median_ms": {
+    "compute_ms": 2.103,
+    "prepare_ms": 0.033,
+    "native_ms": 1.7615,
+    "validate_ms": 0.04,
+    "serialize_ms": 0.019,
+    "parse_ms": 0.034,
+    "send_ms": 0.205
+  }
+}

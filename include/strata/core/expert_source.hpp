@@ -48,6 +48,7 @@ namespace strata::core {
 class PeerExperts;   // multi-GPU: the second GPU's expert tier (peer_experts.hpp)
 class RemoteExperts;
 class NetworkExperts;
+class RemoteExpertOpt;
 struct LoadStats;
 
 namespace detail {
@@ -154,6 +155,7 @@ public:
     /// Plan v0.3 P5: whether `blob(layer, expert)` lies in page-locked, CUDA-registered memory, so an
     /// asynchronous host-to-device copy can DMA it directly (no staging copy on the CPU).
     virtual bool pinned(int64_t layer, int64_t expert) const { (void) layer; (void) expert; return false; }
+    virtual bool cpu_resident(int64_t layer, int64_t expert) const { (void) layer; (void) expert; return false; }
 
     /// Called once before the first expert of a layer.  A source that reads from disk wants to start the read
     /// here so it overlaps the quantisation, and a prefetching source in Phase 3 wants the ids.
@@ -274,7 +276,10 @@ struct GpuPlanSink {
 /// The adapter's own state.  One per session, reused every layer so the token path allocates nothing (P2.T10).
 struct ExpertDispatch {
     NetworkExperts* network = nullptr;     ///< optional authenticated LAN expert workers
+    RemoteExpertOpt* network_reduce = nullptr;
+    bool network_local = false;            ///< only CPU experts already in the bounded RAM copy
     int64_t network_entries = 0;
+    int64_t network_local_entries = 0;
     strata::kernels::cpu::ExpertPool* pool = nullptr;
     ExpertSource* src = nullptr;
     RouterLookahead* lookahead = nullptr;   ///< CS-T: warms the next layer's predicted file-tier experts
@@ -521,6 +526,7 @@ public:
     // STRATA_EXCHANGE_ROTATE=1 can instead transfer buffer ownership (uniform, fully pinned/mapped slots).
     /// Whether the compact copy holds `(layer, expert)`.
     bool has_resident(int64_t layer, int64_t expert) const;
+    bool cpu_resident(int64_t layer, int64_t expert) const override { return has_resident(layer, expert); }
     /// Host room for `n` evicted blobs (page-locked when possible).  Idempotent for the same or a smaller `n`.
     bool reserve_exchanges(int64_t n, std::string& err);
     int64_t exchange_capacity() const { return xstage_cap_; }
