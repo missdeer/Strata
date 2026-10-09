@@ -70,3 +70,11 @@ build-vision-cuda12.bat
 /tmp/dual-host-test/*.key
 /tmp/dual-host-test/*.pid
 /tmp/commit_message.txt
+
+# Native text migration build/test dependencies and generated parity reports.
+/tmp/jsoncons-source/
+/tmp/jsoncons-v1.7.0.zip
+/tmp/native-text-test-deps/
+/tmp/native-text-parity*.json
+/tmp/strata-native-text-*/
+/tmp/build-native-text*.cmd

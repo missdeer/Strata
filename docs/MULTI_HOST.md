@@ -712,3 +712,27 @@ CPU worker 按显式范围运行，全部通过 C++ 专家结果对照；两个 
 ```powershell
 python tools/test_cluster_config.py --build build-network-cpu --pack D:/Strata-data/packs/iq3_s --native D:/Strata-data/models/IQ3_S/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_S-00001-of-00002.gguf --engine-config strata-iq3_s.json
 ```
+
+### 原生文本层（迁移第 3 步）
+
+显式开启 `STRATA_BUILD_NATIVE_CLUSTER=ON` 后可构建 `strata-text-check`，它读取 pack 的
+`tokenizer/` 目录和模型的 Jinja 模板，提供原生分词、消息归一化、模板渲染、思考/工具调用解析、
+增量 UTF-8、停止字符串和 JSON Schema 输出验证。它是 JSON-lines 诊断程序，主机 API 的迁移在
+`PLAN.md` 第 4 步；当前 `strata-cluster` 仍需要单独的 `strata-server` 才能启动原生主机服务。
+
+文本层复用 llama.cpp 的 Unicode/Jinja 实现，并使用 jsoncons v1.7.0（Boost Software License 1.0）。
+CMake 下载固定版本并校验 SHA256；离线构建可传 `-DSTRATA_JSONCONS_DIR=/path/to/jsoncons-1.7.0`。
+构建目录的 `native-text-licenses/` 保存依赖许可证，打包时需带上。没有 Python 运行依赖。
+SYCL 工程可单独开启 `STRATA_BUILD_NATIVE_TEXT=ON` 构建相同 host 文本目标；这不增加 SYCL 专家网络后端。
+
+Windows CPU 对照的重复命令（测试驱动需要 Python、regex、jinja2；完整 schema 对照还需要 jsonschema）：
+
+```powershell
+python tools/test_native_text.py --exe build-network/strata-text-check.exe --tokenizer D:/Projects/Strata-data/packs/iq3_s/tokenizer --report tmp/native-text-parity.json
+```
+
+2026-10-09 本机 CPU 对照 15 组通过，无跳过，包含 727 次完整 token ID 对照、10 个聊天 golden case、
+37 个工具调用 specimens 和 41 项现有 parser 回归。Unicode 路径、普通文字中的特殊 token、
+非法/跨 token UTF-8、跨 chunk 停止字符串和结构化输出错误均有对照；System32-only PATH 下原生
+程序完成分词和模板任务。CPU、CUDA sm_89、HIP gfx1102/gfx1103 配置和 SYCL host 文本目标构建通过。
+本轮没有运行 GPU 推理、验证 Linux 或 Swift 专属模板，也没有测量吞吐、延迟或切换部署服务。
