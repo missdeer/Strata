@@ -29,9 +29,9 @@
 
 ### 2. 原生集群启动入口
 
-- [ ] `strata-cluster --config cluster.json --validate/--node ID`，替代 `cluster.py` 和 `make_network_config.py`。
-- [ ] 跨平台子进程生命周期：Windows job containment、Linux 信号转发、停止和异常清理。
-- [ ] 保持本地 server 配置及共享配置不被改写；worker 可直接运行；coordinator 在第 4 步完成后直接启动原生 API。
+- [x] `strata-cluster --config cluster.json --validate/--node ID`，迁移 `cluster.py` 的启动和 `make_network_config.py` 的配置生成；旧 Python 入口继续作为对照。
+- [ ] 跨平台子进程生命周期：Windows job containment、停止和异常清理已实现；按本轮要求暂不验证 Linux port。
+- [x] 保持本地 server 配置及共享配置不被改写；worker 可直接运行；coordinator 在第 4 步完成后直接启动原生 API。当前缺少原生 API 时明确失败，可用 `--export-config` 查看配置。
 
 ### 3. tokenizer 和请求/输出语义
 
@@ -75,3 +75,9 @@
 - 本机 IQ3_S 的 7 种格式、1/3/8 个计算位置、普通/汇总模式，共 42 组 Python/native 返回字节相同。现有 C++ coordinator 的两种模式各 4 轮对照最大绝对误差为 0。本机测试不是实际 LAN 性能测量。
 - 在子进程 PATH 只含 Windows System32 的条件下，原生 worker 完成认证和专家任务；也验证了 Unicode 路径及 UTF-8 密钥。测试驱动本身仍用 Python，不把这项检查算作整套集群无 Python 验收。
 - 现有 Python 的配置、预加载和有限数/汇总测试共 36 项通过。现有服务与部署包未切换；主机 API、tokenizer、启动器和打包入口的迁移仍未完成。
+- 第 2 步新增显式启用的 `strata-cluster`：共享计划校验、原生 worker 启动、coordinator 配置生成、临时私有配置和原生 API 启动接口。保留 Python 入口及默认计算路径；`STRATA_BUILD_NATIVE_CLUSTER` 仍默认为 OFF。
+- coordinator 默认寻找同目录的 `strata-server`，第 4 步尚未提供该服务；此时启动明确报错，不会把现有引擎或简化接口当作原生 API。`--export-config` 只创建新文件，复制现有 server 设置后按共享计划生成参数；`--api-exe` 为原生服务路径覆盖。
+- Windows 子进程先挂起创建，加入 kill-on-close job 后才运行；转发 Ctrl+C/Ctrl+Break，10 秒后强制结束不响应的进程树。正常退出和启动失败清理临时配置；launcher 被强制结束时，子进程树由 job 清理，可能留下仅 owner 可读写的临时目录。
+- 本轮按用户要求仅验证 Windows；Linux 分支仍需构建和实机生命周期验证，SYCL 的网络接入边界与第 1 步相同。尚未切换服务或部署包，也未测量性能。
+- 第 2 步 Windows 便携 CPU、CUDA sm_89、HIP gfx1102/gfx1103 的启动器构建通过。新启动器测试 16 项通过（另 1 项 POSIX 权限检查跳过），覆盖 Python 配置对照、输入不变、Unicode 路径、owner-only ACL、退出码、停止超时、启动失败及 launcher 强制结束后的孙进程清理。真实原生 worker 使用合成专家包和 CPU 后端，在子进程 PATH 仅含 System32 时完成认证和任务；现有共享配置 17 项和原生 worker 15 项回归通过。未运行 GPU 任务或真实主机 API。
+- 默认路径检查：现有引擎和 Python 入口源文件未改动，新目标仅在 `STRATA_BUILD_NATIVE_CLUSTER=ON` 时添加；本轮没有改变默认参数或计算代码。
