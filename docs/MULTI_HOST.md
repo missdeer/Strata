@@ -4,6 +4,53 @@
 统一配置方案在启动时固定在线节点和专家范围，之后不自动发现机器、不自动变更分工。
 这是同一个模型、同一条生成请求的分工，不是将三个完整模型放在负载均衡器后面。
 
+## C++ 运行时迁移（第一阶段，2026-10-09）
+
+完整迁移计划和进度见 [PLAN.md](../PLAN.md)。目前已增加原生专家 worker 和共享配置校验；
+主机 API、tokenizer、集群启动器和打包入口仍在迁移范围内，整套集群目前仍需 Python。
+
+构建时显式设置 `-DSTRATA_BUILD_NATIVE_CLUSTER=ON`，然后构建 `strata-network-worker`。
+该选项默认为 OFF，需要现有原生专家和网络后端构建；CPU-only、CUDA 和 HIP 配置都支持该目标。
+JSON 和 SHA256 使用项目固定版本的 llama.cpp 中已有的 vendor 源码，不额外下载依赖。
+SYCL 的独立工程目前没有这个目标。
+
+辅助节点可以采用新的入口，继续使用相同共享 JSON 和 `STRATA_NETWORK_KEY`：
+
+```powershell
+strata-network-worker.exe --cluster-config cluster.json --validate
+strata-network-worker.exe --cluster-config cluster.json --node host11
+```
+
+worker 按配置中的 `library` 加载对应后端 DLL/共享库，不自动替换该路径。
+原生 worker 要求后端提供有限数校验和汇总入口，缺少时启动失败并要求更新后端。
+它保留协议 v1、模型指纹、配置 SHA256、专家归属、认证和 coordinator IP 限制；
+可以连接现有 C++ coordinator。该程序只运行 expert-worker，指定 coordinator 角色时明确报错。
+
+它在任务之间复用输入、输出和路由缓冲区，使用 scatter send 直接发送结果。
+单会话同步发送结束前不会复用结果缓冲区。RAM 缓存采用 LRU，任务保持所需专家的引用，
+避免后续查找淘汰当前计算仍使用的指针。与 Python 缓存相同，预算约束缓存中的专家；
+当前任务持有的已淘汰专家、映射页、计算缓冲区和库运行时还会占内存。
+完整预加载仍先检查预算、可用 RAM 和提交空间，留 8 GiB 余量，再开始监听；加载过程可取消。
+
+逐任务日志默认关闭，`STRATA_NETWORK_PROFILE=1` 可启用解析、准备、计算、校验、汇总和发送计时。
+尚无该原生 worker 的速度对照，不能从减少复制推算生成速度的提升。
+
+验证命令（测试驱动使用 Python，worker 不使用 Python）：
+
+```powershell
+python tools/test_native_cluster.py --worker build-network/strata-network-worker.exe --library build-network/strata_network_backend.dll --pack 本机IQ3_S目录 --native 本机第一片GGUF
+```
+
+CPU 构建增加 `-DSTRATA_BUILD_TESTS=ON` 并构建 `strata-network-test-backend`，可运行计算失败、
+无穷输出和汇总失败的注入检查；该测试 DLL 不应进入部署包。
+
+本机 Windows 验证：便携 CPU、CUDA sm_89、HIP gfx1102/gfx1103 配置编译通过；CPU 的 15 项
+配置/协议/预加载/故障测试通过。CUDA、HIP 编译的程序各通过 14 项通用测试，均采用 CPU 后端，
+没有执行新的 GPU 任务。IQ3_S 的 7 种格式、1/3/8 个计算位置和两种响应模式共 42 组对照
+与 Python worker 返回字节相同；现有 C++ coordinator 的普通/汇总模式各 4 轮最大绝对误差为 0。
+PATH 只含 Windows System32 时，原生 worker 完成认证和任务，也通过 Unicode 路径与密钥检查。
+这些检查没有测量真实 LAN 吞吐，没有验证 Linux，也没有切换现有部署。
+
 | 节点 | 地址 | 分工 |
 | --- | --- | --- |
 | 主机：Windows 11、i9、32 GB RAM、RTX 4060 Ti 16 GB | 172.16.0.16 | API、调度、注意力、DeltaNet、KV、共享专家、路由、输出头、MTP、本地热门专家、长提示词处理 |
