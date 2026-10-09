@@ -4,12 +4,12 @@
 统一配置方案在启动时固定在线节点和专家范围，之后不自动发现机器、不自动变更分工。
 这是同一个模型、同一条生成请求的分工，不是将三个完整模型放在负载均衡器后面。
 
-## C++ 运行时迁移（第一阶段，2026-10-09）
+## C++ 运行时迁移（第一、二阶段，2026-10-09）
 
-完整迁移计划和进度见 [PLAN.md](../PLAN.md)。目前已增加原生专家 worker 和共享配置校验；
-主机 API、tokenizer、集群启动器和打包入口仍在迁移范围内，整套集群目前仍需 Python。
+完整迁移计划和进度见 [PLAN.md](../PLAN.md)。目前已增加原生专家 worker、共享配置校验和原生集群启动器；
+主机 API、tokenizer 和打包入口仍待迁移，整套集群目前仍需 Python。
 
-构建时显式设置 `-DSTRATA_BUILD_NATIVE_CLUSTER=ON`，然后构建 `strata-network-worker`。
+构建时显式设置 `-DSTRATA_BUILD_NATIVE_CLUSTER=ON`，然后构建 `strata-network-worker` 和 `strata-cluster`。
 该选项默认为 OFF，需要现有原生专家和网络后端构建；CPU-only、CUDA 和 HIP 配置都支持该目标。
 JSON 和 SHA256 使用项目固定版本的 llama.cpp 中已有的 vendor 源码，不额外下载依赖。
 SYCL 的独立工程目前没有这个目标。
@@ -50,6 +50,51 @@ CPU 构建增加 `-DSTRATA_BUILD_TESTS=ON` 并构建 `strata-network-test-backen
 与 Python worker 返回字节相同；现有 C++ coordinator 的普通/汇总模式各 4 轮最大绝对误差为 0。
 PATH 只含 Windows System32 时，原生 worker 完成认证和任务，也通过 Unicode 路径与密钥检查。
 这些检查没有测量真实 LAN 吞吐，没有验证 Linux，也没有切换现有部署。
+
+### 原生集群启动器（第 2 阶段，Windows）
+
+在工作目录运行，配置中的相对路径相对于该目录解析；角色程序从启动器所在目录寻找。
+本地 server 配置和共享 JSON 不会被改写，配置摘要继续与 Python 一致。
+
+```powershell
+build-network/strata-cluster.exe --config cluster.json --validate
+build-network/strata-cluster.exe --config cluster.json --node host11
+build-network/strata-cluster.exe --config cluster.json --node host16 --export-config coordinator-native.json
+```
+
+worker 启动要求环境变量 `STRATA_NETWORK_KEY`，仍直接使用共享配置中指定的后端库。
+`--export-config` 迁移 Python 入口的 coordinator 配置生成，可在没有网络密钥时检查配置；
+输出文件只允许新建，不能覆盖已有文件，也不能覆盖输入文件或其别名。
+输出可能包含本地配置原有的 API key，Windows 为文件设置仅 owner 可读写的 ACL；
+网络密钥只通过环境传递，程序不把它写入 JSON 或日志。
+
+coordinator 继续监听 `127.0.0.1`，保留本地 server 设置中的 API 认证。
+`--exe`、`--prefill` 和 `--no-api-key` 的含义与 Python 集群入口一致，仅适用于 coordinator；
+`--no-api-key` 同时清除子进程环境中的 `STRATA_API_KEY`。
+启动 coordinator 时默认寻找同目录的原生 `strata-server.exe`，可用 `--api-exe` 指定另一原生服务。
+第 4 阶段尚未实现该服务，当前缺少它会明确失败；配置导出和测试子进程不能算作真实 API 验收。
+原生服务的启动接口为 `--engine strata --config 临时配置 --port 端口`。
+
+Windows 角色进程先挂起创建，加入 kill-on-close job 后再运行，避免创建孙进程时逃出 job。
+Ctrl+C/Ctrl+Break 转发给角色进程组；10 秒不退出则结束整个 job。
+角色退出后也清理仍存活的孙进程，角色退出码传回调用者。
+正常退出和启动失败会移除私有临时配置；强制结束启动器时 job 仍清理进程树，
+但可能留下仅 owner 可读写的临时目录。程序直接传递 argv，不通过 shell。
+
+启动器的测试使用原生角色/孙进程夹具和合成稀疏专家包，不需要模型下载或 GPU：
+
+```powershell
+# CPU 测试构建开启 STRATA_BUILD_TESTS，并构建 strata-cluster-test-role。
+python tools/test_native_launcher.py --launcher build-network/strata-cluster.exe --role build-network/strata-cluster-test-role.exe --library build-network/strata_network_backend.dll
+```
+
+本轮 Windows CPU、CUDA sm_89、HIP gfx1102/gfx1103 配置已构建启动器。
+CPU 构建的 16 项启动器测试通过，另 1 项 POSIX 权限检查跳过；
+覆盖配置对照、输入文件不变、Unicode 路径、ACL、退出码、启动失败、停止超时和孙进程清理。
+真实 worker 的合成专家任务在子进程 PATH 仅含 System32 时完成认证与计算，采用 CPU 后端；
+共享配置 17 项和原生 worker 15 项回归通过，没有执行 GPU 任务或真实主机 API。
+Linux port 按本轮要求暂不验证，SYCL 独立工程仍无网络运行时目标。
+现有 Python 启动入口和部署包继续保留；本阶段没有真实性能测量。
 
 | 节点 | 地址 | 分工 |
 | --- | --- | --- |
