@@ -1,0 +1,157 @@
+{
+  "records": [
+    {
+      "prompt": "code",
+      "spec_min_p": 0.75,
+      "wall_s": 15.433,
+      "timings": {
+        "cache_n": 29,
+        "prompt_n": 7,
+        "prompt_ms": 1856.0,
+        "prompt_per_token_ms": 265.143,
+        "prompt_per_second": 3.8,
+        "predicted_n": 192,
+        "predicted_ms": 13562.5,
+        "predicted_per_token_ms": 70.638,
+        "predicted_per_second": 14.2,
+        "draft_n": 169,
+        "draft_n_accepted": 135,
+        "at": 1791520515
+      },
+      "usage": {
+        "prompt_tokens": 36,
+        "completion_tokens": 192,
+        "total_tokens": 228,
+        "prompt_tokens_details": {
+          "cached_tokens": 29
+        }
+      },
+      "network_tasks": 2736,
+      "network_entries": 83272,
+      "mean_positions_per_task": 3.965,
+      "remote_entries_per_output_token": 433.708,
+      "network_tasks_per_output_token": 14.25,
+      "network_roundtrip_ms": 11708.669000000002,
+      "output_sha256": "09f85029c6c558464a07583aa947e689817298e239c7aa082fb6f53db7cc55a9",
+      "text": "```python\nfrom typing import List, Tuple\n\n\ndef merge_intervals(intervals: List[Tuple[int, int]]) -> List[Tuple[int, int]]:\n    \"\"\"\n    Merge overlapping intervals.\n    \n    Given a list of intervals represented as tuples (start, end), this function\n    merges all overlapping intervals and returns a list of non-overlapping intervals.\n    \n    Two intervals are considered overlapping if the start of one is less than or\n    equal to the end of the other (and vice versa). Intervals that touch at a point\n    (e.g., [1,2] and [2,3]) are also merged.\n    \n    Args:\n        intervals: A list of tuples, each representing an interval (start, end).\n                   Each tuple must have start <= end.\n    \n    Returns:\n        A list of merged, non-overlapping intervals sorted by start time.\n    \n    Raises"
+    },
+    {
+      "prompt": "reasoning",
+      "spec_min_p": 0.75,
+      "wall_s": 20.716,
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 40,
+        "prompt_ms": 7212.4,
+        "prompt_per_token_ms": 180.31,
+        "prompt_per_second": 5.5,
+        "predicted_n": 192,
+        "predicted_ms": 13490.3,
+        "predicted_per_token_ms": 70.262,
+        "predicted_per_second": 14.2,
+        "draft_n": 148,
+        "draft_n_accepted": 122,
+        "at": 1791520536
+      },
+      "usage": {
+        "prompt_tokens": 40,
+        "completion_tokens": 192,
+        "total_tokens": 232,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "network_tasks": 3600,
+      "network_entries": 72263,
+      "mean_positions_per_task": 2.973,
+      "remote_entries_per_output_token": 376.37,
+      "network_tasks_per_output_token": 18.75,
+      "network_roundtrip_ms": 11257.254,
+      "output_sha256": "4e801dfdeb69f094f984a9f16f350769eacf02b1aaf944ba84b774a082923583",
+      "text": "# Binary Search: A Rigorous Treatment\n\n## 1. The Core Idea\n\nBinary search finds a target value in a **sorted** array by repeatedly halving the search space. At each step, we compare the middle element to the target and discard the half that cannot contain the target.\n\n---\n\n## 2. Loop Invariant\n\nA **loop invariant** is a condition that is true before and after every iteration of the loop. For binary search, the invariant is:\n\n> **If the target exists in the array, it lies within the closed interval `[low, high]`.**\n\nMore precisely:\n\n```\nInvariant:  If target ∈ arr, then low ≤ index_of_target ≤ high\n```\n\nThis invariant is maintained because:\n- **Initialization**: Before the loop, `low = 0` and `high = n - 1`, so the entire array is the search space. The invariant holds trivially"
+    },
+    {
+      "prompt": "code",
+      "spec_min_p": 0.75,
+      "wall_s": 20.882,
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 36,
+        "prompt_ms": 6943.3,
+        "prompt_per_token_ms": 192.869,
+        "prompt_per_second": 5.2,
+        "predicted_n": 192,
+        "predicted_ms": 13925.0,
+        "predicted_per_token_ms": 72.526,
+        "predicted_per_second": 13.8,
+        "draft_n": 169,
+        "draft_n_accepted": 135,
+        "at": 1791520557
+      },
+      "usage": {
+        "prompt_tokens": 36,
+        "completion_tokens": 192,
+        "total_tokens": 228,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "network_tasks": 2736,
+      "network_entries": 83272,
+      "mean_positions_per_task": 3.965,
+      "remote_entries_per_output_token": 433.708,
+      "network_tasks_per_output_token": 14.25,
+      "network_roundtrip_ms": 12028.978000000003,
+      "output_sha256": "09f85029c6c558464a07583aa947e689817298e239c7aa082fb6f53db7cc55a9",
+      "text": "```python\nfrom typing import List, Tuple\n\n\ndef merge_intervals(intervals: List[Tuple[int, int]]) -> List[Tuple[int, int]]:\n    \"\"\"\n    Merge overlapping intervals.\n    \n    Given a list of intervals represented as tuples (start, end), this function\n    merges all overlapping intervals and returns a list of non-overlapping intervals.\n    \n    Two intervals are considered overlapping if the start of one is less than or\n    equal to the end of the other (and vice versa). Intervals that touch at a point\n    (e.g., [1,2] and [2,3]) are also merged.\n    \n    Args:\n        intervals: A list of tuples, each representing an interval (start, end).\n                   Each tuple must have start <= end.\n    \n    Returns:\n        A list of merged, non-overlapping intervals sorted by start time.\n    \n    Raises"
+    },
+    {
+      "prompt": "reasoning",
+      "spec_min_p": 0.75,
+      "wall_s": 20.561,
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 40,
+        "prompt_ms": 7215.9,
+        "prompt_per_token_ms": 180.397,
+        "prompt_per_second": 5.5,
+        "predicted_n": 192,
+        "predicted_ms": 13332.0,
+        "predicted_per_token_ms": 69.438,
+        "predicted_per_second": 14.4,
+        "draft_n": 147,
+        "draft_n_accepted": 122,
+        "at": 1791520577
+      },
+      "usage": {
+        "prompt_tokens": 40,
+        "completion_tokens": 192,
+        "total_tokens": 232,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "network_tasks": 3600,
+      "network_entries": 71894,
+      "mean_positions_per_task": 2.96,
+      "remote_entries_per_output_token": 374.448,
+      "network_tasks_per_output_token": 18.75,
+      "network_roundtrip_ms": 11117.008999999991,
+      "output_sha256": "4e801dfdeb69f094f984a9f16f350769eacf02b1aaf944ba84b774a082923583",
+      "text": "# Binary Search: A Rigorous Treatment\n\n## 1. The Core Idea\n\nBinary search finds a target value in a **sorted** array by repeatedly halving the search space. At each step, we compare the middle element to the target and discard the half that cannot contain the target.\n\n---\n\n## 2. Loop Invariant\n\nA **loop invariant** is a condition that is true before and after every iteration of the loop. For binary search, the invariant is:\n\n> **If the target exists in the array, it lies within the closed interval `[low, high]`.**\n\nMore precisely:\n\n```\nInvariant:  If target ∈ arr, then low ≤ index_of_target ≤ high\n```\n\nThis invariant is maintained because:\n- **Initialization**: Before the loop, `low = 0` and `high = n - 1`, so the entire array is the search space. The invariant holds trivially"
+    }
+  ],
+  "summary": [
+    {
+      "spec_min_p": 0.75,
+      "decode_tps_median": 14.2,
+      "decode_tps_by_prompt": {
+        "code": 14.0,
+        "reasoning": 14.3
+      },
+      "mean_positions_per_task": 3.466,
+      "tasks_per_token": 16.5
+    }
+  ],
+  "limitations": "Same running service, two prompts, two counterbalanced repeats; remote task shapes are measured, remote CPU percentage is not."
+}
