@@ -171,6 +171,22 @@ if(STRATA_NATIVE_EXPERTS)
   target_compile_definitions(strata_kernels_cpu PUBLIC STRATA_NATIVE_EXPERTS=1)
 endif()
 
+# Stage 3 is a host-only text layer. This does not add an expert network backend
+# or a native API to SYCL. Explicitly request this target to check the shared code.
+option(STRATA_BUILD_NATIVE_TEXT "Build the native tokenizer/template/output host runtime" OFF)
+if(STRATA_BUILD_NATIVE_TEXT)
+  if(NOT STRATA_NATIVE_EXPERTS)
+    message(FATAL_ERROR "Native text needs the pinned llama.cpp dependency (STRATA_NATIVE_EXPERTS=ON)")
+  endif()
+  if(STRATA_GGML_DIR)
+    set(_strata_text_llama "${STRATA_GGML_DIR}")
+  else()
+    set(_strata_text_llama "${strata_llamacpp_SOURCE_DIR}")
+  endif()
+  include("${STRATA_ROOT}/cmake/native_text.cmake")
+  strata_add_native_text("${_strata_text_llama}")
+endif()
+
 # --- the GPU engine ------------------------------------------------------------------------------------------------
 strata_resolve(_core src/core/device.cu src/core/pinned.cu src/platform/memory.cpp src/core/graph.cpp
                      src/core/weights.cpp src/core/layout.cpp)
