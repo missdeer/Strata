@@ -64,7 +64,8 @@ def main():
         if not 16 <= len(key.encode("utf-8")) <= 256:
             raise ValueError("the shared network key must contain 16..256 bytes")
         source = json.loads(Path(node["server_config"]).read_text(encoding="utf-8-sig"))
-        cfg = make_config(source, plan.endpoints, node["context"], node["engine"])
+        cfg = make_config(source, plan.endpoints, node["context"], node["engine"],
+                          node.get("network_reduce", False), node.get("network_local_ram_mib", 0))
         if not Path(cfg["exe"]).is_file():
             raise ValueError(f"coordinator binary is missing: {cfg['exe']}")
         port = cfg.get("port", 8080)

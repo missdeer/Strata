@@ -1,0 +1,127 @@
+{
+  "mode": "before",
+  "host": "host16 i9-12900HK, Windows",
+  "notes": "Small warm working set; not full-model decode or host11 timings.",
+  "groups": [
+    {
+      "layer": 0,
+      "positions": 1,
+      "entries": 6,
+      "median_ms": 1.829,
+      "mean_ms": 2.3423,
+      "sha256": "383285bd9f30f35bf7b89e5ffd72d41a0922a2f4772f692352cb74455bfb5e61"
+    },
+    {
+      "layer": 0,
+      "positions": 3,
+      "entries": 18,
+      "median_ms": 6.2202,
+      "mean_ms": 6.7619,
+      "sha256": "43c220c412d31048bbb2be516d7c537bce7a977bed4f27142766d9a2f5990649"
+    },
+    {
+      "layer": 0,
+      "positions": 4,
+      "entries": 24,
+      "median_ms": 8.8388,
+      "mean_ms": 8.5807,
+      "sha256": "3740b2b59c5310e06bcb4ac744ba8da91bf9c1c89a2e911c76b8d19fe5f7e989"
+    },
+    {
+      "layer": 1,
+      "positions": 1,
+      "entries": 6,
+      "median_ms": 2.2387,
+      "mean_ms": 2.3576,
+      "sha256": "55673a853a2a2320374cb2229f0fc9bc0449edb010f7bdd15d6690d8e1317f9d"
+    },
+    {
+      "layer": 1,
+      "positions": 3,
+      "entries": 18,
+      "median_ms": 5.7963,
+      "mean_ms": 5.6032,
+      "sha256": "4247497f67ebd1334bca9897579a91fdaf311b2cbe5e17cec590a299d3e8c8a3"
+    },
+    {
+      "layer": 1,
+      "positions": 4,
+      "entries": 24,
+      "median_ms": 8.4257,
+      "mean_ms": 7.9455,
+      "sha256": "9520069c1e65ce0d72aa50633d6ab1e45191a65f1e5dc974a6e3678875513c77"
+    },
+    {
+      "layer": 2,
+      "positions": 1,
+      "entries": 6,
+      "median_ms": 1.9096,
+      "mean_ms": 2.0216,
+      "sha256": "10fee31b59274966eedaecff8724233e03d7051f1d67a48e3fe8cc6b860cd336"
+    },
+    {
+      "layer": 2,
+      "positions": 3,
+      "entries": 18,
+      "median_ms": 6.5733,
+      "mean_ms": 6.5624,
+      "sha256": "09fb9b9df8f839a9c586345828e2733a2e504121cd6ab465823d128b5228d6c2"
+    },
+    {
+      "layer": 2,
+      "positions": 4,
+      "entries": 24,
+      "median_ms": 6.0185,
+      "mean_ms": 6.0179,
+      "sha256": "637f8132c400c9130190c1ffc436fb97e36d3e6f2c7a22c1430afe5052dd07c9"
+    },
+    {
+      "layer": 17,
+      "positions": 1,
+      "entries": 6,
+      "median_ms": 1.697,
+      "mean_ms": 1.9103,
+      "sha256": "f8573252c2e0b9c989aefb46815ee77bb01302de8eb028ba1b2c1afff7159a04"
+    },
+    {
+      "layer": 17,
+      "positions": 3,
+      "entries": 18,
+      "median_ms": 6.9153,
+      "mean_ms": 6.9538,
+      "sha256": "d5614883151d0a5c11a719bbc257304a5481a71bc98c7079f3ffdab563984dd4"
+    },
+    {
+      "layer": 17,
+      "positions": 4,
+      "entries": 24,
+      "median_ms": 8.4663,
+      "mean_ms": 8.5357,
+      "sha256": "60c1ed0939f8e1edb0b6413ece70a722b5629499f535873447afc8644081b7f7"
+    },
+    {
+      "layer": 47,
+      "positions": 1,
+      "entries": 6,
+      "median_ms": 1.5499,
+      "mean_ms": 1.6052,
+      "sha256": "49fbdc11778376976a0f50b767eadbc0f63b56d0b6946c44285050d9833ec134"
+    },
+    {
+      "layer": 47,
+      "positions": 3,
+      "entries": 18,
+      "median_ms": 5.2619,
+      "mean_ms": 5.2388,
+      "sha256": "8114a6f0b78e0749d952d6750b44d4809dc05eb4cccc2aad78d5a16e5befdd2d"
+    },
+    {
+      "layer": 47,
+      "positions": 4,
+      "entries": 24,
+      "median_ms": 5.8283,
+      "mean_ms": 5.8375,
+      "sha256": "c55dde2adb42ce816e11509fc1f9d82a523f2d18dab5fb64b0bbc995f302b0d8"
+    }
+  ]
+}

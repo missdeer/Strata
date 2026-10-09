@@ -62,7 +62,8 @@ def main():
         if node["role"] == "expert-worker":
             raise SystemExit(run(args))
         source = json.loads(Path(node["server_config"]).read_text(encoding="utf-8"))
-        cfg = make_config(source, plan.endpoints, node["context"], node["engine"])
+        cfg = make_config(source, plan.endpoints, node["context"], node["engine"],
+                          node.get("network_reduce", False), node.get("network_local_ram_mib", 0))
         cfg["log"] = str(ROOT / "logs" / f"cluster-{a.node}.log")
         (ROOT / "logs").mkdir(exist_ok=True)
         cfg["args"] += ["--prefill", str(node["prefill"]), "--network-assignment", plan.assignment,

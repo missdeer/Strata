@@ -5,6 +5,7 @@
 #include "strata/core/on_device.hpp"
 #include "strata/platform/aux_cpus.hpp"
 #include "strata/core/network_experts.hpp"
+#include "strata/core/remote_expert_opt.hpp"
 #include "strata/core/remote_experts.hpp"
 #include "strata/core/peer_experts.hpp"
 #include "strata/kernels/cpu/expert_layout.hpp"
@@ -5023,7 +5024,12 @@ void expert_pool_dispatch_multi(ExpertDispatch& d, const float* x_f, const int32
     static const bool dec_batch = [] { const char* v = std::getenv("STRATA_DEC_BATCH"); return v == nullptr || std::atoi(v) != 0; }();
     if (d.network != nullptr) {
         static thread_local std::string network_error;
-        if (!d.network->begin(d.layers, x_f, ids, n_tok, k, kind, network_error)) {
+        uint8_t local[kMaxWindowEntries] = {};
+        if (d.network_local)
+            for (int64_t i = 0; i < n; ++i)
+                local[i] = kind[i] < 0 && d.src->cpu_resident(d.layers, ids[i]);
+        if (!d.network->begin(d.layers, x_f, ids, n_tok, k, kind, network_error,
+                d.network_reduce ? d.network_reduce->weights() : nullptr, local)) {
             d.failed = true; d.fail = network_error.c_str(); d.fail_layer = d.layers; return;
         }
     }
@@ -5131,6 +5137,7 @@ void expert_pool_dispatch_multi(ExpertDispatch& d, const float* x_f, const int32
                 continue;
             }
             ++d.cache_refused;
+            if (d.network != nullptr) ++d.network_local_entries;
             int16_t& jo = d.job_of[(size_t) e];
             if (jo < 0) {
                 const uint8_t* zp[3] = {nullptr, nullptr, nullptr};
@@ -5221,7 +5228,9 @@ void expert_pool_dispatch_multi(ExpertDispatch& d, const float* x_f, const int32
     }
     if (d.network != nullptr) {
         static thread_local std::string network_error;
-        if (!d.network->finish(out, network_error)) {
+        if (!d.network->finish(out, network_error,
+                d.network_reduce ? d.network_reduce->host_sum() : nullptr,
+                d.network_reduce ? d.network_reduce->host_mask() : nullptr)) {
             d.failed = true; d.fail = network_error.c_str(); d.fail_layer = d.layers; return;
         }
     }

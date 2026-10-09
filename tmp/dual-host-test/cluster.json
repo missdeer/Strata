@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "cluster_id": "strata-iq3-s-dual-host-test",
-  "revision": 4,
+  "revision": 6,
   "model": {
     "name": "qwen3.8-flash-next-iq3_s",
     "layers": 48,
@@ -19,9 +19,11 @@
       "role": "coordinator",
       "host": "192.168.233.136",
       "server_config": "D:\\Projects\\Strata\\tmp\\dual-host-test\\server.json",
-      "engine": "D:\\Projects\\Strata\\dist\\cluster\\host16\\strata.exe",
+      "engine": "D:\\Projects\\Strata\\dist\\cluster-network-stage2\\host16\\strata.exe",
       "context": 131072,
-      "prefill": 512
+      "prefill": 512,
+      "network_reduce": true,
+      "network_local_ram_mib": 1024
     },
     {
       "id": "host11",
