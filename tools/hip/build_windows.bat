@@ -22,6 +22,7 @@ rem   STRATA_GGML_DIR      a llama.cpp checkout at the pinned commit (default: C
 rem   STRATA_ROCM_KEEP      1 = use the ROCM_VENV as it is (no pip install, even when its archs differ from STRATA_HIP_ARCHS)
 rem   STRATA_VISION_HIP_ARCHS  the GPU reader's archs (default: STRATA_HIP_ARCHS; about 70 MB of the zip per arch)
 rem   STRATA_NO_VISION     1 = skip the two picture readers (strata-vision.exe for the CPU, strata-vision-hip.exe for the GPU)
+rem   STRATA_ROCM_COMPILER_ROOT  optional compiler root; SDK libraries still come from rocm-sdk path --root
 rem   STRATA_BUILD_JOBS    compiler jobs, default 6
 rem   STRATA_ROCM_SKIP_INSTALL=1  use installed SDK only; never create a venv or download packages
 setlocal EnableDelayedExpansion
@@ -67,8 +68,10 @@ if not "!HAVE!"=="!WANT!" if not "%STRATA_ROCM_KEEP%"=="1" (
   >"%STAMP%" echo !WANT!
 )
 for /f "delims=" %%R in ('"%ROCM_VENV%\Scripts\rocm-sdk.exe" path --root') do set "ROCM=%%R"
-if not exist "%ROCM%\lib\llvm\bin\clang++.exe" (echo ROCm has no compiler in "%ROCM%" & exit /b 1)
+if not defined STRATA_ROCM_COMPILER_ROOT set "STRATA_ROCM_COMPILER_ROOT=%ROCM%"
+if not exist "%STRATA_ROCM_COMPILER_ROOT%\lib\llvm\bin\clang++.exe" (echo ROCm has no compiler in "%STRATA_ROCM_COMPILER_ROOT%" & exit /b 1)
 set "ROCM_F=%ROCM:\=/%"
+set "ROCM_COMPILER_F=%STRATA_ROCM_COMPILER_ROOT:\=/%"
 set "BITCODE=%ROCM_F%/lib/llvm/amdgcn/bitcode"
 
 rem ---- 2. MSVC: the linker, the C runtime and the Windows SDK (ROCm's clang uses them)
@@ -80,7 +83,7 @@ call "%VS%\VC\Auxiliary\Build\vcvars64.bat" >nul || exit /b 1
 set "HIP_PLATFORM=amd"
 set "HIP_PATH=%ROCM%"
 set "ROCM_PATH=%ROCM%"
-set "PATH=%ROCM%\bin;%ROCM%\lib\llvm\bin;%PATH%"
+set "PATH=%ROCM%\bin;%STRATA_ROCM_COMPILER_ROOT%\lib\llvm\bin;%PATH%"
 
 rem ---- 3. configure + build (STRATA_PORTABLE: the CPU kernels for an AVX2 baseline, as in the NVIDIA zip)
 set "GGML="
@@ -89,8 +92,8 @@ rem Always configure: a changed arch list or network mode must not reuse stale c
 cmake -G Ninja -S "%SRC%" -B "%BUILD_DIR%" -DCMAKE_BUILD_TYPE=Release ^
     -DSTRATA_ENABLE_HIP=ON -DSTRATA_ENABLE_CUDA=OFF -DSTRATA_ENABLE_SYCL=OFF -DSTRATA_HIP_GFX906=OFF -DSTRATA_BUILD_TESTS=%TESTS% -DSTRATA_PREFILL_MMQ=ON ^
     -DSTRATA_NATIVE_EXPERTS=ON -DSTRATA_PORTABLE=ON "-DCMAKE_HIP_ARCHITECTURES=%STRATA_HIP_ARCHS%" ^
-    "-DCMAKE_C_COMPILER=%ROCM_F%/lib/llvm/bin/clang.exe" "-DCMAKE_CXX_COMPILER=%ROCM_F%/lib/llvm/bin/clang++.exe" ^
-    "-DCMAKE_HIP_COMPILER=%ROCM_F%/lib/llvm/bin/clang++.exe" "-DCMAKE_HIP_COMPILER_ROCM_ROOT=%ROCM_F%" ^
+    "-DCMAKE_C_COMPILER=%ROCM_COMPILER_F%/lib/llvm/bin/clang.exe" "-DCMAKE_CXX_COMPILER=%ROCM_COMPILER_F%/lib/llvm/bin/clang++.exe" ^
+    "-DCMAKE_HIP_COMPILER=%ROCM_COMPILER_F%/lib/llvm/bin/clang++.exe" "-DCMAKE_HIP_COMPILER_ROCM_ROOT=%ROCM_F%" ^
     "-DCMAKE_PREFIX_PATH=%ROCM_F%" "-DCMAKE_HIP_FLAGS=--rocm-path=%ROCM_F% --rocm-device-lib-path=%BITCODE%" ^
     "-DCMAKE_C_FLAGS=-DWIN32 -D_WINDOWS" "-DCMAKE_CXX_FLAGS=-DWIN32 -D_WINDOWS -fexceptions -fcxx-exceptions" ^
     "-DCMAKE_C_FLAGS_RELEASE=-O3 -DNDEBUG" "-DCMAKE_CXX_FLAGS_RELEASE=-O3 -DNDEBUG" "-DCMAKE_HIP_FLAGS_RELEASE=-O3 -DNDEBUG" ^
