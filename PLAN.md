@@ -35,9 +35,9 @@
 
 ### 3. tokenizer 和请求/输出语义
 
-- [ ] C++ 实现 byte-level BPE、Qwen35 Unicode 预分词、特殊 token、增量 UTF-8 解码和停止规则。
-- [ ] 用现有 tokenizer corpus/golden fixture 对照完整 token ID；只验证 round-trip 不足以证明正确。
-- [ ] 迁移聊天模板、工具定义/结果、思考开关和结构化输出解析，并对照 `serve/chat_golden.json`、`serve/fixtures` 和 server 测试。
+- [x] C++ 实现 byte-level BPE、Qwen35 Unicode 预分词、特殊 token、增量 UTF-8 解码和停止规则。
+- [x] 用现有 tokenizer corpus/golden fixture 对照完整 token ID；只验证 round-trip 不足以证明正确。
+- [x] 迁移聊天模板、工具定义/结果、思考开关和结构化输出解析，并对照 `serve/chat_golden.json`、`serve/fixtures` 和 server 测试。
 
 ### 4. 主机 API 和引擎管理
 
@@ -81,3 +81,9 @@
 - 本轮按用户要求仅验证 Windows；Linux 分支仍需构建和实机生命周期验证，SYCL 的网络接入边界与第 1 步相同。尚未切换服务或部署包，也未测量性能。
 - 第 2 步 Windows 便携 CPU、CUDA sm_89、HIP gfx1102/gfx1103 的启动器构建通过。新启动器测试 16 项通过（另 1 项 POSIX 权限检查跳过），覆盖 Python 配置对照、输入不变、Unicode 路径、owner-only ACL、退出码、停止超时、启动失败及 launcher 强制结束后的孙进程清理。真实原生 worker 使用合成专家包和 CPU 后端，在子进程 PATH 仅含 System32 时完成认证和任务；现有共享配置 17 项和原生 worker 15 项回归通过。未运行 GPU 任务或真实主机 API。
 - 默认路径检查：现有引擎和 Python 入口源文件未改动，新目标仅在 `STRATA_BUILD_NATIVE_CLUSTER=ON` 时添加；本轮没有改变默认参数或计算代码。
+- 第 3 步完成：新增 `strata_text_runtime` 和 `strata-text-check`，提供 pack tokenizer 读取、按 rank/位置排序的 heap BPE、Qwen35 Unicode 预分词、CONTROL/USER_DEFINED token 和普通文字 span、增量 UTF-8、停止字符串、OpenAI/Anthropic 消息归一化、Jinja 模板、思考/工具调用流式解析和结构化输出验证。普通文字 span 使用 UTF-8 字节偏移；与 Python 字符偏移的转换已对照。
+- Unicode 和 Jinja 使用现有 llama.cpp 依赖中的实现；JSON Schema 使用固定的 jsoncons v1.7.0，下载校验 SHA256，可通过 `STRATA_JSONCONS_DIR` 使用离线源码。schema 在运行引擎前按其 meta-schema 校验，只接受本地引用；生成未自然停止、JSON 重复字段、非法 JSON 和 schema 失败均报错。许可证复制至构建目录 `native-text-licenses/`，第 5 步需纳入部署包。
+- 第 3 步 CPU 对照测试 15 组全部通过，无跳过：727 次完整 token ID 对照包含固定 32 个 golden case、合成词表和真实 IQ3_S 词表；10 个 `serve/chat_golden.json` case、Qwen3-Coder/Qwen3.5 和本机 pack 模板对照通过。984 次 parser 对照覆盖全部 37 个 `rcall_specimens`、跨 chunk 标签、参数内 XML、未完成调用、自然停止/取消、思考区调用、可选恢复及 41 项现有 server parser 回归。另覆盖 23 次请求归一化、131 次结构化输出、84 次停止字符串和 136 次 UTF-8 字节流对照。报告：`tmp/native-text-parity.json`。
+- Windows 便携 CPU（IntelLLVM）、CUDA sm_89 配置（IntelLLVM）、HIP gfx1102/gfx1103 配置（ROCm clang）的文本目标均构建通过；SYCL 工程显式 `STRATA_BUILD_NATIVE_TEXT=ON` 的 host 文本目标也构建通过。SYCL 使用 Windows icx-cl，工程既有 `-fp-model=precise` 参数会被该驱动忽略并警告；这里只验证文本目标，未构建/运行 SYCL 引擎或增加 SYCL 专家网络后端。Linux、真实 GPU 推理及 Swift 专属模板尚未验证。
+- 原生 worker 15 项和 launcher 16 项 Windows 回归通过，另 1 项 POSIX 权限检查跳过。System32-only PATH 下原生文本程序完成 tokenizer 和模板任务；Python 只用作测试驱动/行为对照。整套集群无 Python 启动仍待第 4/5 步验收。
+- 第 3 步没有改动现有 Python 入口、模板文件或引擎计算源文件；普通 CPU/CUDA/HIP 工程仍由 `STRATA_BUILD_NATIVE_CLUSTER=ON` 启用新增目标，SYCL 的新增开关默认 OFF。没有更改默认参数、部署包或运行服务，也没有性能结论；原生主机 API 和引擎管理继续在第 4 步实现。
