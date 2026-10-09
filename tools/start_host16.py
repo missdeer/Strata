@@ -53,6 +53,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", type=Path, default=ROOT / "tmp/dual-host-test/cluster.json")
     parser.add_argument("--key-file", type=Path, default=ROOT / "tmp/dual-host-test/network.key")
+    parser.add_argument("--exe", type=Path, help="local coordinator engine override")
     parser.add_argument("--no-api-key", action="store_true", help="disable local API authentication; keep the worker key")
     parser.add_argument("--prefill", choices=("512", "1024", "2048", "4096", "8192", "auto", "auto:8192"),
                         help="local coordinator prompt chunk override; the worker plan is unchanged")
@@ -67,7 +68,7 @@ def main():
         if not 16 <= len(key.encode("utf-8")) <= 256:
             raise ValueError("the shared network key must contain 16..256 bytes")
         source = json.loads(Path(node["server_config"]).read_text(encoding="utf-8-sig"))
-        cfg = make_config(source, plan.endpoints, node["context"], node["engine"],
+        cfg = make_config(source, plan.endpoints, node["context"], args.exe or node["engine"],
                           node.get("network_reduce", False), node.get("network_local_ram_mib", 0))
         if not Path(cfg["exe"]).is_file():
             raise ValueError(f"coordinator binary is missing: {cfg['exe']}")
@@ -105,6 +106,8 @@ def main():
         print("Starting host16. Keep this window open; Ctrl+C stops the coordinator.", flush=True)
         command = [sys.executable, "-u", str(ROOT / "tools/cluster.py"), "--config", str(args.config.resolve()),
                    "--node", "host16"]
+        if args.exe:
+            command += ["--exe", cfg["exe"]]
         if args.no_api_key:
             command.append("--no-api-key")
         if args.prefill:
