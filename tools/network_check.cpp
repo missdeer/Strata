@@ -1,5 +1,6 @@
 // Exercises the actual coordinator transport and compares worker rows with the local CPU backend.
 #include "strata/core/network_experts.hpp"
+#include "strata/core/network_backend.h"
 #include "strata/kernels/cpu/expert_layout.hpp"
 #include <algorithm>
 #include <cmath>
@@ -11,12 +12,6 @@
 #include <memory>
 #include <string>
 #include <vector>
-
-extern "C" void* strata_network_create(int, int, uint64_t);
-extern "C" void strata_network_destroy(void*);
-extern "C" const char* strata_network_error();
-extern "C" int strata_network_compute(void*, int, int, int, const float*, int, int,
-    const int32_t*, const int32_t*, const uint8_t* const*, int, float*);
 
 int main(int argc, char** argv) {
     if (argc < 4) {
