@@ -62,9 +62,10 @@ int main(int argc, char** argv) {
     const char* key = std::getenv("STRATA_NETWORK_KEY");
     const char* assignment = std::getenv("STRATA_NETWORK_ASSIGNMENT");
     const char* config_id = std::getenv("STRATA_NETWORK_CONFIG_ID");
+    const bool reduced = std::getenv("STRATA_NETWORK_REDUCE") != nullptr;
     strata::core::NetworkExperts net;
     if (!net.open(argv[2], key ? key : "", 1000, read, layers, 512, error,
-                  assignment ? assignment : "", config_id ? config_id : "")) return fail(error);
+                  assignment ? assignment : "", config_id ? config_id : "", reduced)) return fail(error);
     void* backend = strata_network_create(2, -1, 0);
     if (!backend) return fail(strata_network_error());
     constexpr int H = 2560, k = 4;
@@ -86,17 +87,32 @@ int main(int argc, char** argv) {
         }
         // Mark one row as a local GPU hit; the network tier must leave it untouched.
         kind[0] = 0;
+        std::vector<float> weights(n), sum(static_cast<size_t>(nt) * H, 0.f), expected_sum(sum.size(), 0.f);
+        std::vector<int32_t> mask(n, 0);
+        for (int i = 0; i < n; ++i) weights[i] = .1f * (i % k + 1);
         const auto& f = layout.fmt[static_cast<size_t>(l)];
         if (!strata_network_compute(backend, f.gu_type, f.d_type, l, x.data(), nt, n, rows.data(), ids.data(), ptr.data(), k, ref.data())) {
             rc = fail(strata_network_error()); break;
         }
-        if (!net.begin(l, x.data(), ids.data(), nt, k, kind.data(), error) || !net.finish(got.data(), error)) {
+        if (!net.begin(l, x.data(), ids.data(), nt, k, kind.data(), error, weights.data()) ||
+            !net.finish(got.data(), error, sum.data(), mask.data())) {
             rc = fail(error); break;
         }
         double delta = 0, scale = 0;
-        for (size_t i = H; i < got.size(); ++i) {
-            delta = std::max(delta, std::fabs(double(got[i]) - ref[i]));
-            scale = std::max(scale, std::fabs(double(ref[i])));
+        if (reduced) {
+            for (int r = 1; r < n; ++r) {
+                if (!mask[r]) { rc = fail("missing reduced row mask"); break; }
+                for (int h = 0; h < H; ++h)
+                    expected_sum[(r / k) * H + h] = std::fma(ref[r * H + h], weights[r], expected_sum[(r / k) * H + h]);
+            }
+            if (mask[0]) { rc = fail("reduced mask overwrote a local GPU row"); break; }
+            for (size_t i = 0; i < sum.size(); ++i) {
+                delta = std::max(delta, std::fabs(double(sum[i]) - expected_sum[i]));
+                scale = std::max(scale, std::fabs(double(expected_sum[i])));
+            }
+        } else for (size_t i = H; i < got.size(); ++i) {
+                delta = std::max(delta, std::fabs(double(got[i]) - ref[i]));
+                scale = std::max(scale, std::fabs(double(ref[i])));
         }
         const bool untouched = std::all_of(got.begin(), got.begin() + H, [](float v) { return v == 19.0f; });
         if (!untouched || delta > 1e-5 + .02 * scale) { rc = fail("worker/local parity failed"); break; }

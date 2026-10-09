@@ -327,6 +327,8 @@ struct Options {
     std::string network_workers;
     std::string network_assignment, network_config_id;
     int network_timeout_ms = 5000;
+    bool network_reduce = false;
+    int network_local_ram_mib = 0;
     std::string pack = "pack/full";
     std::vector<int64_t> tokens;      // the prompt, PRE-TOKENIZED
     int64_t max_new = 16;
@@ -870,6 +872,8 @@ void usage() {
                  "  --network-workers IPv4:port[,IPv4:port]  LAN expert workers (native pack, serve)\n"
                  "                       STRATA_NETWORK_KEY authenticates; mmap + local prefill.\n"
                  "  --network-timeout-ms N  per-layer deadline, default 5000 (100..60000)\n"
+                 "  --network-reduce      return a weighted vector per position (requires updated workers)\n"
+                 "  --network-local-ram-mib N  bounded hot CPU expert copy for LAN decode, default 0\n"
                  "  --expert-cache-remote-placement stripe|layer  distribute expert ranks or whole\n"
                  "                       layers across CUDA1..3 (default: stripe)\n"
                  "  --peer-device N      a second GPU as an adaptive expert-cache tier (rows over P2P; it also\n"
@@ -1945,6 +1949,16 @@ int main(int argc, char** argv) {
             o.expert_cache_remote[r] = v == "auto" ? std::numeric_limits<int>::max() : std::atoi(v.c_str());
         }
         else if (a == "--network-workers") o.network_workers = next("--network-workers");
+        else if (a == "--network-reduce") o.network_reduce = true;
+        else if (a == "--network-local-ram-mib") {
+            const char* value = next("--network-local-ram-mib");
+            char* end = nullptr;
+            const long budget = std::strtol(value, &end, 10);
+            if (!*value || *value == '-' || *end || budget < 0 || budget > 65536) {
+                std::fprintf(stderr, "strata: --network-local-ram-mib must be 0..65536\n"); return 2;
+            }
+            o.network_local_ram_mib = (int) budget;
+        }
         else if (a == "--network-timeout-ms") o.network_timeout_ms = std::atoi(next("--network-timeout-ms"));
         else if (a == "--network-assignment") o.network_assignment = next("--network-assignment");
         else if (a == "--network-config-id") o.network_config_id = next("--network-config-id");
@@ -2266,6 +2280,20 @@ int main(int argc, char** argv) {
     // --pcie-frac given: that one share is every stage's (the stages' own link probes are skipped), so a split over
     // a fast and a slow link cannot set the two apart from the command line (#485)
     const bool pcie_given = o.pcie_frac >= 0.0;
+    if (o.network_workers.empty() && (o.network_reduce || o.network_local_ram_mib > 0)) {
+        std::fprintf(stderr, "strata: network reduce/local RAM options require --network-workers\n"); return 2;
+    }
+    if (o.network_local_ram_mib > 0) {
+        o.mmap_experts = o.resident_cpu_experts = true;
+        o.resident_pin = false;
+        o.resident_budget = (uint64_t) o.network_local_ram_mib << 20;
+        o.resident_soft = false;
+        // Match --resident-budget-gib: keep 4 GiB available and clamp the
+        // bounded copy against both physical RAM and commit capacity.
+        o.resident_headroom = 4ull << 30;
+        if (const char* v = std::getenv("STRATA_RESIDENT_HEADROOM_GIB"); v != nullptr && std::atof(v) >= 0.0)
+            o.resident_headroom = (uint64_t) (std::atof(v) * 1073741824.0);
+    }
     std::vector<int64_t> split_at;
     std::vector<int> split_devs;
     bool split_auto = false, split_same = false;
@@ -4567,6 +4595,12 @@ int main(int argc, char** argv) {
     // The earlier "the arena does not fit" conclusion was WRONG and is worth recording: the failure was a stale
     // CUDA error left set by the failed `cudaHostRegister` and read later by `gr_read`'s launch check.  See the
     // note in `pinned.cu`.
+    // LAN decode only reads its private CPU cache; cold experts run remotely.
+    // Keep the prompt's cached file reads instead of applying the standalone
+    // resident-budget heuristic. An explicit I/O override remains authoritative.
+    const char* unbuffered_override = std::getenv("STRATA_UNBUFFERED_LOAD");
+    const bool network_cached_file_tier = !o.network_workers.empty() &&
+        (unbuffered_override == nullptr || unbuffered_override[0] == '\0');
     strata::core::FileExpertSource src;
     {   // the card, and whether this build has code for it (a binary built for other GPUs fails at its first kernel
         // otherwise, after the whole expert arena has loaded) - before the arena starts loading
@@ -4670,11 +4704,13 @@ int main(int argc, char** argv) {
         // #773: without a RAM budget there is no RAM copy and the file cache IS the expert tier (measured on a
         // 32 GB, 2 x 16 GB rig: forcing unbuffered reads there re-read 163-629 GB from the drive and halved the
         // speed), so STRATA_UNBUFFERED_LOAD=1 is not honoured in that mode
-        if (o.resident_budget > 0) {
+        if (o.resident_budget > 0 && !network_cached_file_tier) {
             std::string why;
             const bool ub = src.set_unbuffered(o.resident_budget, why);
             std::fprintf(stderr, "strata generate: the file tier reads %s (%s)\n",
                          ub ? "unbuffered" : "through the file cache", why.c_str());
+        } else if (o.resident_budget > 0 && network_cached_file_tier) {
+            std::fprintf(stderr, "strata generate: LAN prompt reads use the file cache; decode cold experts run remotely\n");
         } else if (const char* env = std::getenv("STRATA_UNBUFFERED_LOAD"); env != nullptr && env[0] != '\0' &&
                    env[0] != '0') {
             std::fprintf(stderr, "strata generate: the file tier reads through the file cache (STRATA_UNBUFFERED_LOAD=%s "
@@ -5388,7 +5424,8 @@ int main(int argc, char** argv) {
 
     std::array<strata::core::RemoteExperts, 3> remote_experts;
     std::unique_ptr<strata::core::RemoteExpertOpt> remote_opt;
-    if (o.remote_expert_opt && o.expert_cache_remote[0] > 0) remote_opt = std::make_unique<strata::core::RemoteExpertOpt>();
+    if ((o.remote_expert_opt && o.expert_cache_remote[0] > 0) || o.network_reduce)
+        remote_opt = std::make_unique<strata::core::RemoteExpertOpt>();
     const bool multi_remote = o.expert_cache_remote[1] > 0 || o.expert_cache_remote[2] > 0;
     if (o.expert_cache_remote[0] > 0) {
         if (o.expert_cache <= 0 || profile.empty() || o.no_pool) {
@@ -5518,11 +5555,13 @@ int main(int argc, char** argv) {
     if (!o.network_workers.empty()) {
         if (!network.open(o.network_workers, std::getenv("STRATA_NETWORK_KEY"), o.network_timeout_ms,
                           [&](int64_t l, int64_t e) { return srcp->blob(l, e); }, g.n_layers, g.n_expert, err,
-                          o.network_assignment, o.network_config_id)) {
+                          o.network_assignment, o.network_config_id, o.network_reduce)) {
             std::fprintf(stderr, "strata: %s\n", err.c_str());
             return 1;
         }
         drive.d.network = &network;
+        drive.d.network_reduce = o.network_reduce ? remote_opt.get() : nullptr;
+        drive.d.network_local = o.network_local_ram_mib > 0;
         std::fprintf(stderr, "strata: network workers connected: %s\n", o.network_workers.c_str());
     }
     // CS-T: routing-aware prefetch of the file tier (the GGUF in place): the next layer's router on this layer's MoE
@@ -6843,7 +6882,7 @@ int main(int argc, char** argv) {
         // the file cache keeps those, and every refill after a prompt read the drive instead).  Windows and Linux: the
         // unbuffered reads exist there
 #if defined(_WIN32) || defined(__linux__)
-        if (o.mmap_experts && o.resident_budget > 0 && !startup_kept) {
+        if (o.mmap_experts && o.resident_budget > 0 && !startup_kept && !network_cached_file_tier) {
             std::string why;
             const bool was = src.unbuffered();
             const bool ub = src.recheck_unbuffered(why);
@@ -12420,7 +12459,11 @@ int main(int argc, char** argv) {
                                      "of %lld windows\n", (long long) t2_rej[0], (long long) t2_hit[0], (long long) t2_rej[1],
                              (long long) t2_hit[1], (long long) t2_rej[2], (long long) t2_hit[2], (long long) t2_rej[3],
                              (long long) t2_hit[3], (long long) dec_windows);
-            if (!o.network_workers.empty()) network.report();
+            if (!o.network_workers.empty()) {
+                network.report();
+                std::fprintf(stderr, "strata network local: entries=%lld RAM budget=%d MiB\n",
+                             (long long) drive.d.network_local_entries, o.network_local_ram_mib);
+            }
             for (int r = 0; r < 3; ++r) if (o.expert_cache_remote[(size_t) r] > 0)
                 std::fprintf(stderr, "strata serve: CUDA%d: %lld expert entries, %lld active layer launches, %.1f MiB returned "
                                      "(%.1f MiB with full rows) in this request; host %.0f ms staging+launching, %.0f ms "

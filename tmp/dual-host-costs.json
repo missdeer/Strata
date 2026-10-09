@@ -1,0 +1,294 @@
+{
+  "saved_lan_requests": [
+    {
+      "output_tokens": 2,
+      "decode_ms": 7624,
+      "tasks": 96,
+      "entries": 1820,
+      "tx_bytes": 2476000,
+      "rx_bytes": 18639104,
+      "roundtrip_ms": 7541.105,
+      "mean_task_ms": 78.553,
+      "roundtrip_decode_ratio": 0.9891,
+      "min_full_duplex_1g_transfer_ms": 149.113
+    },
+    {
+      "output_tokens": 17,
+      "decode_ms": 18925,
+      "tasks": 336,
+      "entries": 8259,
+      "tx_bytes": 10892952,
+      "rx_bytes": 84580224,
+      "roundtrip_ms": 18709.902,
+      "mean_task_ms": 55.684,
+      "roundtrip_decode_ratio": 0.9886,
+      "min_full_duplex_1g_transfer_ms": 676.642
+    },
+    {
+      "output_tokens": 45,
+      "decode_ms": 14032,
+      "tasks": 960,
+      "entries": 18368,
+      "tx_bytes": 31642624,
+      "rx_bytes": 188111360,
+      "roundtrip_ms": 13175.504,
+      "mean_task_ms": 13.724,
+      "roundtrip_decode_ratio": 0.939,
+      "min_full_duplex_1g_transfer_ms": 1504.891
+    },
+    {
+      "output_tokens": 53,
+      "decode_ms": 16641,
+      "tasks": 1248,
+      "entries": 23096,
+      "tx_bytes": 34641088,
+      "rx_bytes": 236532992,
+      "roundtrip_ms": 15808.163,
+      "mean_task_ms": 12.667,
+      "roundtrip_decode_ratio": 0.95,
+      "min_full_duplex_1g_transfer_ms": 1892.264
+    },
+    {
+      "output_tokens": 46,
+      "decode_ms": 12917,
+      "tasks": 1055,
+      "entries": 16557,
+      "tx_bytes": 28181056,
+      "rx_bytes": 169569000,
+      "roundtrip_ms": 12223.683,
+      "mean_task_ms": 11.586,
+      "roundtrip_decode_ratio": 0.9463,
+      "min_full_duplex_1g_transfer_ms": 1356.552
+    },
+    {
+      "output_tokens": 53,
+      "decode_ms": 14092,
+      "tasks": 1152,
+      "entries": 21603,
+      "tx_bytes": 34625304,
+      "rx_bytes": 221242368,
+      "roundtrip_ms": 13170.463,
+      "mean_task_ms": 11.433,
+      "roundtrip_decode_ratio": 0.9346,
+      "min_full_duplex_1g_transfer_ms": 1769.939
+    }
+  ],
+  "measurement_host": "host16; not host11",
+  "limitations": [
+    "Native timings use a small warm working set, not a full-model decode.",
+    "Roundtrip intervals include overlapped GPU work and host scheduling; they are not pure network or stall times.",
+    "1 Gbit/s transfer values are ideal lower bounds, not measured link times."
+  ],
+  "python_validation": [
+    {
+      "positions": 1,
+      "entries": 6,
+      "input_finite_ms": 0.1143,
+      "output_finite_ms": 0.7051
+    },
+    {
+      "positions": 3,
+      "entries": 19,
+      "input_finite_ms": 0.346,
+      "output_finite_ms": 2.2172
+    },
+    {
+      "positions": 4,
+      "entries": 24,
+      "input_finite_ms": 0.4394,
+      "output_finite_ms": 2.8542
+    }
+  ],
+  "pack_formats": [
+    {
+      "gate_up": "IQ3_XXS",
+      "down": "IQ4_NL",
+      "layers": [
+        0,
+        7,
+        14,
+        16,
+        18,
+        22,
+        31,
+        33,
+        37,
+        38,
+        41,
+        42,
+        43,
+        46
+      ]
+    },
+    {
+      "gate_up": "IQ2_S",
+      "down": "Q2_0",
+      "layers": [
+        1,
+        8,
+        10,
+        13,
+        36
+      ]
+    },
+    {
+      "gate_up": "IQ2_S",
+      "down": "IQ4_NL",
+      "layers": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        9,
+        11,
+        15,
+        19,
+        23,
+        24,
+        26,
+        32,
+        34,
+        39
+      ]
+    },
+    {
+      "gate_up": "IQ3_XXS",
+      "down": "Q2_0",
+      "layers": [
+        12,
+        20,
+        30
+      ]
+    },
+    {
+      "gate_up": "IQ3_S",
+      "down": "IQ4_NL",
+      "layers": [
+        17,
+        25,
+        27,
+        28,
+        29,
+        35,
+        40,
+        44,
+        45
+      ]
+    },
+    {
+      "gate_up": "IQ3_S",
+      "down": "Q2_0",
+      "layers": [
+        21
+      ]
+    },
+    {
+      "gate_up": "IQ4_XS",
+      "down": "IQ4_NL",
+      "layers": [
+        47
+      ]
+    }
+  ],
+  "local_warm_backend": [
+    {
+      "layer": 0,
+      "positions": 1,
+      "entries": 6,
+      "native_call_ms": 0.3289,
+      "python_plus_native_ms": 1.3935
+    },
+    {
+      "layer": 0,
+      "positions": 3,
+      "entries": 18,
+      "native_call_ms": 1.3803,
+      "python_plus_native_ms": 5.9605
+    },
+    {
+      "layer": 1,
+      "positions": 1,
+      "entries": 6,
+      "native_call_ms": 0.3718,
+      "python_plus_native_ms": 2.0175
+    },
+    {
+      "layer": 1,
+      "positions": 3,
+      "entries": 18,
+      "native_call_ms": 1.4478,
+      "python_plus_native_ms": 5.119
+    },
+    {
+      "layer": 2,
+      "positions": 1,
+      "entries": 6,
+      "native_call_ms": 0.3508,
+      "python_plus_native_ms": 1.9287
+    },
+    {
+      "layer": 2,
+      "positions": 3,
+      "entries": 18,
+      "native_call_ms": 1.1496,
+      "python_plus_native_ms": 6.3044
+    },
+    {
+      "layer": 12,
+      "positions": 1,
+      "entries": 6,
+      "native_call_ms": 0.4376,
+      "python_plus_native_ms": 2.3135
+    },
+    {
+      "layer": 12,
+      "positions": 3,
+      "entries": 18,
+      "native_call_ms": 1.5512,
+      "python_plus_native_ms": 5.2187
+    },
+    {
+      "layer": 17,
+      "positions": 1,
+      "entries": 6,
+      "native_call_ms": 0.5344,
+      "python_plus_native_ms": 2.1897
+    },
+    {
+      "layer": 17,
+      "positions": 3,
+      "entries": 18,
+      "native_call_ms": 1.4269,
+      "python_plus_native_ms": 6.1975
+    },
+    {
+      "layer": 21,
+      "positions": 1,
+      "entries": 6,
+      "native_call_ms": 0.6716,
+      "python_plus_native_ms": 2.3231
+    },
+    {
+      "layer": 21,
+      "positions": 3,
+      "entries": 18,
+      "native_call_ms": 1.8022,
+      "python_plus_native_ms": 6.2578
+    },
+    {
+      "layer": 47,
+      "positions": 1,
+      "entries": 6,
+      "native_call_ms": 0.2263,
+      "python_plus_native_ms": 1.6497
+    },
+    {
+      "layer": 47,
+      "positions": 3,
+      "entries": 18,
+      "native_call_ms": 0.7558,
+      "python_plus_native_ms": 4.8422
+    }
+  ]
+}

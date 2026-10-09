@@ -26,10 +26,16 @@ class Source:
 
 
 class Backend:
+    can_reduce = True
     def __init__(self):
         self.calls = 0
-    def compute(self, source, layer, nt, k, entries, activation):
+    def compute(self, source, layer, nt, k, entries, activation, weights=None):
         self.calls += 1
+        if weights is not None:
+            sums = [0.] * nt
+            for (r, e), weight in zip(entries, weights):
+                sums[r // k] += e * weight
+            return b"".join(struct.pack("<f", v) * W.H for v in sums)
         return b"".join(struct.pack("<f", float(e)) * W.H for _, e in entries)
 
 
@@ -56,9 +62,39 @@ class ProtocolTests(unittest.TestCase):
         self.thread.join(2)
         self.assertFalse(self.thread.is_alive(), "worker did not terminate disconnected session")
 
-    def authenticate(self):
-        W.send(self.conn, 0, 1, hello(), 1)
-        self.assertEqual(W.frame(self.conn, 1), (0, 129, b""))
+    def authenticate(self, reduced=False):
+        kind = 5 if reduced else 1
+        W.send(self.conn, 0, kind, hello(), 1)
+        self.assertEqual(W.frame(self.conn, 1), (0, kind + 128, b""))
+
+    def reduced_body(self, nt=1, weights=(.25, .75)):
+        return (struct.pack("<IIII", 0, nt, 2, 2)
+                + b"".join(struct.pack("<IIf", r, e, w) for r, e, w in zip((0, 1), (2, 4), weights))
+                + struct.pack("<f", .25) * (nt * W.H))
+
+    def test_reduced_response_and_empty_positions(self):
+        self.authenticate(reduced=True)
+        W.send(self.conn, 1, 4, self.reduced_body(nt=3), 1)
+        seq, kind, result = W.frame(self.conn, 1)
+        self.assertEqual((seq, kind), (1, 132))
+        self.assertEqual(result, struct.pack("<f", 3.5) * W.H + b"\0" * (2 * W.H * 4))
+
+    def test_reduced_nonfinite_weight_is_rejected(self):
+        self.authenticate(reduced=True)
+        W.send(self.conn, 1, 4, self.reduced_body(weights=(.25, float('nan'))), 1)
+        self.assertIn(b"non-finite router weight", W.frame(self.conn, 1)[2])
+        self.assertEqual(self.backend.calls, 0)
+
+    def test_reduction_capability_required(self):
+        self.backend.can_reduce = False
+        W.send(self.conn, 0, 5, hello(), 1)
+        self.assertIn(b"lacks reduced results support", W.frame(self.conn, 1)[2])
+
+    def test_task_mode_cannot_change_after_handshake(self):
+        self.authenticate(reduced=True)
+        W.send(self.conn, 1, 2, body(), 1)
+        self.assertIn(b"identity", W.frame(self.conn, 1)[2])
+        self.assertEqual(self.backend.calls, 0)
 
     def reject_task(self, data, expected):
         self.authenticate()
@@ -170,6 +206,8 @@ def integration(args):
             thread = threading.Thread(target=serve, daemon=True)
             thread.start(); threads.append(thread)
         env = dict(os.environ, STRATA_NETWORK_KEY=KEY.decode())
+        if args.reduce:
+            env["STRATA_NETWORK_REDUCE"] = "1"
         if args.static_plan:
             env.update(STRATA_NETWORK_ASSIGNMENT="0" * 256 + "1" * 256, STRATA_NETWORK_CONFIG_ID="a" * 64)
         cmd = [str(checker), args.pack, ",".join(peers), str(len(sources[0].layers)), "-"]
@@ -183,7 +221,7 @@ def integration(args):
         print("real backend/C++ coordinator parity: PASS")
         coordinator_failures(checker, args, sources[0], env)
         if args.engine_config:
-            engine_smoke(args.engine_config, ",".join(peers), env, workers, args.engine_spec)
+            engine_smoke(args.engine_config, ",".join(peers), env, workers, args.engine_spec, args.local_ram_mib)
     finally:
         stop.set()
         for listener in listeners:
@@ -217,7 +255,7 @@ def coordinator_failures(checker, args, source, env):
                     if mode in ("auth", "model"):
                         W.send(conn, seq, 255, expected.encode(), 3)
                         return
-                    W.send(conn, seq, 131 if kind == 3 else 129, b"", 3)
+                    W.send(conn, seq, kind + 128, b"", 3)
                     seq, kind, data = W.frame(conn, 3)
                     if mode == "disconnect":
                         return
@@ -225,11 +263,11 @@ def coordinator_failures(checker, args, source, env):
                         # Event wait is confined to this test thread, shorter than two seconds.
                         threading.Event().wait(1.3)
                         return
-                    n = struct.unpack_from("<I", data, 12)[0]
+                    n = struct.unpack_from("<I", data, 4 if kind == 4 else 12)[0]
                     payload = struct.pack("<f", float("nan") if mode == "nan" else 0.) * (n * W.H)
                     if mode == "short":
                         payload = payload[:-4]
-                    W.send(conn, seq + 1 if mode == "sequence" else seq, 130, payload, 3)
+                    W.send(conn, seq + 1 if mode == "sequence" else seq, kind + 128, payload, 3)
             except (OSError, EOFError):
                 pass
         thread = threading.Thread(target=fake, daemon=True)
@@ -246,7 +284,7 @@ def coordinator_failures(checker, args, source, env):
             listener.close(); thread.join(3)
 
 
-def engine_smoke(config, peers, env, workers, spec):
+def engine_smoke(config, peers, env, workers, spec, local_ram_mib=0):
     from batch_test import tokenizer
     cfg = json.loads(Path(config).read_text(encoding="utf-8"))
     env = dict(env)
@@ -263,6 +301,10 @@ def engine_smoke(config, peers, env, workers, spec):
     options = base + ["--network-workers", peers, "--network-timeout-ms", "5000",
         "--max-context", "4096", "--prefill", "512", "--expert-cache", "512", "--pcie-frac", "0",
         "--prompt-cache", "0", "--adapt-every", "0", "--spec", str(max(2, spec))]
+    if env.get("STRATA_NETWORK_REDUCE") == "1":
+        options.append("--network-reduce")
+    if local_ram_mib:
+        options += ["--network-local-ram-mib", str(local_ram_mib)]
     if "STRATA_NETWORK_ASSIGNMENT" in env:
         options += ["--network-assignment", env["STRATA_NETWORK_ASSIGNMENT"], "--network-config-id", env["STRATA_NETWORK_CONFIG_ID"]]
     path = Path(f"tmp/network-engine-smoke-spec{spec}.log")
@@ -315,6 +357,12 @@ def engine_smoke(config, peers, env, workers, spec):
             process.wait(timeout=15)
             if process.returncode:
                 raise RuntimeError(f"engine exit {process.returncode}")
+            if local_ram_mib:
+                import re
+                counts = re.findall(r"strata network local: entries=(\d+)", path.read_text())
+                if not counts or int(counts[-1]) == 0:
+                    raise RuntimeError("local RAM mode did not execute any CPU expert")
+                print(f"local RAM CPU entries={counts[-1]}: PASS", flush=True)
         finally:
             if process.poll() is None:
                 process.terminate()
@@ -334,6 +382,8 @@ if __name__ == "__main__":
     parser.add_argument("--engine-config", help="also run the complete engine on two localhost workers")
     parser.add_argument("--engine-spec", type=int, choices=(0, 4), default=4, help="full-engine MTP mode; 0 removes --mtp")
     parser.add_argument("--static-plan", action="store_true", help="test explicit ranges and configuration digest instead of legacy modulo")
+    parser.add_argument("--reduce", action="store_true", help="test weighted compact LAN responses")
+    parser.add_argument("--local-ram-mib", type=int, default=0, help="also verify local CPU participation in full-engine smoke")
     args = parser.parse_args()
     suite = unittest.defaultTestLoader.loadTestsFromTestCase(ProtocolTests)
     result = unittest.TextTestRunner(verbosity=2).run(suite)
