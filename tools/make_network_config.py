@@ -17,7 +17,7 @@ def endpoints(value):
     return value
 
 
-def make_config(source, peers, context=131072, exe=None):
+def make_config(source, peers, context=131072, exe=None, reduce=False, local_ram_mib=0):
     cfg = dict(source)
     if "--native" not in cfg.get("args", []):
         raise ValueError("network workers require an installed native IQ model")
@@ -25,9 +25,9 @@ def make_config(source, peers, context=131072, exe=None):
         "--max-context", "--prefill", "--batch", "--slots",
         "--layer-split", "--split-device", "--peer-device", "--expert-cache-device1", "--expert-cache-device2",
         "--expert-cache-device3", "--pipeline-windows", "--shared-expert-arena", "--resident-budget-gib", "--kv-resident",
-        "--pcie-frac", "--short-read", "--gpu"}
+        "--pcie-frac", "--short-read", "--gpu", "--network-local-ram-mib"}
     remove_flags = {"--no-pool", "--resident-experts", "--resident-cpu-experts", "--resident-cpu-experts-soft",
-        "--remote-expert-opt", "--split-skip-if-fits", "--trim-stage-weights", "--mmap-experts"}
+        "--remote-expert-opt", "--split-skip-if-fits", "--trim-stage-weights", "--mmap-experts", "--network-reduce"}
     args, old, i = [], cfg["args"], 0
     while i < len(old):
         if old[i] in remove_values:
@@ -40,6 +40,10 @@ def make_config(source, peers, context=131072, exe=None):
             args.append(old[i]); i += 1
     args += ["--network-workers", endpoints(peers), "--network-timeout-ms", "5000", "--mmap-experts",
              "--pcie-frac", "0", "--short-read", "0", "--max-context", str(context), "--prefill", "512"]
+    if reduce:
+        args.append("--network-reduce")
+    if local_ram_mib:
+        args += ["--network-local-ram-mib", str(local_ram_mib)]
     cfg["args"] = args
     cfg["gpu"] = 0
     cfg["host"] = "127.0.0.1"

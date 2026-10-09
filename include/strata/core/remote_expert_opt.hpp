@@ -28,6 +28,10 @@ public:
     // Bracket the existing pool callback; its signature and dispatch remain unchanged.
     void begin(const float* weights, int token_begin, int tokens);
     void end() { weights_ = nullptr; }
+    // The LAN tier shares the verifier's weighted-sum buffer and row mask.
+    const float* weights() const { return weights_; }
+    float* host_sum() const { return h_sum_ + token_begin_ * 2560; }
+    int32_t* host_mask() const { return h_mask_ + token_begin_ * 10; }
     void copy_rows(float* dst, const float* src, int token_begin, int tokens,
                    const int32_t* hit_rows, const int32_t* count, void* stream) const;
     void combine(float* dst, float* scratch, int token_begin, int tokens,
