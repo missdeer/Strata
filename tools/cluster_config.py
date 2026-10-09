@@ -60,7 +60,11 @@ class ClusterConfig:
                 raise ValueError("node must be an object")
             common = ("id", "online", "role", "host")
             if node.get("role") == "coordinator":
-                fields(node, common + ("server_config", "engine", "context", "prefill"))
+                fields(node, common + ("server_config", "engine", "context", "prefill"),
+                       ("network_reduce", "network_local_ram_mib"))
+                if "network_reduce" in node and type(node["network_reduce"]) is not bool:
+                    raise ValueError("network_reduce must be true or false")
+                integer(node.get("network_local_ram_mib", 0), 0, 65536, "network_local_ram_mib")
                 for name in ("server_config", "engine"):
                     string(node[name], name)
                 integer(node["context"], 1024, 131072, "context")

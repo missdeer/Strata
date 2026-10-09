@@ -122,6 +122,48 @@ struct Backend {
 };
 }
 EXPORT const char* strata_network_error() { return last_error.c_str(); }
+// Raw IEEE-754 words also reject NaN/Inf under fast-math builds and need no
+// aligned float pointer. Used for both wire activations and compact results.
+EXPORT int strata_network_all_finite(const void* data, uint64_t bytes) {
+    if (bytes % sizeof(float) != 0 || (!data && bytes != 0)) return 0;
+    const auto* p = static_cast<const uint8_t*>(data);
+    for (uint64_t i = 0; i < bytes; i += sizeof(float)) {
+        uint32_t bits;
+        std::memcpy(&bits, p + i, sizeof(bits));
+        if ((bits & 0x7f800000u) == 0x7f800000u) return 0;
+    }
+    return 1;
+}
+// Compact a task's routed rows into one weighted FP32 vector per position.
+// Accumulate in router order even when a caller supplied entries out of order.
+EXPORT int strata_network_reduce(const float* parts, const int32_t* row, const float* weights,
+                                 int nt, int n, int k, float* out) {
+    try {
+        if (!parts || !row || !weights || !out || nt < 1 || nt > cpu::MAXT || k < 1 || k > 10 || n < 1 || n > nt * k)
+            throw std::runtime_error("invalid network reduction geometry");
+        if (!strata_network_all_finite(parts, uint64_t(n) * cpu::H * sizeof(float)) ||
+            !strata_network_all_finite(weights, uint64_t(n) * sizeof(float)))
+            throw std::runtime_error("non-finite network reduction input or weight");
+        int indices[cpu::MAXT * 10];
+        std::fill(indices, indices + nt * k, -1);
+        for (int i = 0; i < n; ++i) {
+            if (row[i] < 0 || row[i] >= nt * k || indices[row[i]] >= 0 || !std::isfinite(weights[i]))
+                throw std::runtime_error("invalid network reduction routing or weight");
+            indices[row[i]] = i;
+        }
+        std::fill(out, out + nt * cpu::H, 0.0f);
+        for (int r = 0; r < nt * k; ++r) {
+            const int i = indices[r];
+            if (i < 0) continue;
+            float* dst = out + (r / k) * cpu::H;
+            const float* src = parts + i * cpu::H;
+            for (int h = 0; h < cpu::H; ++h) dst[h] = std::fma(src[h], weights[i], dst[h]);
+        }
+        if (!strata_network_all_finite(out, uint64_t(nt) * cpu::H * sizeof(float)))
+            throw std::runtime_error("non-finite network reduction result");
+        return 1;
+    } catch (const std::exception& e) { last_error = e.what(); return 0; }
+}
 EXPORT void* strata_network_create(int workers, int device, uint64_t cache_mib) {
     try {
         if (!cpu::cpu_avx2_ok()) throw std::runtime_error("network backend requires an AVX2 CPU");
