@@ -43,6 +43,7 @@ def main():
     p.add_argument("--node", help="this machine's stable node id; required except with --validate")
     p.add_argument("--validate", action="store_true", help="validate and print the static plan without starting a process")
     p.add_argument("--no-api-key", action="store_true", help="disable coordinator API authentication on 127.0.0.1")
+    p.add_argument("--exe", type=Path, help="local coordinator engine override; does not change the shared plan")
     p.add_argument("--prefill", choices=("512", "1024", "2048", "4096", "8192", "auto", "auto:8192"),
                    help="local coordinator prompt chunk override; does not change the shared worker plan")
     a = p.parse_args()
@@ -63,11 +64,13 @@ def main():
             p.error("set STRATA_NETWORK_KEY to the same 16..256 byte secret on every node")
         args = command(plan, a.node)
         if node["role"] == "expert-worker":
+            if a.exe:
+                p.error("--exe applies only to the coordinator")
             if a.prefill:
                 p.error("--prefill applies only to the coordinator")
             raise SystemExit(run(args))
         source = json.loads(Path(node["server_config"]).read_text(encoding="utf-8"))
-        cfg = make_config(source, plan.endpoints, node["context"], node["engine"],
+        cfg = make_config(source, plan.endpoints, node["context"], a.exe or node["engine"],
                           node.get("network_reduce", False), node.get("network_local_ram_mib", 0))
         if a.no_api_key:
             cfg["host"] = "127.0.0.1"
