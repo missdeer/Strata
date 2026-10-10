@@ -17,12 +17,17 @@
 #include "strata/runtime/path.hpp"
 #include <algorithm>
 #include <future>
+#include <cwctype>
+#include <fstream>
+#include <sstream>
 #include <stdexcept>
 #include <thread>
 
 namespace strata::runtime {
 struct EngineProcess::Impl {
     std::string buffered;
+    size_t maximum_line = 1u << 20;
+    mutable int result = -1;
 #ifdef _WIN32
     HANDLE process = nullptr, job = nullptr, input = nullptr, output = nullptr;
 #else
@@ -56,8 +61,11 @@ void release(HANDLE &h) {
 } // namespace
 #endif
 EngineProcess::EngineProcess(const std::vector<std::string> &argv, const std::filesystem::path &cwd,
-                             const std::filesystem::path &log)
+                             const std::filesystem::path &log,
+                             const std::map<std::string, std::string> &environment, size_t maximum_line,
+                             const std::vector<std::string> &removed_environment)
     : impl_(std::make_unique<Impl>()) {
+    impl_->maximum_line = maximum_line;
     if (argv.empty())
         throw std::invalid_argument("empty engine command");
 #ifdef _WIN32
@@ -108,11 +116,78 @@ EngineProcess::EngineProcess(const std::vector<std::string> &argv, const std::fi
                 cmd += L' ';
             cmd += quote(arg);
         }
-        const auto exe = utf8_path(argv.front());
+        auto exe = utf8_path(argv.front());
+        if (exe.is_relative()) {
+            if (exe.has_parent_path())
+                exe = std::filesystem::absolute(cwd / exe);
+            else {
+                std::wstring found(32768, L'\0');
+                std::wstring search;
+                for (const auto &[k, v] : environment)
+                    if (_stricmp(k.c_str(), "PATH") == 0)
+                        search = utf8_path(v).native();
+                for (const auto *extension : {L".exe", L".com", L".cmd", L".bat"}) {
+                    const auto n =
+                        SearchPathW(search.empty() ? nullptr : search.c_str(), exe.c_str(), extension,
+                                    static_cast<DWORD>(found.size()), found.data(), nullptr);
+                    if (n && n < found.size()) {
+                        found.resize(n);
+                        exe = found;
+                        break;
+                    }
+                }
+            }
+        }
+        auto extension = exe.extension().wstring();
+        std::transform(extension.begin(), extension.end(), extension.begin(),
+                       [](wchar_t c) { return static_cast<wchar_t>(std::towlower(c)); });
+        if (extension == L".cmd" || extension == L".bat") {
+            std::wstring argument_line = quote(path_utf8(exe));
+            for (size_t i = 1; i < argv.size(); ++i)
+                argument_line += L" " + quote(argv[i]);
+            std::wstring system(32768, L'\0');
+            const auto n = GetSystemDirectoryW(system.data(), static_cast<UINT>(system.size()));
+            if (!n || n >= system.size())
+                throw std::runtime_error("cannot locate command interpreter");
+            system.resize(n);
+            exe = std::filesystem::path(system) / L"cmd.exe";
+            cmd = quote(path_utf8(exe)) + L" /d /s /c \"" + argument_line + L"\"";
+        } else if (argv.size() == 5 && argv[1] == "/d" && argv[2] == "/s" && argv[3] == "/c")
+            cmd = quote(path_utf8(exe)) + L" /d /s /c \"" + utf8_path(argv[4]).native() + L"\"";
+        struct Less {
+            bool operator()(const std::wstring &a, const std::wstring &b) const {
+                return _wcsicmp(a.c_str(), b.c_str()) < 0;
+            }
+        };
+        std::map<std::wstring, std::wstring, Less> variables;
+        if (auto inherited = GetEnvironmentStringsW()) {
+            for (auto p = inherited; *p; p += wcslen(p) + 1) {
+                std::wstring row(p);
+                const auto at = row.find(L'=', row[0] == L'=' ? 1 : 0);
+                if (at != std::wstring::npos)
+                    variables[row.substr(0, at)] = row.substr(at + 1);
+            }
+            FreeEnvironmentStringsW(inherited);
+        }
+        for (const auto &[key, value] : environment) {
+            if (key.empty() || key.find('=') != std::string::npos || key.find('\0') != std::string::npos ||
+                value.find('\0') != std::string::npos)
+                throw std::invalid_argument("invalid child environment");
+            variables[utf8_path(key).native()] = utf8_path(value).native();
+        }
+        for (const auto &key : removed_environment)
+            variables.erase(utf8_path(key).native());
+        std::wstring block;
+        for (const auto &[key, value] : variables) {
+            block += key + L"=" + value;
+            block += L'\0';
+        }
+        block += L'\0';
         const bool created =
             CreateProcessW(exe.c_str(), cmd.data(), nullptr, nullptr, TRUE,
-                           CREATE_SUSPENDED | CREATE_NO_WINDOW | EXTENDED_STARTUPINFO_PRESENT, nullptr,
-                           cwd.empty() ? nullptr : cwd.c_str(), &si.StartupInfo, &pi) != FALSE;
+                           CREATE_SUSPENDED | CREATE_NO_WINDOW | EXTENDED_STARTUPINFO_PRESENT |
+                               CREATE_UNICODE_ENVIRONMENT,
+                           block.data(), cwd.empty() ? nullptr : cwd.c_str(), &si.StartupInfo, &pi) != FALSE;
         DeleteProcThreadAttributeList(attributes);
         attributes = nullptr;
         if (!created)
@@ -162,11 +237,16 @@ EngineProcess::EngineProcess(const std::vector<std::string> &argv, const std::fi
                 ::close(fd);
         if (!cwd.empty() && chdir(cwd.c_str()))
             _exit(127);
+        for (const auto &[key, value] : environment)
+            if (setenv(key.c_str(), value.c_str(), 1))
+                _exit(127);
+        for (const auto &key : removed_environment)
+            unsetenv(key.c_str());
         std::vector<char *> args;
         for (const auto &s : argv)
             args.push_back(const_cast<char *>(s.c_str()));
         args.push_back(nullptr);
-        execv(args[0], args.data());
+        execvp(args[0], args.data());
         _exit(127);
     }
     ::close(in[0]);
@@ -281,9 +361,77 @@ bool EngineProcess::receive(std::string &line, std::chrono::milliseconds timeout
             throw std::runtime_error("engine output closed");
 #endif
         impl_->buffered.append(bytes, static_cast<size_t>(count));
-        if (impl_->buffered.size() > (1u << 20))
+        if (impl_->buffered.size() > impl_->maximum_line)
             throw std::runtime_error("engine protocol line exceeds limit");
     }
+}
+bool EngineProcess::alive() const {
+#ifdef _WIN32
+    if (!impl_->process || WaitForSingleObject(impl_->process, 0) != WAIT_TIMEOUT) {
+        DWORD code = 2;
+        if (impl_->process)
+            GetExitCodeProcess(impl_->process, &code);
+        impl_->result = static_cast<int>(code);
+        return false;
+    }
+    return true;
+#else
+    if (impl_->process <= 0 || impl_->result != -1)
+        return false;
+    int status = 0;
+    const auto pid = waitpid(impl_->process, &status, WNOHANG);
+    if (pid == impl_->process) {
+        impl_->result = WIFEXITED(status) ? WEXITSTATUS(status) : 128 + WTERMSIG(status);
+        return false;
+    }
+    return pid == 0;
+#endif
+}
+int EngineProcess::exit_code() const {
+    if (alive())
+        return -1;
+    return impl_->result;
+}
+std::optional<std::pair<double, uint64_t>> EngineProcess::activity() const {
+#ifdef _WIN32
+    FILETIME born{}, ended{}, kernel{}, user{};
+    IO_COUNTERS io{};
+    if (!impl_->process || !GetProcessTimes(impl_->process, &born, &ended, &kernel, &user) ||
+        !GetProcessIoCounters(impl_->process, &io))
+        return {};
+    const auto count = [](const FILETIME &t) { return (uint64_t(t.dwHighDateTime) << 32) | t.dwLowDateTime; };
+    return std::pair{(count(kernel) + count(user)) / 10000000.,
+                     uint64_t(io.ReadTransferCount + io.WriteTransferCount)};
+#else
+    if (impl_->process <= 0)
+        return {};
+    const auto root = std::string("/proc/") + std::to_string(impl_->process);
+    std::ifstream stat(root + "/stat"), io(root + "/io");
+    std::string line;
+    if (!std::getline(stat, line))
+        return {};
+    const auto end = line.rfind(')');
+    if (end == std::string::npos)
+        return {};
+    std::istringstream fields(line.substr(end + 2));
+    std::string value;
+    uint64_t ticks = 0;
+    for (int i = 0; i <= 12; ++i) {
+        if (!(fields >> value))
+            return {};
+        if (i == 11 || i == 12)
+            ticks += std::stoull(value);
+    }
+    uint64_t bytes = 0, n = 0;
+    std::string key;
+    while (io >> key >> n)
+        if (key == "read_bytes:" || key == "write_bytes:")
+            bytes += n;
+    const auto rate = sysconf(_SC_CLK_TCK);
+    if (rate <= 0)
+        return {};
+    return std::pair{ticks / double(rate), bytes};
+#endif
 }
 void EngineProcess::finish() noexcept {
     try {
