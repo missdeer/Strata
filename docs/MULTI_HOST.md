@@ -4,10 +4,11 @@
 统一配置方案在启动时固定在线节点和专家范围，之后不自动发现机器、不自动变更分工。
 这是同一个模型、同一条生成请求的分工，不是将三个完整模型放在负载均衡器后面。
 
-## C++ 运行时迁移（第一、二阶段，2026-10-09）
+## C++ 运行时迁移（第一至第四阶段核心路径，2026-10-10）
 
-完整迁移计划和进度见 [PLAN.md](../PLAN.md)。目前已增加原生专家 worker、共享配置校验和原生集群启动器；
-主机 API、tokenizer 和打包入口仍待迁移，整套集群目前仍需 Python。
+完整迁移计划和进度见 [PLAN.md](../PLAN.md)。目前已增加原生专家 worker、共享配置校验、集群启动器、
+tokenizer/模板/输出层及原生主机 API 核心路径。第 4 步的可选功能和第 5/6 步打包/验收尚未全部完成；
+当前安装器和部署包仍使用 Python，不能视为整套部署已不依赖 Python。
 
 构建时显式设置 `-DSTRATA_BUILD_NATIVE_CLUSTER=ON`，然后构建 `strata-network-worker` 和 `strata-cluster`。
 该选项默认为 OFF，需要现有原生专家和网络后端构建；CPU-only、CUDA 和 HIP 配置都支持该目标。
@@ -72,8 +73,64 @@ coordinator 继续监听 `127.0.0.1`，保留本地 server 设置中的 API 认�
 `--exe`、`--prefill` 和 `--no-api-key` 的含义与 Python 集群入口一致，仅适用于 coordinator；
 `--no-api-key` 同时清除子进程环境中的 `STRATA_API_KEY`。
 启动 coordinator 时默认寻找同目录的原生 `strata-server.exe`，可用 `--api-exe` 指定另一原生服务。
-第 4 阶段尚未实现该服务，当前缺少它会明确失败；配置导出和测试子进程不能算作真实 API 验收。
+第 4 阶段已提供该服务；缺少它仍会明确失败。配置导出和测试子进程不能算作真实模型/LAN API 验收。
 原生服务的启动接口为 `--engine strata --config 临时配置 --port 端口`。
+
+### 原生主机 API（第 4 阶段核心路径，2026-10-10）
+
+显式开启 `STRATA_BUILD_NATIVE_CLUSTER` 时构建 `strata-server`，与 `strata-cluster` 放在同一目录。
+直接运行时可先检查配置，检查不启动引擎、不监听端口：
+
+```powershell
+build-network/strata-server.exe --engine strata --config strata-iq3_s.json --validate
+build-network/strata-server.exe --engine strata --config strata-iq3_s.json --port 18085
+```
+
+服务需要 pack 的 tokenizer 和 chat template，以及现有 `serve/web` 静态资源；可以用配置
+`web_root` 或 `--web-root` 指向 web 目录。模板默认先寻找 tokenizer 目录内的 `chat_template.jinja`，
+否则使用 web 目录上级的同名文件；配置 `template` 可以覆盖路径。打包收集这些资源和许可证待第 5 步。
+cpp-httplib 使用项目固定版本的 llama.cpp vendor，许可证在构建目录 `native-text-licenses`。
+
+支持 OpenAI chat completions、stateless Responses、Anthropic messages/count_tokens，以及 JSON/SSE、
+思考/工具调用、namespace/custom tools、reasoning replay、思考预算、强制工具调用、停止字符串、
+结构化输出验证、用量、timings 和缓存计数。工具定义及结果传递给模型；客户端自行执行返回的调用。
+`/v1/models`、健康/状态、`/props`、`/slots`、web 静态路由、settings/config、load/unload、
+API monitor 和基础 Prometheus 计数可用。共享设置写入配置旁的 `.shared-settings.json`；
+配置编辑仅允许服务已支持的字段，先保存 `.bak`，再以私有临时文件原子替换。
+
+常驻引擎按 FIFO 一次生成一条请求。取消时 STOP 并读到本次 DONE 后才放行；断开、协议错误或
+引擎崩溃不重放当前请求，下一请求重启引擎。多段思考/工具续写持有相同队列位置。
+原生服务保留引擎自身的 prompt/conversation cache，API 的 cached_tokens 来自本次 DONE。
+启动、静默、STOP 和管道写入有截止时间；Windows job 在服务被强制结束时清理引擎子树。
+
+API key 支持配置及 `STRATA_API_KEY`，请求使用 Bearer 或 x-api-key。非 loopback 监听必须配置 key；
+密钥不会出现在健康信息、监控响应或配置视图。拒绝 foreign Origin，loopback 监听拒绝不匹配的 Host。
+原生 CPU/RAM 监控使用系统 API，NVIDIA 监控动态加载驱动 NVML，不启动 Python 或采样子进程。
+NVML 不可用和 AMD Windows 未有读数时返回缺失值；完整监控及 Prometheus 指标对照仍待补齐。
+
+目前明确拒绝的配置包括 MCP 执行、vision、parallel/batch、idle unload、before_load、vram control、
+磁盘 session save/restore、部分恢复/安全/模型参数派生设置。未知字段会在引擎启动前报错，不会被
+静默忽略。多机本机配置没有启用 MCP；MCP stdio/HTTP 和执行轮次仍列在 PLAN 第 4 步剩余项。
+这些边界意味着主机 API 核心路径可验证，但不能宣称 Python 服务的所有可选能力已迁移。
+
+验证（Python 只作驱动和行为对照）：
+
+```powershell
+python tools/test_native_server.py --exe build-network/strata-server.exe --engine build-network/strata-server-test-engine.exe --report tmp/native-server-parity.json
+python tools/test_native_server_real.py --exe build-network/strata-server.exe --config tmp/dual-host-test/server.json --report tmp/native-server-real-parity.json
+```
+
+第一个命令需 CPU 测试构建的 `STRATA_BUILD_TESTS=ON` 和 `strata-server-test-engine`；测试夹具不进入部署包。
+第二个命令顺序启动两套隔离的 loopback 服务，使用同一真实引擎；临时配置将 context 设为 8192、
+prefill 设为 512，不改输入配置或停止已有服务。它不产生性能结论。
+
+Windows 本机 21 项 API 检查、15 组文本回归、15 项 worker 和 16 项 launcher 检查通过；launcher
+另跳过 1 项 POSIX 权限检查。System32-only PATH 下 launcher→原生 API→原生引擎夹具完成生成。
+CPU、CUDA sm_89、HIP gfx1102/gfx1103 和 SYCL 主机服务目标均构建通过；SYCL 不包含新专家网络后端。
+同日 i9-12900HK、RTX 4060 Ti 16 GiB、IQ3_S、同一引擎 0.1.41 下的 8 组真实检查，短/长提示词、
+多轮、工具调用、Responses、Anthropic 的输出与用量相同，SSE 断开后下一请求成功。
+长提示词为 2029 token，多轮复用 17 token。没有运行 HIP/SYCL 推理、Linux 或真实 LAN API 性能测试，
+没有切换部署包，也没有无 Python 的完整部署包验收。
 
 Windows 角色进程先挂起创建，加入 kill-on-close job 后再运行，避免创建孙进程时逃出 job。
 Ctrl+C/Ctrl+Break 转发给角色进程组；10 秒不退出则结束整个 job。

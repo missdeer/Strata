@@ -86,7 +86,7 @@ int run(const std::vector<std::string>& argv) {
         if (key.size() < 16 || key.size() > 256) throw std::runtime_error("set STRATA_NETWORK_KEY to a 16..256 byte secret");
         const auto service = api.empty() ? sibling / (std::string("strata-server") + suffix) : std::filesystem::absolute(utf8_path(api));
         if (!std::filesystem::is_regular_file(service))
-            throw std::runtime_error("native API executable unavailable (PLAN.md stage 4); use --export-config to inspect the plan");
+            throw std::runtime_error("native API executable unavailable; build strata-server or use --export-config to inspect the plan");
         if (no_key) {
 #ifdef _WIN32
             SetEnvironmentVariableW(L"STRATA_API_KEY", nullptr);
