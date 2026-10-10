@@ -125,19 +125,21 @@ std::string environment_utf8(const char* name) {
 #endif
 }
 
-std::filesystem::path executable_directory() {
+std::filesystem::path executable_path() {
 #ifdef _WIN32
     std::wstring path(32768, L'\0');
     const auto size = GetModuleFileNameW(nullptr, path.data(), static_cast<DWORD>(path.size()));
     if (!size || size >= path.size()) throw std::runtime_error("cannot locate launcher executable");
-    path.resize(size); return std::filesystem::path(path).parent_path();
+    path.resize(size); return std::filesystem::path(path);
 #else
     std::array<char, 32768> path{};
     const auto size = readlink("/proc/self/exe", path.data(), path.size());
     if (size <= 0 || static_cast<size_t>(size) == path.size()) throw std::runtime_error("cannot locate launcher executable");
-    return utf8_path(std::string(path.data(), static_cast<size_t>(size))).parent_path();
+    return utf8_path(std::string(path.data(), static_cast<size_t>(size)));
 #endif
 }
+
+std::filesystem::path executable_directory() { return executable_path().parent_path(); }
 
 Json coordinator_config(const Json& source, const ClusterConfig& plan, const Json& node,
                         const std::string& engine, const std::string& prefill,

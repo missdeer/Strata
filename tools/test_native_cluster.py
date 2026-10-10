@@ -26,7 +26,7 @@ SETTINGS = None
 
 
 def command(*args, env=None):
-    return subprocess.run([str(SETTINGS.worker), *map(str, args)], capture_output=True,
+    return subprocess.run([str(SETTINGS.worker), "worker", *map(str, args)], capture_output=True,
                           encoding="utf-8", errors="replace", env=env, timeout=20)
 
 
@@ -40,7 +40,7 @@ class RunningWorker:
     def __init__(self, folder, *args, env=None):
         self.log_path = Path(folder) / ("worker-" + str(time.time_ns()) + ".log")
         self.log = self.log_path.open("wb")
-        self.process = subprocess.Popen([str(SETTINGS.worker), *map(str, args)],
+        self.process = subprocess.Popen([str(SETTINGS.worker), "worker", *map(str, args)],
                                         stdout=self.log, stderr=self.log,
                                         env=env or dict(os.environ, STRATA_NETWORK_KEY=KEY.decode()))
         try:
