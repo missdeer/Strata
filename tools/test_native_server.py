@@ -52,7 +52,7 @@ class Running:
         self.engine_cwd=Path(cfg.get("cwd",ROOT)).resolve()
         self.config = folder / ("native.json" if native else "python.json")
         self.config.write_text(json.dumps(cfg), encoding="utf-8")
-        args = [str(ARGS.exe.resolve())] if native else [sys.executable, "-m", "serve.server"]
+        args = [str(ARGS.exe.resolve()), "serve"] if native else [sys.executable, "-m", "serve.server"]
         env = dict(os.environ)
         env.pop("STRATA_API_KEY", None)
         env["PYTHONPATH"] = os.pathsep.join(sys.path)
@@ -281,7 +281,15 @@ class ServerTests(unittest.TestCase):
             futures=[]
             for _ in texts:
                 futures.append(pool.submit(svc.request,"POST","/v1/chat/completions",self.chat()))
-                time.sleep(.04)
+                # Confirm admission before submitting the next request. A fixed
+                # sleep does not establish arrival order under compiler load.
+                deadline = time.monotonic() + 10
+                while True:
+                    state = svc.request("GET", "/status")[1]
+                    admitted = state["queued"] + int(state["busy"]) + sum(f.done() for f in futures)
+                    if admitted >= len(futures): break
+                    self.assertLess(time.monotonic(), deadline, "request was not admitted")
+                    time.sleep(.01)
             results=[f.result()[1]["choices"][0]["message"]["content"] for f in futures]
         self.assertEqual(results,texts)
     def test_responses_namespace_and_reasoning_replay(self):
@@ -305,7 +313,7 @@ class ServerTests(unittest.TestCase):
         for field in ("not_a_server_setting",):
             cfg={"exe":str(ARGS.engine.resolve()), "args":[], "tokenizer":str(self.folder/"tokenizer"), field:{"enabled":True}}
             path=self.folder/"bad.json";path.write_text(json.dumps(cfg),encoding="utf-8")
-            p=subprocess.run([str(ARGS.exe.resolve()),"--config",str(path),"--validate"],capture_output=True,text=True)
+            p=subprocess.run([str(ARGS.exe.resolve()),"serve","--config",str(path),"--validate"],capture_output=True,text=True)
             self.assertNotEqual(p.returncode,0)
             self.assertIn(field,p.stderr)
     def test_settings_and_config_persist_without_exposing_key(self):
@@ -414,6 +422,22 @@ class ServerTests(unittest.TestCase):
             self.assertTrue(all(h=="Bearer fixture-private-key" for _,_,h in observed));self.assertTrue(all(s=="native-session" for m,s,_ in observed if m!="initialize"))
             self.assertNotIn("fixture-private-key",json.dumps(svc.request("GET","/mcp")[1]))
         finally:server.shutdown();server.server_close();thread.join()
+    def test_vision_uses_host_without_an_external_encoder(self):
+        for override in (False, True):
+            log = self.folder / ("builtin-explicit.log" if override else "builtin-default.log")
+            cfg = {"mmproj": str(self.folder / "missing-projector.gguf"),
+                   "model": str(self.folder / "missing-model.gguf")}
+            if override: cfg["exe"] = str(ARGS.exe.resolve())
+            svc = self.start(lazy_load=True, vision=cfg, log=str(log))
+            status, result = svc.request("POST", "/v1/load", {})
+            self.assertEqual(status, 503, result)
+            # The linked encoder actually ran and failed on its model. A
+            # missing subcommand or sibling exe must not produce this result.
+            diagnostic = log.read_text(encoding="utf-8", errors="replace")
+            self.assertIn("missing-model.gguf", diagnostic)
+            self.assertNotIn("unknown command", diagnostic)
+            self.assertFalse(svc.request("GET", "/health")[1]["loaded"])
+
     def test_vision_generation_count_tokens_and_cache(self):
         fixture=ARGS.engine.resolve().with_name("strata-vision-test-encoder.exe" if os.name=="nt" else "strata-vision-test-encoder")
         png=base64.b64decode("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aYu0AAAAASUVORK5CYII=")
@@ -668,7 +692,7 @@ class ServerTests(unittest.TestCase):
         self.assertEqual(outputs[0]["choices"],outputs[1]["choices"])
         self.assertEqual(outputs[0]["usage"],outputs[1]["usage"])
     def test_native_launcher_to_api_without_python_on_path(self):
-        launcher=ARGS.exe.resolve().with_name("strata-cluster.exe" if os.name=="nt" else "strata-cluster")
+        launcher=ARGS.exe.resolve()
         if not launcher.is_file():self.skipTest("native cluster launcher not built in this host-only configuration")
         number=port()
         source=self.folder/"coordinator.json"
@@ -683,7 +707,7 @@ class ServerTests(unittest.TestCase):
         env.pop("STRATA_API_KEY",None)
         env["PATH"]=str(Path(env.get("SYSTEMROOT","C:/Windows"))/"System32")
         with (self.folder/"chain.log").open("w",encoding="utf-8") as log:
-            proc=subprocess.Popen([str(launcher),"--config",str(shared),"--node",node["id"]],cwd=self.folder,env=env,stdout=log,stderr=subprocess.STDOUT)
+            proc=subprocess.Popen([str(launcher),"cluster","--config",str(shared),"--node",node["id"]],cwd=self.folder,env=env,stdout=log,stderr=subprocess.STDOUT)
             try:
                 end=time.monotonic()+20
                 while True:

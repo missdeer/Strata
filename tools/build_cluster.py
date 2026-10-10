@@ -24,11 +24,17 @@ PROGRAMS = {
     "host11": ("strata_network_backend.dll", "strata-network-check.exe"),
     "host17": ("strata.exe", "strata-device.exe", "strata_network_backend.dll", "strata-network-check.exe"),
 }
+NATIVE_PROGRAMS = {
+    "host16": ("strata.exe", "strata-host.exe", "strata_network_backend.dll"),
+    "host11": ("strata-host.exe", "strata_network_backend.dll"),
+    "host17": ("strata.exe", "strata-host.exe", "strata_network_backend.dll"),
+}
 SYSTEM_DLLS = {
     "kernel32.dll", "kernelbase.dll", "ntdll.dll", "advapi32.dll", "ws2_32.dll", "user32.dll", "gdi32.dll",
     "rpcrt4.dll", "ole32.dll", "oleaut32.dll", "shell32.dll", "shlwapi.dll", "secur32.dll", "crypt32.dll",
     "bcrypt.dll", "bcryptprimitives.dll", "version.dll", "winmm.dll", "psapi.dll", "setupapi.dll", "cfgmgr32.dll",
     "shcore.dll", "imm32.dll", "combase.dll", "dbghelp.dll", "dbgcore.dll", "nvcuda.dll", "ucrtbase.dll",
+    "winhttp.dll", "windowscodecs.dll", "pdh.dll",
 }
 
 
@@ -198,6 +204,7 @@ def run_build(host, build, hip_output, args):
     for key in ("CFLAGS", "CXXFLAGS", "CUDAFLAGS", "HIPFLAGS", "STRATA_CLUSTER_BUILD_DIR", "BUILD_DIR", "DIST_DIR"):
         env.pop(key, None)
     env["STRATA_BUILD_JOBS"] = str(args.jobs)
+    env["STRATA_CLUSTER_NATIVE"] = "ON" if args.native else "OFF"
     ggml = local_ggml(args.ggml_dir)
     if ggml:
         env["STRATA_GGML_DIR"] = str(ggml)
@@ -205,7 +212,7 @@ def run_build(host, build, hip_output, args):
         script = ROOT / "tools/hip/build_windows.bat"
         env.update(BUILD_DIR=str(build), DIST_DIR=str(hip_output), ROCM_VENV=str(args.rocm_venv),
                    STRATA_HIP_ARCHS=";".join(args.hip_archs), STRATA_ROCM_SKIP_INSTALL="1" if args.no_install_rocm else "0")
-        command = ["cmd.exe", "/d", "/c", "call", str(script), "network"]
+        command = ["cmd.exe", "/d", "/c", "call", str(script), "native-network" if args.native else "network"]
     else:
         env["STRATA_CLUSTER_BUILD_DIR"] = str(build)
         command = ["cmd.exe", "/d", "/c", "call", str(ROOT / "tools/build_cluster_intel.bat"), host]
@@ -222,6 +229,9 @@ def run_build(host, build, hip_output, args):
 def package(host, build, stage, hip_output, args):
     cache = cache_values(build)
     verify_profile(host, cache, args.hip_archs)
+    programs = NATIVE_PROGRAMS[host] if args.native else PROGRAMS[host]
+    if args.native and cache.get("STRATA_BUILD_NATIVE_CLUSTER") != "ON":
+        raise ValueError("native package requires STRATA_BUILD_NATIVE_CLUSTER=ON")
     if host == "host17":
         source = hip_output / "strata-windows-x64-hip"
         if not source.is_dir():
@@ -230,27 +240,35 @@ def package(host, build, stage, hip_output, args):
         shutil.move(str(hip_output / "strata-windows-x64-hip.zip"), str(stage / "strata-windows-x64-hip.zip"))
     else:
         stage.mkdir()
-        for name in PROGRAMS[host]:
+        for name in programs:
             source = build / name
             if not source.is_file():
                 raise ValueError(f"required compiled file is missing: {source}")
             shutil.copy2(source, stage / name)
-        copy_runtime(stage, [stage / name for name in PROGRAMS[host]], runtime_directories(cache, build, args.runtime_dir))
-    for name in PROGRAMS[host]:
+        copy_runtime(stage, [stage / name for name in programs], runtime_directories(cache, build, args.runtime_dir))
+    for name in programs:
         if not (stage / name).is_file():
             raise ValueError(f"{host}: missing program in deployment package: {name}")
-    add_scripts(stage, host)
+    if args.native:
+        from native_host_package import add_resources, verify_binaries
+        add_resources(stage, build, host)
+        verify_binaries(stage, programs)
+    else:
+        add_scripts(stage, host)
     meta = {"node": host, "built_at_utc": datetime.now(timezone.utc).isoformat(), "build_directory": str(build),
             "compiler": cache.get("CMAKE_CXX_COMPILER"), "c_release_flags": cache.get("CMAKE_C_FLAGS_RELEASE"),
             "cxx_release_flags": cache.get("CMAKE_CXX_FLAGS_RELEASE"), "portable": cache.get("STRATA_PORTABLE") == "ON",
             "backend": "hip" if host == "host17" else "cuda" if host == "host16" else "cpu",
             "hip_archs": args.hip_archs if host == "host17" else [],
-            "programs": {name: hashlib.sha256((stage / name).read_bytes()).hexdigest() for name in PROGRAMS[host]}}
+            "programs": {name: hashlib.sha256((stage / name).read_bytes()).hexdigest() for name in programs}}
+    if args.native:
+        meta["native_host"] = True
     (stage / "CLUSTER_BUILD.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument("--native", action="store_true", help="package strata-host subcommands; no Python runtime or diagnostic executables")
     p.add_argument("--hosts", nargs="+", choices=HOSTS, default=list(HOSTS))
     p.add_argument("--build-root", type=Path, default=ROOT / "build-cluster")
     p.add_argument("--out-root", type=Path, default=ROOT / "dist/cluster")

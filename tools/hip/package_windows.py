@@ -89,7 +89,10 @@ def main() -> int:
     ap.add_argument("--vision-cpu", type=Path, help="strata-vision.exe built for the CPU (tools/vision, STRATA_PORTABLE=ON)")
     ap.add_argument("--vision-hip", type=Path, help="strata-vision-hip.exe built for the same archs (STRATA_VISION_HIP=ON)")
     ap.add_argument("--network", action="store_true", help="include the LAN expert worker library and checker")
+    ap.add_argument("--native-host", action="store_true", help="replace diagnostic tools and Python worker with strata-host")
     a = ap.parse_args()
+    if a.native_host and not a.network:
+        ap.error("--native-host requires --network")
     a.out = a.out.resolve()
     archs = [x for x in re.split(r"[;, ]+", a.archs) if x]
     rbin = a.rocm / "bin"
@@ -101,15 +104,22 @@ def main() -> int:
     (stage / "rocm" / "bin").mkdir(parents=True)
 
     programs = PROGRAMS + (("strata_network_backend.dll", "strata-network-check.exe") if a.network else ())
+    if a.native_host:
+        programs = ("strata.exe", "strata-host.exe", "strata_network_backend.dll")
     for p in programs:
         shutil.copy2(a.build / p, stage / p)
     readers = [(src, src.name) for src in (a.vision_cpu, a.vision_hip) if src is not None]
     for src, name in readers:
         shutil.copy2(src, stage / name)
-    if a.network:
+    if a.network and not a.native_host:
         (stage / "tools").mkdir()
         for name in ("network_worker.py", "gguf_reader.py", "cluster_config.py"):
             shutil.copy2(ROOT / "tools" / name, stage / "tools" / name)
+
+    if a.native_host:
+        sys.path.insert(0, str(ROOT / "tools"))
+        from native_host_package import add_resources
+        add_resources(stage, a.build, "host17")
 
     # the ROCm DLLs: the programs' imports, followed through the ROCm DLLs themselves
     rocm_dlls = {p.name.lower(): p for p in rbin.glob("*.dll")}
@@ -188,6 +198,8 @@ def main() -> int:
         meta.update({"vision": "cpu", "vision_cpu": a.vision_cpu.name})
     if a.vision_hip is not None:
         meta.update({"vision": "gpu", "vision_gpu": a.vision_hip.name, "vision_archs": archs})
+    if a.native_host:
+        meta.update(native_host=True, vision="builtin-cpu")
     (stage / "BUILD.json").write_text(json.dumps(meta, indent=1), encoding="utf-8")
     # the hipBLASLt tuning tables of tools/hip for these archs and exactly this hipBLASLt version, in tuning/ (strata_control/hipblaslt_tuning.py):
     # the engine start points STRATA_HIPBLASLT_TUNING at the one for the card; an arch without a table keeps plain hipBLAS
@@ -198,6 +210,10 @@ def main() -> int:
 
     z = a.out / ASSET
     z.unlink(missing_ok=True)
+    if a.native_host:
+        from native_host_package import verify_binaries
+        verify_binaries(stage, programs)
+
     with zipfile.ZipFile(z, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as f:
         for p in sorted(stage.rglob("*")):
             if p.is_file():

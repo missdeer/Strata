@@ -1,3 +1,4 @@
+#include "strata/runtime/host_commands.hpp"
 // Native LAN worker. All request buffers and backend state are reused; JSON,
 // GGUF directory parsing and model fingerprinting happen only during startup.
 #ifdef _WIN32
@@ -271,9 +272,9 @@ bool options(const std::vector<std::string>& args, Options& o) {
     for (size_t i = 1; i < args.size(); ++i) {
         const auto& arg = args[i]; names.push_back(arg);
         if (arg == "--help") {
-            std::cout << "strata-network-worker --cluster-config FILE --node ID\n"
-                         "strata-network-worker --cluster-config FILE --validate\n"
-                         "strata-network-worker --pack DIR --native GGUF --library DLL --index N [--count N]\n"
+            std::cout << "strata-host worker --cluster-config FILE --node ID\n"
+                         "strata-host worker --cluster-config FILE --validate\n"
+                         "strata-host worker --pack DIR --native GGUF --library DLL --index N [--count N]\n"
                          "  [--host IPv4 --port PORT --allow-client IPv4 --backend cpu|gpu --device N]\n"
                          "  [--workers N --ram-cache-mib N --gpu-cache-mib N --preload-experts --timeout-ms N --verbose]\n"
                          "Set STRATA_NETWORK_KEY (16..256 UTF-8 bytes). Profiling: STRATA_NETWORK_PROFILE=1.\n";
@@ -507,18 +508,4 @@ int run(const std::vector<std::string>& args) {
 }
 } // namespace
 
-#ifdef _WIN32
-int wmain(int argc, wchar_t** argv) {
-    std::vector<std::string> args;
-    for (int i = 0; i < argc; ++i) {
-        const int n = WideCharToMultiByte(CP_UTF8, WC_ERR_INVALID_CHARS, argv[i], -1, nullptr, 0, nullptr, nullptr);
-        if (!n) return 2;
-        std::string arg(static_cast<size_t>(n), '\0');
-        WideCharToMultiByte(CP_UTF8, WC_ERR_INVALID_CHARS, argv[i], -1, arg.data(), n, nullptr, nullptr);
-        arg.pop_back(); args.push_back(std::move(arg));
-    }
-    return run(args);
-}
-#else
-int main(int argc, char** argv) { return run(std::vector<std::string>(argv, argv + argc)); }
-#endif
+int strata::runtime::worker_main(const std::vector<std::string>& args) { return run(args); }

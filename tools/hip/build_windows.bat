@@ -4,6 +4,7 @@ rem
 rem   tools\hip\build_windows.bat              build strata.exe + strata-device.exe and package dist\strata-windows-x64-hip.zip
 rem   tools\hip\build_windows.bat tests        also build the HIP unit tests (ctest in build-hip-win; they need an AMD GPU)
 rem   tools\hip\build_windows.bat network      also build and package the LAN expert worker library and checker
+rem   tools\hip\build_windows.bat native-network  package strata-host + engine + LAN DLL, without Python or diagnostic exes
 rem
 rem Needs: Visual Studio 2022 (or 2019) Build Tools with the C++ workload (the linker, the CRT and the Windows SDK),
 rem Python 3.10+ and git.  No admin rights and no AMD GPU: ROCm comes from AMD's TheRock Python wheels (the same
@@ -36,8 +37,13 @@ if not defined DIST_DIR set "DIST_DIR=%SRC%\dist"
 if not defined STRATA_BUILD_JOBS set "STRATA_BUILD_JOBS=6"
 set "TESTS=OFF"
 set "NETWORK="
+set "NATIVE_HOST=OFF"
 if /i "%~1"=="tests" set "TESTS=ON"
 if /i "%~1"=="network" set "NETWORK=--network"
+if /i "%~1"=="native-network" (
+  set "NETWORK=--network --native-host"
+  set "NATIVE_HOST=ON"
+)
 
 rem ---- 1. ROCm (TheRock wheels: the compiler, the HIP runtime, hipBLAS/hipBLASLt/rocBLAS, a device package per arch)
 set "PY="
@@ -97,12 +103,14 @@ cmake -G Ninja -S "%SRC%" -B "%BUILD_DIR%" -DCMAKE_BUILD_TYPE=Release ^
     "-DCMAKE_PREFIX_PATH=%ROCM_F%" "-DCMAKE_HIP_FLAGS=--rocm-path=%ROCM_F% --rocm-device-lib-path=%BITCODE%" ^
     "-DCMAKE_C_FLAGS=-DWIN32 -D_WINDOWS" "-DCMAKE_CXX_FLAGS=-DWIN32 -D_WINDOWS -fexceptions -fcxx-exceptions" ^
     "-DCMAKE_C_FLAGS_RELEASE=-O3 -DNDEBUG" "-DCMAKE_CXX_FLAGS_RELEASE=-O3 -DNDEBUG" "-DCMAKE_HIP_FLAGS_RELEASE=-O3 -DNDEBUG" ^
-    -DSTRATA_BUILD_NETWORK_BACKEND=ON ^
+    -DSTRATA_BUILD_NETWORK_BACKEND=ON -DSTRATA_BUILD_NATIVE_CLUSTER=%NATIVE_HOST% ^
     %GGML% || exit /b 1
 if "%TESTS%"=="ON" (
   cmake --build "%BUILD_DIR%" --parallel %STRATA_BUILD_JOBS% || exit /b 1
 ) else (
-  if defined NETWORK (
+  if "%NATIVE_HOST%"=="ON" (
+    cmake --build "%BUILD_DIR%" --target strata strata-host strata_network_backend --parallel %STRATA_BUILD_JOBS% || exit /b 1
+  ) else if defined NETWORK (
     cmake --build "%BUILD_DIR%" --target strata strata-device strata_network_backend strata-network-check --parallel %STRATA_BUILD_JOBS% || exit /b 1
   ) else (
     cmake --build "%BUILD_DIR%" --target strata strata-device --parallel %STRATA_BUILD_JOBS% || exit /b 1
