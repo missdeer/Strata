@@ -3,6 +3,7 @@ setlocal EnableExtensions DisableDelayedExpansion
 rem Build the two Intel nodes separately. host11 must never inherit host16's /QxHost flags.
 rem Usage: tools\build_cluster_intel.bat host16 ^| host11
 rem Optional: STRATA_ONEAPI_VARS, STRATA_CLUSTER_BUILD_DIR, STRATA_GGML_DIR, STRATA_BUILD_JOBS, STRATA_ICX_COMPILER.
+rem STRATA_CLUSTER_NATIVE=ON builds strata-host instead of Python deployment's diagnostic tools.
 if /i "%~1"=="host16" goto host16
 if /i "%~1"=="host11" goto host11
 echo Usage: tools\build_cluster_intel.bat host16 ^| host11
@@ -24,6 +25,14 @@ set "STRATA_CLUSTER_RELEASE=/O3 /DNDEBUG /fp:precise"
 set "STRATA_CLUSTER_TARGETS=strata_network_backend strata-network-check"
 
 :configure
+if not defined STRATA_CLUSTER_NATIVE set "STRATA_CLUSTER_NATIVE=OFF"
+if /i "%STRATA_CLUSTER_NATIVE%"=="ON" (
+  if /i "%~1"=="host16" (
+    set "STRATA_CLUSTER_TARGETS=strata strata-host strata_network_backend"
+  ) else (
+    set "STRATA_CLUSTER_TARGETS=strata-host strata_network_backend"
+  )
+)
 for %%I in ("%~dp0..") do set "STRATA_CLUSTER_ROOT=%%~fI"
 if not defined STRATA_ONEAPI_VARS (
   if exist "%ProgramFiles(x86)%\Intel\oneAPI\setvars.bat" (
@@ -67,7 +76,7 @@ cmake -S "%STRATA_CLUSTER_ROOT%" -B "%STRATA_CLUSTER_BUILD_DIR%" -G Ninja ^
   "-DCMAKE_C_FLAGS=" "-DCMAKE_CXX_FLAGS=/DWIN32 /D_WINDOWS /EHsc" ^
   "-DCMAKE_C_FLAGS_RELEASE=%STRATA_CLUSTER_RELEASE%" "-DCMAKE_CXX_FLAGS_RELEASE=%STRATA_CLUSTER_RELEASE%" ^
   -DSTRATA_ENABLE_CUDA=%STRATA_CLUSTER_CUDA% -DSTRATA_ENABLE_HIP=OFF -DSTRATA_ENABLE_SYCL=OFF ^
-  -DSTRATA_PORTABLE=%STRATA_CLUSTER_PORTABLE% -DSTRATA_BUILD_TESTS=OFF -DSTRATA_BUILD_NETWORK_BACKEND=ON ^
+  -DSTRATA_PORTABLE=%STRATA_CLUSTER_PORTABLE% -DSTRATA_BUILD_TESTS=OFF -DSTRATA_BUILD_NETWORK_BACKEND=ON -DSTRATA_BUILD_NATIVE_CLUSTER=%STRATA_CLUSTER_NATIVE% ^
   -DCMAKE_CUDA_ARCHITECTURES=89 -DCMAKE_CUDA_HOST_COMPILER=cl.exe "%STRATA_CLUSTER_GGML%"
 if errorlevel 1 exit /b 1
 cmake --build "%STRATA_CLUSTER_BUILD_DIR%" --target %STRATA_CLUSTER_TARGETS% --parallel %STRATA_BUILD_JOBS%

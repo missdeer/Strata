@@ -7,10 +7,11 @@
 ## C++ 运行时迁移（第一至第四阶段，2026-10-10）
 
 完整迁移计划和进度见 [PLAN.md](../PLAN.md)。目前已增加原生专家 worker、共享配置校验、集群启动器、
-tokenizer/模板/输出层及原生主机 API，已完成第 4 步的可选功能。第 5/6 步打包/验收尚未完成；
-当前安装器和部署包仍使用 Python，不能视为整套部署已不依赖 Python。
+tokenizer/模板/输出层及原生主机 API，已完成第 4 步的可选功能。原生运行入口已合并到
+`strata-host`；`tools/build_cluster.py --native` 收集不依赖 Python 的运行包。安装器和不带
+`--native` 的旧打包路径继续使用 Python；完整真实 LAN 验收仍待第 6 步。
 
-构建时显式设置 `-DSTRATA_BUILD_NATIVE_CLUSTER=ON`，然后构建 `strata-network-worker` 和 `strata-cluster`。
+构建时显式设置 `-DSTRATA_BUILD_NATIVE_CLUSTER=ON`，然后构建 `strata-host`。
 该选项默认为 OFF，需要现有原生专家和网络后端构建；CPU-only、CUDA 和 HIP 配置都支持该目标。
 JSON 和 SHA256 使用项目固定版本的 llama.cpp 中已有的 vendor 源码，不额外下载依赖。
 SYCL 的独立工程没有专家网络后端；可显式设置 `STRATA_BUILD_NATIVE_TEXT=ON` 和
@@ -19,8 +20,8 @@ SYCL 的独立工程没有专家网络后端；可显式设置 `STRATA_BUILD_NAT
 辅助节点可以采用新的入口，继续使用相同共享 JSON 和 `STRATA_NETWORK_KEY`：
 
 ```powershell
-strata-network-worker.exe --cluster-config cluster.json --validate
-strata-network-worker.exe --cluster-config cluster.json --node host11
+strata-host.exe worker --cluster-config cluster.json --validate
+strata-host.exe worker --cluster-config cluster.json --node host11
 ```
 
 worker 按配置中的 `library` 加载对应后端 DLL/共享库，不自动替换该路径。
@@ -40,7 +41,7 @@ worker 按配置中的 `library` 加载对应后端 DLL/共享库，不自动替
 验证命令（测试驱动使用 Python，worker 不使用 Python）：
 
 ```powershell
-python tools/test_native_cluster.py --worker build-network/strata-network-worker.exe --library build-network/strata_network_backend.dll --pack 本机IQ3_S目录 --native 本机第一片GGUF
+python tools/test_native_cluster.py --worker build-network/strata-host.exe --library build-network/strata_network_backend.dll --pack 本机IQ3_S目录 --native 本机第一片GGUF
 ```
 
 CPU 构建增加 `-DSTRATA_BUILD_TESTS=ON` 并构建 `strata-network-test-backend`，可运行计算失败、
@@ -59,9 +60,9 @@ PATH 只含 Windows System32 时，原生 worker 完成认证和任务，也通�
 本地 server 配置和共享 JSON 不会被改写，配置摘要继续与 Python 一致。
 
 ```powershell
-build-network/strata-cluster.exe --config cluster.json --validate
-build-network/strata-cluster.exe --config cluster.json --node host11
-build-network/strata-cluster.exe --config cluster.json --node host16 --export-config coordinator-native.json
+build-network/strata-host.exe cluster --config cluster.json --validate
+build-network/strata-host.exe cluster --config cluster.json --node host11
+build-network/strata-host.exe cluster --config cluster.json --node host16 --export-config coordinator-native.json
 ```
 
 worker 启动要求环境变量 `STRATA_NETWORK_KEY`，仍直接使用共享配置中指定的后端库。
@@ -73,27 +74,62 @@ worker 启动要求环境变量 `STRATA_NETWORK_KEY`，仍直接使用共享配�
 coordinator 继续监听 `127.0.0.1`，保留本地 server 设置中的 API 认证。
 `--exe`、`--prefill` 和 `--no-api-key` 的含义与 Python 集群入口一致，仅适用于 coordinator；
 `--no-api-key` 同时清除子进程环境中的 `STRATA_API_KEY`。
-启动 coordinator 时默认寻找同目录的原生 `strata-server.exe`，可用 `--api-exe` 指定另一原生服务。
+启动 coordinator 时重新运行当前宿主的 `serve` 子命令，worker 使用当前宿主的 `worker` 子命令；
+不会按旧名字寻找其他角色 exe。`--api-exe` 仍可指定另一宿主，启动时同样使用 `serve` 子命令。
 第 4 阶段已提供该服务；缺少它仍会明确失败。配置导出和测试子进程不能算作真实模型/LAN API 验收。
 原生服务的启动接口为 `--engine strata --config 临时配置 --port 端口`。
 
+### 两个 exe 的原生部署包
+
+`strata-host.exe` 提供 `cluster`、`worker`、`serve`、`vision` 四个子命令；另一个正式 exe
+是现有推理引擎 `strata.exe`。专家后端仍为唯一项目 DLL `strata_network_backend.dll`。
+辅助节点只需要宿主和专家 DLL。测试、设备诊断、网络校验程序不进入原生运行包。
+第三方 CUDA/HIP、Intel、MSVC 运行库仍按依赖收集，不计入项目 DLL 目标数。
+
+```powershell
+python tools/build_cluster.py --native --hosts host16 host11 host17 --out-root dist/cluster-native
+# 复用已开启 STRATA_BUILD_NATIVE_CLUSTER 的 Intel 编译目录：
+python tools/build_cluster.py --native --package-only --hosts host16 host11 --build-dir host16=build-intel --build-dir host11=build-network --out-root dist/cluster-native
+strata-host.exe cluster --config cluster.json --node host16
+strata-host.exe worker --cluster-config cluster.json --node host11
+strata-host.exe serve --engine strata --config strata-iq3_s.json
+strata-host.exe vision --mmproj mmproj.gguf --model model.gguf
+```
+
+`--native` 是显式选择；原有 Python 打包和安装器路径保留。打包器收集 Web、模板、许可证和
+示例配置，并拒绝额外 exe、额外项目 DLL 或 Python 文件。不要把整个测试构建目录复制进部署包。
+原生图片配置保留 `mmproj`、`model`，省略 `vision.exe` 时，服务运行自身的 `vision` 子命令。
+已有外部编码器配置仍可使用；将 `vision.exe` 指向当前宿主也会自动加入 `vision` 子命令。
+内置编码器复用当前 CPU ggml；`--gpu` 在没有 GPU 编码后端时明确失败。图片模型不随程序打包。
+SYCL 可构建同一个宿主，但该独立工程仍不生成专家网络 DLL。
+
+本次 Windows 验证：CPU（oneAPI 2026.1）、CUDA sm_89、HIP gfx1102/gfx1103（ROCm
+10.2.0a20260930）、SYCL host 配置构建通过。统一入口 4 项、worker 15 项、launcher 17 项
+（跳过 POSIX ACL 1 项）、API 52 项、文本 15 组、打包 13 项检查通过。
+CUDA 包和 HIP 包的 launcher→serve 链路在 PATH 仅含 Windows System32 时完成测试引擎请求；
+三个包的全部子命令及两个 GPU 引擎的 `--help` 在包内运行库加 System32 的 PATH 下通过。
+host16/host17 各 2 个 exe、1 个项目 DLL，host11 为 1 个 exe、1 个项目 DLL；三个包均无 Python 文件。
+CUDA 引擎与本次改动前的文件 SHA256 相同；HIP 当前构建在原生开关 ON/OFF 下字节相同。
+没有运行真实 GPU 推理或完整 LAN，没有图片 projector 可用来验收实际图片编码，没有验证 Linux，
+也没有测量性能或切换现有部署服务。
+
 ### 原生主机 API（第 4 阶段，2026-10-10）
 
-显式开启 `STRATA_BUILD_NATIVE_CLUSTER` 时构建 `strata-server`，与 `strata-cluster` 放在同一目录。
+显式开启 `STRATA_BUILD_NATIVE_CLUSTER` 时构建统一的 `strata-host`。
 直接运行时可先检查配置，检查不启动引擎、不监听端口：
 
 ```powershell
-build-network/strata-server.exe --engine strata --config strata-iq3_s.json --validate
-build-network/strata-server.exe --engine strata --config strata-iq3_s.json --port 18085
+build-network/strata-host.exe serve --engine strata --config strata-iq3_s.json --validate
+build-network/strata-host.exe serve --engine strata --config strata-iq3_s.json --port 18085
 ```
 
 服务需要 pack 的 tokenizer 和 chat template，以及现有 `serve/web` 静态资源；可以用配置
 `web_root` 或 `--web-root` 指向 web 目录。模板默认先寻找 tokenizer 目录内的 `chat_template.jinja`，
-否则使用 web 目录上级的同名文件；配置 `template` 可以覆盖路径。打包收集这些资源和许可证待第 5 步。
+否则使用 web 目录上级的同名文件；配置 `template` 可以覆盖路径。`--native` 打包收集这些资源和许可证。
 cpp-httplib 使用项目固定版本的 llama.cpp vendor。原生图片转换使用固定版本 libwebp 1.6.0、
 libavif 1.4.2、libaom 3.14.1，CMake 下载时验证 SHA256；可分别用 `STRATA_WEBP_DIR`、
 `STRATA_AVIF_DIR`、`STRATA_AOM_DIR` 指向这些版本的离线源码。许可证和专利文件复制到构建目录
-`native-text-licenses`，第 5 步需收集进包。Windows HTTP 客户端/图片转换使用 WinHTTP/WIC；
+`native-text-licenses`，`--native` 收集进包。Windows HTTP 客户端/图片转换使用 WinHTTP/WIC；
 Linux 分支需要 libcurl/libpng，尚未实机构建或运行。
 
 支持 OpenAI chat completions、stateless Responses、Anthropic messages/count_tokens，以及 JSON/SSE、
@@ -137,9 +173,9 @@ histogram；API monitor 内存保留最多 100 条请求，生成历史最多 50
 验证（Python 只作驱动和行为对照）：
 
 ```powershell
-python tools/test_native_server.py --exe build-network/strata-server.exe --engine build-network/strata-server-test-engine.exe --report tmp/native-server-stage4-final.json
-python tools/test_native_server_real.py --exe build-network/strata-server.exe --config tmp/dual-host-test/server.json --report tmp/native-server-stage4-real.json
-python tools/test_native_server_real.py --exe build-network/strata-server.exe --config tmp/dual-host-test/server.json --parallel 2 --port 18088 --report tmp/native-server-stage4-real-batch.json
+python tools/test_native_server.py --exe build-network/strata-host.exe --engine build-network/strata-server-test-engine.exe --report tmp/native-server-stage4-final.json
+python tools/test_native_server_real.py --exe build-network/strata-host.exe --config tmp/dual-host-test/server.json --report tmp/native-server-stage4-real.json
+python tools/test_native_server_real.py --exe build-network/strata-host.exe --config tmp/dual-host-test/server.json --parallel 2 --port 18088 --report tmp/native-server-stage4-real-batch.json
 ```
 
 第一个命令需 CPU 测试构建的 `STRATA_BUILD_TESTS=ON`，并构建 `strata-server-test-engine`、
@@ -168,7 +204,7 @@ Ctrl+C/Ctrl+Break 转发给角色进程组；10 秒不退出则结束整个 job�
 
 ```powershell
 # CPU 测试构建开启 STRATA_BUILD_TESTS，并构建 strata-cluster-test-role。
-python tools/test_native_launcher.py --launcher build-network/strata-cluster.exe --role build-network/strata-cluster-test-role.exe --library build-network/strata_network_backend.dll
+python tools/test_native_launcher.py --launcher build-network/strata-host.exe --role build-network/strata-cluster-test-role.exe --library build-network/strata_network_backend.dll
 ```
 
 本轮 Windows CPU、CUDA sm_89、HIP gfx1102/gfx1103 配置已构建启动器。
@@ -800,8 +836,8 @@ python tools/test_cluster_config.py --build build-network-cpu --pack D:/Strata-d
 
 显式开启 `STRATA_BUILD_NATIVE_CLUSTER=ON` 后可构建 `strata-text-check`，它读取 pack 的
 `tokenizer/` 目录和模型的 Jinja 模板，提供原生分词、消息归一化、模板渲染、思考/工具调用解析、
-增量 UTF-8、停止字符串和 JSON Schema 输出验证。它是 JSON-lines 诊断程序，第 4 步的
-`strata-server` 复用该文本层；`strata-cluster` 启动同目录的 `strata-server` 提供主机 API。
+增量 UTF-8、停止字符串和 JSON Schema 输出验证。它是仅在 `STRATA_BUILD_TESTS=ON` 时构建的 JSON-lines 诊断程序，第 4 步的
+`strata-host serve` 复用该文本层；`strata-host cluster` 启动自身的 `serve` 子命令提供主机 API。
 
 文本层复用 llama.cpp 的 Unicode/Jinja 实现，并使用 jsoncons v1.7.0（Boost Software License 1.0）。
 CMake 下载固定版本并校验 SHA256；离线构建可传 `-DSTRATA_JSONCONS_DIR=/path/to/jsoncons-1.7.0`。

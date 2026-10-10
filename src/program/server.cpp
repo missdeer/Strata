@@ -1,3 +1,4 @@
+#include "strata/runtime/host_commands.hpp"
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
@@ -240,7 +241,7 @@ int run(const std::vector<std::string> &argv) {
             if (!seen.insert(arg).second)
                 throw std::invalid_argument("duplicate option: " + arg);
             if (arg == "--help") {
-                std::cout << "strata-server --engine strata --config server.json [--host IP] [--port N] "
+                std::cout << "strata-host serve --engine strata --config server.json [--host IP] [--port N] "
                              "[--api-key KEY] [--web-root DIR] [--validate]\n";
                 return 0;
             }
@@ -1831,13 +1832,4 @@ int run(const std::vector<std::string> &argv) {
     }
 }
 } // namespace
-#ifdef _WIN32
-int wmain(int argc, wchar_t **argv) {
-    std::vector<std::string> args;
-    for (int i = 0; i < argc; ++i)
-        args.push_back(strata::runtime::path_utf8(std::filesystem::path(argv[i])));
-    return run(args);
-}
-#else
-int main(int argc, char **argv) { return run(std::vector<std::string>(argv, argv + argc)); }
-#endif
+int strata::runtime::server_main(const std::vector<std::string>& args) { return run(args); }

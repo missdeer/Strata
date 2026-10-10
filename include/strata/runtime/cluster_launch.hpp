@@ -11,6 +11,7 @@ Json coordinator_config(const Json& source, const ClusterConfig& plan, const Jso
                         const std::string& engine, const std::string& prefill,
                         bool no_api_key, const std::filesystem::path& working_directory);
 std::string environment_utf8(const char* name);
+std::filesystem::path executable_path();
 std::filesystem::path executable_directory();
 // Exclusive creation with owner-only access, including on Windows. Never overwrites.
 void write_private_json(const std::filesystem::path& path, const Json& value);

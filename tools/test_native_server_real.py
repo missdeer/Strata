@@ -85,7 +85,7 @@ def main():
             cfg = {**source,"args":args,"parallel":a.parallel,"host":"127.0.0.1","port":a.port,"open_browser":False,"log":str(folder/(label+"-engine.log"))}
             cfg.pop("api_key",None)
             path=folder/(label+".json");path.write_text(json.dumps(cfg),encoding="utf-8")
-            cmd=[str(a.exe.resolve())] if native else [sys.executable,"-m","serve.server"]
+            cmd=[str(a.exe.resolve()), "serve"] if native else [sys.executable,"-m","serve.server"]
             env=dict(os.environ);env.pop("STRATA_API_KEY",None);env["PYTHONPATH"]=os.pathsep.join(sys.path)
             with (folder/(label+"-server.log")).open("w",encoding="utf-8") as log:
                 process=subprocess.Popen(cmd+["--engine","strata","--config",str(path),"--port",str(a.port)],cwd=ROOT,env=env,stdout=log,stderr=subprocess.STDOUT)
