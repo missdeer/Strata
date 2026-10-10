@@ -1,3 +1,4 @@
+#include "strata/runtime/host_commands.hpp"
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
@@ -21,11 +22,11 @@ int run(const std::vector<std::string>& argv) {
             const auto& arg = argv[i];
             if (!seen.insert(arg).second) throw std::runtime_error("duplicate option: " + arg);
             if (arg == "--help") {
-                std::cout << "strata-cluster --config cluster.json --validate | --node ID\n"
+                std::cout << "strata-host cluster --config cluster.json --validate | --node ID\n"
                     "  --exe PATH       coordinator engine override\n"
                     "  --prefill VALUE  512/1024/2048/4096/8192/auto/auto:8192\n"
                     "  --no-api-key     loopback coordinator without API authentication\n"
-                    "  --api-exe PATH   native API executable (default: sibling strata-server)\n"
+                    "  --api-exe PATH   host executable override (default: this host, serve)\n"
                     "  --export-config PATH  create private coordinator config and exit; never overwrite\n";
                 return 0;
             }
@@ -59,16 +60,11 @@ int run(const std::vector<std::string>& argv) {
         const bool worker = (*node)["role"] == "expert-worker";
         if (worker && (!engine.empty() || !prefill.empty() || no_key || !api.empty() || !output.empty()))
             throw std::runtime_error("coordinator options cannot be used for an expert-worker");
-#ifdef _WIN32
-        constexpr auto suffix = ".exe";
-#else
-        constexpr auto suffix = "";
-#endif
-        const auto sibling = executable_directory();
+        const auto host = executable_path();
         if (worker) {
             const auto key = environment_utf8("STRATA_NETWORK_KEY");
             if (key.size() < 16 || key.size() > 256) throw std::runtime_error("set STRATA_NETWORK_KEY to a 16..256 byte secret");
-            return run_contained({path_utf8(sibling / (std::string("strata-network-worker") + suffix)),
+            return run_contained({path_utf8(host), "worker",
                                   "--cluster-config", path_utf8(config_path), "--node", node_id});
         }
         const auto cwd = std::filesystem::current_path();
@@ -84,9 +80,9 @@ int run(const std::vector<std::string>& argv) {
         }
         const auto key = environment_utf8("STRATA_NETWORK_KEY");
         if (key.size() < 16 || key.size() > 256) throw std::runtime_error("set STRATA_NETWORK_KEY to a 16..256 byte secret");
-        const auto service = api.empty() ? sibling / (std::string("strata-server") + suffix) : std::filesystem::absolute(utf8_path(api));
+        const auto service = api.empty() ? host : std::filesystem::absolute(utf8_path(api));
         if (!std::filesystem::is_regular_file(service))
-            throw std::runtime_error("native API executable unavailable; build strata-server or use --export-config to inspect the plan");
+            throw std::runtime_error("native API executable unavailable; use --export-config to inspect the plan");
         if (no_key) {
 #ifdef _WIN32
             SetEnvironmentVariableW(L"STRATA_API_KEY", nullptr);
@@ -98,8 +94,10 @@ int run(const std::vector<std::string>& argv) {
         const auto runtime_config = runtime.path / "coordinator.json";
         write_private_json(runtime_config, cfg);
         std::filesystem::create_directories(cwd / "logs");
-        return run_contained({path_utf8(service), "--engine", "strata", "--config", path_utf8(runtime_config),
+        std::vector<std::string> command{path_utf8(service), "serve"};
+        command.insert(command.end(), {"--engine", "strata", "--config", path_utf8(runtime_config),
                               "--port", std::to_string(cfg.value("port", 8080))});
+        return run_contained(command);
     } catch (const Json::exception&) {
         // JSON parse/type diagnostics can include fragments of a private API key.
         std::cerr << "cluster startup failed: invalid JSON configuration or field type" << std::endl;
@@ -110,12 +108,4 @@ int run(const std::vector<std::string>& argv) {
     }
 }
 } // namespace
-#ifdef _WIN32
-int wmain(int argc, wchar_t** argv) {
-    std::vector<std::string> args;
-    for (int i = 0; i < argc; ++i) args.push_back(strata::runtime::path_utf8(std::filesystem::path(argv[i])));
-    return run(args);
-}
-#else
-int main(int argc, char** argv) { return run(std::vector<std::string>(argv, argv + argc)); }
-#endif
+int strata::runtime::cluster_main(const std::vector<std::string>& args) { return run(args); }
