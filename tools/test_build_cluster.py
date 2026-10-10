@@ -51,7 +51,8 @@ class DeploymentTests(unittest.TestCase):
             root = Path(folder); sdk = root / "sdk"; sdk.mkdir(); stage = root / "stage"; stage.mkdir()
             program = stage / "program.exe"; program.write_bytes(b"program")
             (sdk / "a.dll").write_bytes(b"a"); (sdk / "b.dll").write_bytes(b"b")
-            imports = {"program.exe": ["A.dll", "KERNEL32.dll"], "a.dll": ["b.dll"], "b.dll": ["WS2_32.dll"]}
+            imports = {"program.exe": ["A.dll", "KERNEL32.dll", "WINHTTP.dll", "pdh.dll"],
+                       "a.dll": ["b.dll"], "b.dll": ["WS2_32.dll"]}
             with patch.object(B, "pe_imports", lambda image: imports[image.name]):
                 copied = B.copy_runtime(stage, [program], [sdk])
             self.assertEqual(copied, ["a.dll", "b.dll"])

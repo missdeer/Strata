@@ -15,6 +15,7 @@
 #include "strata/runtime/server_api.hpp"
 #include "strata/runtime/native_http.hpp"
 #include "strata/runtime/path.hpp"
+#include "strata/runtime/cluster_launch.hpp"
 extern "C" {
 #include "sha256.h"
 }
@@ -389,8 +390,15 @@ struct NativeVision::Impl {
             auto path = utf8_path(value.get<std::string>());
             return path_utf8(path.is_relative() ? cwd / path : path);
         };
-        args = {absolute(vision.at("exe")), "--mmproj", absolute(vision.at("mmproj")), "--model",
-                absolute(vision.at("model"))};
+        const auto host = executable_path();
+        if (!vision.contains("exe")) {
+            args = {path_utf8(host), "vision"};
+        } else {
+            args = {absolute(vision.at("exe"))};
+            if (std::filesystem::equivalent(utf8_path(args.front()), host)) args.push_back("vision");
+        }
+        args.insert(args.end(), {"--mmproj", absolute(vision.at("mmproj")), "--model",
+                                 absolute(vision.at("model"))});
         if (vision.value("gpu", false))
             args.push_back("--gpu");
         for (auto key : {"threads", "max_tokens", "min_tokens"})

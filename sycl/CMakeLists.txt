@@ -189,8 +189,8 @@ if(STRATA_NATIVE_EXPERTS)
   target_compile_definitions(strata_kernels_cpu PUBLIC STRATA_NATIVE_EXPERTS=1)
 endif()
 
-# Stage 3 is a host-only text layer. This does not add an expert network backend
-# or a native API to SYCL. Explicitly request this target to check the shared code.
+# The host text layer is opt-in. STRATA_BUILD_NATIVE_SERVER also builds the
+# unified host commands; SYCL still does not build an expert network DLL.
 option(STRATA_BUILD_NATIVE_TEXT "Build the native tokenizer/template/output host runtime" OFF)
 if(STRATA_BUILD_NATIVE_TEXT)
   if(NOT STRATA_NATIVE_EXPERTS)

@@ -76,7 +76,7 @@ class LauncherTests(unittest.TestCase):
         self.source_path.write_text(json.dumps(self.source, ensure_ascii=False), encoding="utf-8-sig")
 
     def command(self, *args, env=None):
-        return subprocess.run([str(SETTINGS.launcher), "--config", str(self.plan_path), *map(str, args)],
+        return subprocess.run([str(SETTINGS.launcher), "cluster", "--config", str(self.plan_path), *map(str, args)],
                               env=env or self.env, cwd=self.folder, capture_output=True, encoding="utf-8", timeout=20)
 
     def export(self, *args):
@@ -167,7 +167,7 @@ class LauncherTests(unittest.TestCase):
         for key in ("", "x" * 15, "x" * 257):
             result = self.command("--node", "host16", env=dict(self.env, STRATA_NETWORK_KEY=key))
             self.assertIn("16..256", result.stderr)
-        # Stage 4 now builds a real sibling strata-server; exercise absence explicitly.
+        # The default API is this host; exercise a missing explicit override.
         self.assertIn("native API executable unavailable", self.command("--node", "host16", "--api-exe", self.folder / "missing-api.exe").stderr)
         self.assertFalse(self.record.exists())
 
@@ -220,7 +220,7 @@ class LauncherTests(unittest.TestCase):
         env = dict(self.env, PATH=str(Path(os.environ["SystemRoot"]) / "System32") if os.name == "nt" else "/usr/bin:/bin")
         log_path = self.folder / "worker.log"
         with log_path.open("wb") as log:
-            process = subprocess.Popen([str(SETTINGS.launcher), "--config", str(self.plan_path), "--node", "host11"],
+            process = subprocess.Popen([str(SETTINGS.launcher), "cluster", "--config", str(self.plan_path), "--node", "host11"],
                                        env=env, cwd=self.folder, stdout=log, stderr=log,
                                        creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if os.name == "nt" else 0)
             try:
@@ -245,7 +245,7 @@ class LauncherTests(unittest.TestCase):
     def start_role(self, **settings):
         self.source.update(settings)
         self.save()
-        process = subprocess.Popen([str(SETTINGS.launcher), "--config", str(self.plan_path), "--node", "host16",
+        process = subprocess.Popen([str(SETTINGS.launcher), "cluster", "--config", str(self.plan_path), "--node", "host16",
                                     "--api-exe", str(self.role), "--no-api-key"], env=self.env, cwd=self.folder,
                                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
                                    creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if os.name == "nt" else 0)
@@ -273,6 +273,7 @@ class LauncherTests(unittest.TestCase):
         self.assertNotIn("api_key", snapshot)
         self.assertEqual(snapshot["args"], self.expected(no_key=True)["args"])
         self.assertEqual(snapshot["test_argv"][-2:], ["--port", "19001"])
+        self.assertEqual(snapshot["test_argv"][1], "serve")
         self.assertEqual(Path(snapshot["test_cwd"]), self.folder)
         self.assertFalse(Path(snapshot["test_runtime_path"]).parent.exists())
 
