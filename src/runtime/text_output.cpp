@@ -392,4 +392,6 @@ std::vector<OutputEvent> OutputParser::feed(const std::string& delta) { return i
 std::vector<OutputEvent> OutputParser::finish(const std::string& reason) { return impl_->finish(reason); }
 size_t OutputParser::rescued() const { return impl_->rescued; }
 size_t OutputParser::refused() const { return impl_->refused; }
+std::string OutputParser::state() const { return impl_->state; }
+bool OutputParser::boundary() const { return impl_->buf.empty(); }
 } // namespace strata::runtime

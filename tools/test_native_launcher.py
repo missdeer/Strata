@@ -167,7 +167,8 @@ class LauncherTests(unittest.TestCase):
         for key in ("", "x" * 15, "x" * 257):
             result = self.command("--node", "host16", env=dict(self.env, STRATA_NETWORK_KEY=key))
             self.assertIn("16..256", result.stderr)
-        self.assertIn("stage 4", self.command("--node", "host16").stderr)
+        # Stage 4 now builds a real sibling strata-server; exercise absence explicitly.
+        self.assertIn("native API executable unavailable", self.command("--node", "host16", "--api-exe", self.folder / "missing-api.exe").stderr)
         self.assertFalse(self.record.exists())
 
     def test_json_error_does_not_log_private_values(self):

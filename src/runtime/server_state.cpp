@@ -1,0 +1,192 @@
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <windows.h>
+#include <sddl.h> // Requires Windows types and WINAPI_FAMILY_PARTITION above.
+#else
+#include <fcntl.h>
+#include <unistd.h>
+#endif
+#include "strata/runtime/path.hpp"
+#include "strata/runtime/server_api.hpp"
+#include "strata/runtime/server_state.hpp"
+#include <algorithm>
+#include <cmath>
+#include <set>
+#include <sstream>
+namespace strata::runtime {
+using J = TextJson;
+void save_server_json(const std::filesystem::path &path, const J &value) {
+    auto temp = path;
+    temp += utf8_path("." + api_id("tmp"));
+    const auto bytes = value.dump(2) + "\n";
+#ifdef _WIN32
+    PSECURITY_DESCRIPTOR sd = nullptr;
+    if (!ConvertStringSecurityDescriptorToSecurityDescriptorW(L"D:P(A;;FA;;;OW)", SDDL_REVISION_1, &sd,
+                                                              nullptr))
+        throw std::runtime_error("cannot protect settings file");
+    SECURITY_ATTRIBUTES sa{sizeof(sa), sd, FALSE};
+    const auto file =
+        CreateFileW(temp.c_str(), GENERIC_WRITE, 0, &sa, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, nullptr);
+    LocalFree(sd);
+    if (file == INVALID_HANDLE_VALUE)
+        throw std::runtime_error("cannot create settings temporary file");
+    bool ok = true;
+    size_t offset = 0;
+    while (offset < bytes.size()) {
+        DWORD n = 0;
+        if (!WriteFile(file, bytes.data() + offset,
+                       static_cast<DWORD>(std::min<size_t>(65536, bytes.size() - offset)), &n, nullptr) ||
+            !n) {
+            ok = false;
+            break;
+        }
+        offset += n;
+    }
+    ok = FlushFileBuffers(file) && ok;
+    CloseHandle(file);
+    if (!ok || !MoveFileExW(temp.c_str(), path.c_str(), MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH)) {
+        DeleteFileW(temp.c_str());
+        throw std::runtime_error("cannot save settings atomically");
+    }
+#else
+    const auto file = open(temp.c_str(), O_WRONLY | O_CREAT | O_EXCL | O_CLOEXEC, 0600);
+    if (file < 0)
+        throw std::runtime_error("cannot create settings temporary file");
+    bool ok = true;
+    size_t offset = 0;
+    while (offset < bytes.size()) {
+        auto n = write(file, bytes.data() + offset, bytes.size() - offset);
+        if (n < 0 && errno == EINTR)
+            continue;
+        if (n <= 0) {
+            ok = false;
+            break;
+        }
+        offset += n;
+    }
+    ok = fsync(file) == 0 && ok;
+    ::close(file);
+    if (!ok || rename(temp.c_str(), path.c_str())) {
+        unlink(temp.c_str());
+        throw std::runtime_error("cannot save settings atomically");
+    }
+#endif
+}
+J shared_defaults(const J &value) {
+    if (value.is_null())
+        return J::object();
+    if (!value.is_object())
+        throw ApiError(400, "defaults must be an object");
+    const std::set<std::string> allowed{"temperature",
+                                        "top_p",
+                                        "top_k",
+                                        "min_p",
+                                        "seed",
+                                        "repetition_penalty",
+                                        "presence_penalty",
+                                        "frequency_penalty",
+                                        "penalty_last_n",
+                                        "max_tokens",
+                                        "reasoning_effort",
+                                        "reasoning_budget_tokens",
+                                        "experimental_speed_projection"};
+    auto out = J::object();
+    for (auto it = value.begin(); it != value.end(); ++it) {
+        if (!allowed.count(it.key()))
+            throw ApiError(400, "unsupported shared setting: " + it.key());
+        if (it.value().is_null() || it.value() == "")
+            continue;
+        out[it.key()] = it.value();
+    }
+    sampling_keys(out);
+    if (out.contains("reasoning_effort"))
+        effort_kwargs(out["reasoning_effort"]);
+    for (auto key : {"seed", "max_tokens", "penalty_last_n"})
+        if (out.contains(key) && (!out[key].is_number_integer() || out[key].get<int64_t>() < 1 ||
+                                  out[key].get<int64_t>() > 2147483647))
+            throw ApiError(400, std::string(key) + " must be a positive integer");
+    if (out.contains("reasoning_budget_tokens") &&
+        (!out["reasoning_budget_tokens"].is_number_integer() ||
+         out["reasoning_budget_tokens"].get<int64_t>() < 0 ||
+         out["reasoning_budget_tokens"].get<int64_t>() > 2147483647))
+        throw ApiError(400, "reasoning_budget_tokens must be nonnegative integer");
+    return out;
+}
+namespace {
+const std::vector<std::pair<std::string, std::string>> editable{{"sampling.temperature", "number"},
+                                                                {"sampling.top_p", "number"},
+                                                                {"sampling.top_k", "number"},
+                                                                {"sampling.min_p", "number"},
+                                                                {"fit_max_tokens", "bool"},
+                                                                {"anthropic_thinking", "enum"},
+                                                                {"aliases", "names"},
+                                                                {"lazy_load", "bool"},
+                                                                {"engine_silence_s", "number"},
+                                                                {"api_monitor", "bool"},
+                                                                {"open_browser", "bool"},
+                                                                {"reasoning_budget_tokens", "number"}};
+J config_value(const J &cfg, const std::string &key) {
+    if (key.starts_with("sampling."))
+        return cfg.value("sampling", J::object()).value(key.substr(9), J(nullptr));
+    return cfg.value(key, J(nullptr));
+}
+} // namespace
+J server_config_view(const J &config, const std::filesystem::path &path) {
+    J fields = J::array();
+    for (const auto &[key, kind] : editable) {
+        J item{{"key", key},
+               {"kind", kind},
+               {"value", config_value(config, key)},
+               {"help", "Used from the next server start."}};
+        if (kind == "enum")
+            item["choices"] = J::array({"model", "on_request"});
+        fields.push_back(item);
+    }
+    return {{"file", path_utf8(path.filename())},
+            {"keys", fields},
+            {"note", "Saved to the run config; used from the next server start."}};
+}
+J server_config_edit(J config, const J &edits) {
+    if (!edits.is_object())
+        throw ApiError(400, "set must be an object");
+    for (auto it = edits.begin(); it != edits.end(); ++it) {
+        const auto found = std::find_if(editable.begin(), editable.end(),
+                                        [&](const auto &p) { return p.first == it.key(); });
+        if (found == editable.end())
+            throw ApiError(400, "config field cannot be edited here: " + it.key());
+        auto v = it.value();
+        const auto &kind = found->second;
+        if (!v.is_null()) {
+            if (kind == "bool" && !v.is_boolean())
+                throw ApiError(400, it.key() + " must be boolean");
+            if (kind == "number" &&
+                (!v.is_number() || !std::isfinite(v.get<double>()) || v.get<double>() < 0))
+                throw ApiError(400, it.key() + " must be nonnegative");
+            if (kind == "names" && v.is_string()) {
+                std::istringstream input(v.get<std::string>());
+                v = J::array();
+                std::string name;
+                while (std::getline(input, name, ',')) {
+                    name = trim_text(name);
+                    if (!name.empty())
+                        v.push_back(name);
+                }
+            }
+        }
+        if (it.key().starts_with("sampling.")) {
+            if (!config.contains("sampling"))
+                config["sampling"] = J::object();
+            if (v.is_null())
+                config["sampling"].erase(it.key().substr(9));
+            else
+                config["sampling"][it.key().substr(9)] = v;
+        } else if (v.is_null())
+            config.erase(it.key());
+        else
+            config[it.key()] = v;
+    }
+    validate_server_config(config);
+    return config;
+}
+} // namespace strata::runtime
