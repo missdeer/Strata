@@ -1,8 +1,11 @@
 #include "strata/runtime/server_api.hpp"
+#include "strata/runtime/server_recovery.hpp"
 #include <algorithm>
 #include <atomic>
 #include <chrono>
 #include <cmath>
+#include <charconv>
+#include <cstdlib>
 #include <iomanip>
 #include <random>
 #include <sstream>
@@ -35,6 +38,27 @@ std::string text_content(const J &value) {
             throw ApiError(400, "native text server does not support content part: " + kind);
     }
     return out;
+}
+J response_content(const J &value) {
+    if (!value.is_array())
+        return text_content(value);
+    J parts = J::array();
+    bool image = false;
+    std::string text;
+    for (const auto &p : value) {
+        if (p.is_object() && (p.value("type", "") == "input_image" || p.value("type", "") == "image_url")) {
+            const auto url = p.value("image_url", J(nullptr));
+            if (!url.is_string() && !url.is_object())
+                throw ApiError(400, "image content requires image_url");
+            parts.push_back({{"type", "image_url"}, {"image_url", url}});
+            image = true;
+        } else {
+            const auto t = text_content(J::array({p}));
+            text += t;
+            parts.push_back({{"type", "text"}, {"text", t}});
+        }
+    }
+    return image ? parts : J(text);
 }
 std::string base64(const std::string &bytes) {
     const char *alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
@@ -83,7 +107,7 @@ std::string unbase64(const std::string &input) {
 J responses_messages(const J &req) {
     J messages = J::array();
     if (req.contains("instructions") && !req["instructions"].is_null())
-        messages.push_back({{"role", "system"}, {"content", text_content(req["instructions"])}});
+        messages.push_back({{"role", "system"}, {"content", response_content(req["instructions"])}});
     if (!req.contains("input"))
         throw ApiError(400, "input is required", "invalid_request_error", "input",
                        "missing_required_parameter");
@@ -112,15 +136,30 @@ J responses_messages(const J &req) {
                 throw ApiError(400, "unknown message role");
             if (role == "assistant") {
                 new_turn();
-                messages[turn]["content"] = text_content(item.value("content", J(nullptr)));
+                auto content = response_content(item.value("content", J(nullptr)));
+                if (content.is_string())
+                    messages[turn]["content"] = content;
+                else {
+                    std::string text;
+                    for (const auto &p : content)
+                        if (p.value("type", "") == "text")
+                            text += p.value("text", "");
+                    messages[turn]["content"] = text;
+                }
             } else {
                 turn = -1;
                 thinking.clear();
                 messages.push_back({{"role", role == "developer" ? "system" : role},
-                                    {"content", text_content(item.value("content", J(nullptr)))}});
+                                    {"content", response_content(item.value("content", J(nullptr)))}});
             }
         } else if (kind == "reasoning") {
-            auto text = text_content(item.value("content", J::array()));
+            std::string text;
+            const auto content = item.value("content", J::array());
+            if (content.is_array())
+                for (const auto &p : content)
+                    if (p.is_object() &&
+                        (p.value("type", "") == "reasoning_text" || p.value("type", "") == "text"))
+                        text += p.value("text", "");
             const auto enc = item.value("encrypted_content", "");
             if (text.empty() && enc.starts_with("strata.r1:")) {
                 try {
@@ -149,7 +188,7 @@ J responses_messages(const J &req) {
                     const auto raw = args.get<std::string>();
                     args = J::parse(raw, nullptr, false);
                     if (!args.is_object())
-                        args = {{"arguments", raw}};
+                        args = {{"arguments", args.is_discarded() ? J(raw) : args}};
                 }
                 if (args.is_null())
                     args = J::object();
@@ -162,9 +201,10 @@ J responses_messages(const J &req) {
                                                     {"_call_id", item.value("call_id", J(nullptr))}});
         } else if (kind == "function_call_output" || kind == "custom_tool_call_output") {
             const auto output = item.value("output", J(nullptr));
-            messages.push_back({{"role", "tool"},
-                                {"content", output.is_object() ? python_json(output) : text_content(output)},
-                                {"_call_id", item.value("call_id", J(nullptr))}});
+            messages.push_back(
+                {{"role", "tool"},
+                 {"content", output.is_object() ? J(python_json(output)) : response_content(output)},
+                 {"_call_id", item.value("call_id", J(nullptr))}});
             turn = -1;
             thinking.clear();
         } else if (kind != "additional_tools")
@@ -278,22 +318,29 @@ std::string api_id(const std::string &prefix) {
     return s.str();
 }
 ApiRequest prepare_api_request(ApiDialect dialect, J req, const J &defaults, const Tokenizer &tok,
-                               const ChatTemplate &chat, int context, bool fit, bool think_unasked) {
+                               const ChatTemplate &chat, int context, bool fit, bool think_unasked,
+                               bool permit_images) {
     if (!req.is_object())
         throw ApiError(400, "request must be a JSON object");
+    if (dialect != ApiDialect::responses && req.value("messages", J(nullptr)).is_string())
+        req["messages"] = parse_text_json(req["messages"].get<std::string>());
     for (auto it = defaults.begin(); it != defaults.end(); ++it)
         if (!req.contains(it.key()) || req[it.key()].is_null())
             req[it.key()] = it.value();
     if (req.contains("stream") && !req["stream"].is_boolean())
         throw ApiError(400, "stream must be boolean");
+    if (req.contains("messages") && !req["messages"].is_array() && dialect != ApiDialect::responses)
+        throw ApiError(400, "messages must be an array of objects");
+    if (dialect != ApiDialect::responses && req.value("messages", J(nullptr)).is_array())
+        for (const auto &message : req["messages"]) {
+            if (!message.is_object())
+                throw ApiError(400, "messages must contain objects");
+            const auto content = message.value("content", J(nullptr));
+            if (!content.is_null() && !content.is_string() && !content.is_array())
+                throw ApiError(400, "message content must be text, parts or null");
+        }
     if (req.value("n", J(1)) != 1)
         throw ApiError(400, "only n=1 is supported");
-    for (auto key : {"strata_prefix", "strata_tune"})
-        if (req.contains(key) && !req[key].is_null())
-            throw ApiError(400, std::string("native server does not yet support ") + key,
-                           "invalid_request_error", key, "unsupported_parameter");
-    if (req.value("strata_mcp", false))
-        throw ApiError(400, "native server does not yet support MCP execution");
     ApiRequest out;
     out.dialect = dialect;
     out.original = req;
@@ -317,7 +364,7 @@ ApiRequest prepare_api_request(ApiDialect dialect, J req, const J &defaults, con
             throw ApiError(400, "invalid " + max_key);
         out.max_new = static_cast<int>(n);
     }
-    J format = req.value("response_format", J(nullptr));
+    J format = dialect == ApiDialect::chat ? req.value("response_format", J(nullptr)) : J(nullptr);
     if (dialect == ApiDialect::responses) {
         for (auto key : {"previous_response_id", "conversation", "background", "prompt"})
             if (req.contains(key) && req[key] != false && !req[key].is_null() && req[key] != "")
@@ -359,8 +406,8 @@ ApiRequest prepare_api_request(ApiDialect dialect, J req, const J &defaults, con
         out.prompt = anthropic_to_messages(out.original, think_unasked);
     else
         out.prompt = openai_to_messages(out.original);
-    if (!images_of(out.prompt.messages).empty())
-        throw ApiError(400, "native server is text-only; images require the Python vision service");
+    if (!permit_images && !images_of(out.prompt.messages).empty())
+        throw ApiError(400, "image input is not enabled for this request");
     const auto choice = out.original.value("tool_choice", J(nullptr));
     if (choice == "none" || (choice.is_object() && choice.value("type", "") == "none"))
         out.prompt.tools = nullptr;
@@ -368,8 +415,7 @@ ApiRequest prepare_api_request(ApiDialect dialect, J req, const J &defaults, con
     out.thinking = out.prompt.kwargs.value("enable_thinking", true);
     out.format = StructuredFormat::prepare(format, out.prompt.messages,
                                            dialect != ApiDialect::responses && !out.prompt.tools.is_null());
-    const auto rendered = chat.render_prompt(out.prompt, tok.controls());
-    out.ids = tok.encode(rendered.text, true, rendered.plain);
+    out.ids = effort_prompt(out.prompt, tok, chat, req.value("_strata_effort_end", false));
     if (!out.force.empty() && !out.thinking) {
         const auto ids = tok.encode(out.force, true);
         out.ids.insert(out.ids.end(), ids.begin(), ids.end());
@@ -386,6 +432,78 @@ ApiRequest prepare_api_request(ApiDialect dialect, J req, const J &defaults, con
         out.max_new = static_cast<int>(room);
     }
     out.sampling = req;
+    if (req.contains("strata_prefix") && !req["strata_prefix"].is_null()) {
+        const auto spec = req["strata_prefix"];
+        const bool token = spec.is_object() && spec.size() == 1 && spec.contains("tokens"),
+                   messages = spec.is_object() && spec.size() == 1 && spec.contains("messages"),
+                   chars = spec.is_object() && spec.size() == 2 && spec.contains("message") &&
+                           spec.contains("chars");
+        if (!token && !messages && !chars)
+            throw ApiError(400, "strata_prefix requires tokens, messages, or message and chars");
+        for (auto it = spec.begin(); it != spec.end(); ++it)
+            if (!it.value().is_number_integer() ||
+                it.value().get<int64_t>() < (it.key() == "message" ? 0 : 1))
+                throw ApiError(400, "strata_prefix counts must be positive integers");
+        int64_t n = 0;
+        if (images_of(out.prompt.messages).empty()) {
+            if (token)
+                n = spec["tokens"].get<int64_t>();
+            else {
+                auto head = out.prompt;
+                const auto marker = std::string("\1strata-prefix-end\1");
+                bool usable = true;
+                if (messages) {
+                    const auto count = spec["messages"].get<size_t>();
+                    if (count >= head.messages.size())
+                        usable = false;
+                    else
+                        head.messages.erase(head.messages.begin() + count, head.messages.end());
+                } else {
+                    const auto index = spec["message"].get<size_t>(), count = spec["chars"].get<size_t>();
+                    if (index >= head.messages.size() ||
+                        !head.messages[index].value("content", TextJson(nullptr)).is_string())
+                        usable = false;
+                    else {
+                        const auto text = head.messages[index]["content"].get<std::string>();
+                        size_t at = 0, seen = 0;
+                        while (at < text.size() && seen < count) {
+                            ++at;
+                            while (at < text.size() && (static_cast<unsigned char>(text[at]) & 0xc0) == 0x80)
+                                ++at;
+                            ++seen;
+                        }
+                        if (seen < count)
+                            usable = false;
+                        else {
+                            head.messages[index]["content"] = text.substr(0, at) + marker;
+                            head.messages.erase(head.messages.begin() + index + 1, head.messages.end());
+                        }
+                    }
+                }
+                if (usable) {
+                    if (req.value("_strata_effort_end", false)) {
+                        head.kwargs.erase("reasoning_effort");
+                        head.kwargs.erase("enable_thinking");
+                    }
+                    auto rendered = chat.render_prompt(head, tok.controls(), false);
+                    const auto at = rendered.text.find(marker);
+                    if (at != std::string::npos) {
+                        rendered.text.resize(at);
+                        std::erase_if(rendered.plain, [&](const auto &span) { return span.first >= at; });
+                        for (auto &span : rendered.plain)
+                            span.second = std::min(span.second, at);
+                    }
+                    const auto prefix = tok.encode(rendered.text, true, rendered.plain);
+                    while (n < static_cast<int64_t>(std::min(prefix.size(), out.ids.size())) &&
+                           prefix[static_cast<size_t>(n)] == out.ids[static_cast<size_t>(n)])
+                        ++n;
+                }
+            }
+        }
+        out.sampling["strata_prefix"] = (n > 0 && n < static_cast<int64_t>(out.ids.size()) - 1)
+                                            ? TextJson{{"tokens", n}}
+                                            : TextJson::object();
+    }
     sampling_keys(out.sampling);
     return out;
 }
@@ -399,32 +517,37 @@ ApiOutput::ApiOutput(ApiRequest request, std::string model,
       emit_(std::move(emit)) {
     if (request_.dialect == ApiDialect::responses) {
         const auto &req = request_.wire;
-        response_ = {{"id", id_},
-                     {"object", "response"},
-                     {"created_at", created_},
-                     {"status", "in_progress"},
-                     {"background", false},
-                     {"error", nullptr},
-                     {"incomplete_details", nullptr},
-                     {"instructions", req.value("instructions", J(nullptr))},
-                     {"max_output_tokens", req.value("max_output_tokens", J(nullptr))},
-                     {"model", model_},
-                     {"output", J::array()},
-                     {"parallel_tool_calls", req.value("parallel_tool_calls", true)},
-                     {"previous_response_id", nullptr},
-                     {"reasoning",
-                      {{"effort", req.value("reasoning", J::object()).value("effort", J(nullptr))},
-                       {"summary", req.value("reasoning", J::object()).value("summary", J(nullptr))}}},
-                     {"store", false},
-                     {"temperature", req.value("temperature", J(nullptr))},
-                     {"text", req.value("text", J{{"format", {{"type", "text"}}}})},
-                     {"tool_choice", req.value("tool_choice", J("auto"))},
-                     {"tools", req.value("tools", J::array())},
-                     {"top_p", req.value("top_p", J(nullptr))},
-                     {"truncation", "disabled"},
-                     {"usage", nullptr},
-                     {"user", nullptr},
-                     {"metadata", req.value("metadata", J::object())}};
+        const auto raw_reasoning = req.value("reasoning", J(nullptr));
+        const auto reasoning = raw_reasoning.is_object() ? raw_reasoning : J::object();
+        const auto raw_text = req.value("text", J(nullptr));
+        const auto text = raw_text.is_object() ? raw_text : J{{"format", {{"type", "text"}}}};
+        response_ = {
+            {"id", id_},
+            {"object", "response"},
+            {"created_at", created_},
+            {"status", "in_progress"},
+            {"background", false},
+            {"error", nullptr},
+            {"incomplete_details", nullptr},
+            {"instructions", req.value("instructions", J(nullptr))},
+            {"max_output_tokens", req.value("max_output_tokens", J(nullptr))},
+            {"model", model_},
+            {"output", J::array()},
+            {"parallel_tool_calls", req.value("parallel_tool_calls", J(true))},
+            {"previous_response_id", nullptr},
+            {"reasoning",
+             {{"effort", reasoning.value("effort", J(nullptr))},
+              {"summary", reasoning.value("summary", J(nullptr))}}},
+            {"store", false},
+            {"temperature", req.value("temperature", J(nullptr))},
+            {"text", text},
+            {"tool_choice", req.value("tool_choice", J("auto"))},
+            {"tools", req.value("tools", J(nullptr)).is_null() ? J::array() : req["tools"]},
+            {"top_p", req.value("top_p", J(nullptr))},
+            {"truncation", "disabled"},
+            {"usage", nullptr},
+            {"user", nullptr},
+            {"metadata", req.value("metadata", J(nullptr)).is_null() ? J::object() : req["metadata"]}};
     }
 }
 bool ApiOutput::send(const std::string &type, J body) {
@@ -520,6 +643,19 @@ bool ApiOutput::event(const OutputEvent &ev) {
     const bool tool = ev.kind == "tool_call" || ev.kind == "tool_start" || ev.kind == "tool_args";
     if (!tool && ev.text.empty())
         return true;
+    if (request_.dialect == ApiDialect::responses && request_.format.enabled()) {
+        if (ev.kind == "content" && !releasing_json_) {
+            if (!response_close())
+                return false;
+            json_text_ += ev.text;
+            return true;
+        }
+        if ((ev.kind == "tool_start" || ev.kind == "tool_call") && !json_called_) {
+            json_called_ = true;
+            if (!release_json())
+                return false;
+        }
+    }
     if (ev.kind == "content")
         content_ += ev.text;
     else if (ev.kind == "reasoning")
@@ -707,10 +843,61 @@ bool ApiOutput::ping(const J &progress) {
     }
     return emit_("", nullptr);
 }
+bool ApiOutput::mcp(const J &activity) {
+    mcp_events_.push_back(activity);
+    return send("",
+                {{"id", id_},
+                 {"object", "chat.completion.chunk"},
+                 {"created", created_},
+                 {"model", model_},
+                 {"choices", J::array({J{{"index", 0}, {"delta", J::object()}, {"finish_reason", nullptr}}})},
+                 {"strata_mcp", activity}});
+}
+bool ApiOutput::release_json() {
+    const auto text = std::move(json_text_);
+    json_text_.clear();
+    if (trim_text(text).empty())
+        return true;
+    releasing_json_ = true;
+    const auto ok = event({"content", text, {}});
+    releasing_json_ = false;
+    return response_close() && ok;
+}
+J request_timings(int pt, int n, const J &done) {
+    if (!done.contains("prompt_ms"))
+        return nullptr;
+    const auto cached = done.value("reused", 0), pn = std::max(0, pt - cached),
+               decoded = done.value("generated", n);
+    const auto pp = done.value("prompt_ms", 0.), ms = done.value("decode_ms", 0.);
+    const auto round = [](double v, int digits) {
+        char buffer[512];
+        const auto result =
+            std::to_chars(buffer, buffer + sizeof(buffer) - 1, v, std::chars_format::fixed, digits);
+        if (result.ec != std::errc())
+            return v;
+        *result.ptr = '\0';
+        return std::strtod(buffer, nullptr);
+    };
+    J result{{"cache_n", cached},
+             {"prompt_n", pn},
+             {"prompt_ms", round(pp, 1)},
+             {"prompt_per_token_ms", pn ? J(round(pp / pn, 3)) : J(nullptr)},
+             {"prompt_per_second", pn && pp > 0 ? J(round(1000. * pn / pp, 1)) : J(nullptr)},
+             {"predicted_n", n},
+             {"predicted_ms", round(ms, 1)},
+             {"predicted_per_token_ms", decoded ? J(round(ms / decoded, 3)) : J(nullptr)},
+             {"predicted_per_second", decoded && ms > 0 ? J(round(1000. * decoded / ms, 1)) : J(nullptr)}};
+    if (done.contains("drafts_offered")) {
+        result["draft_n"] = done["drafts_offered"];
+        result["draft_n_accepted"] = done.value("drafts_accepted", 0);
+    }
+    return result;
+}
 J ApiOutput::finish(const J &done, const std::optional<std::string> &stop) {
     const auto pt = done.value("prompt_tokens", static_cast<int>(request_.ids.size())),
                n = done.value("completion_tokens", done.value("generated", 0));
-    const auto cached = std::clamp(done.value("reused", 0), 0, std::max(0, pt - 1));
+    const auto cached = std::clamp(done.value("reused", 0), 0,
+                                   std::max(0, request_.dialect == ApiDialect::anthropic ? pt - 1 : pt));
     const auto reason = stop ? "stop" : done.value("finish", "stop");
     const auto all_calls = !calls_.empty() && completed_calls_.size() == calls_.size();
     J clean = J::array();
@@ -724,29 +911,7 @@ J ApiOutput::finish(const J &done, const std::optional<std::string> &stop) {
             {"completion_tokens", n},
             {"total_tokens", pt + n},
             {"prompt_tokens_details", {{"cached_tokens", cached}}}};
-    J timings = nullptr;
-    if (done.contains("prompt_ms")) {
-        const auto pn = std::max(0, pt - cached), decoded = done.value("generated", n);
-        const auto pp = done.value("prompt_ms", 0.), ms = done.value("decode_ms", 0.);
-        const auto round = [](double v, int digits) {
-            const auto scale = std::pow(10., digits);
-            return std::round(v * scale) / scale;
-        };
-        timings = {
-            {"cache_n", cached},
-            {"prompt_n", pn},
-            {"prompt_ms", round(pp, 1)},
-            {"prompt_per_token_ms", pn ? J(round(pp / pn, 3)) : J(nullptr)},
-            {"prompt_per_second", pn && pp > 0 ? J(round(1000. * pn / pp, 1)) : J(nullptr)},
-            {"predicted_n", n},
-            {"predicted_ms", round(ms, 1)},
-            {"predicted_per_token_ms", decoded ? J(round(ms / decoded, 3)) : J(nullptr)},
-            {"predicted_per_second", decoded && ms > 0 ? J(round(1000. * decoded / ms, 1)) : J(nullptr)}};
-        if (done.contains("drafts_offered")) {
-            timings["draft_n"] = done["drafts_offered"];
-            timings["draft_n_accepted"] = done["drafts_accepted"];
-        }
-    }
+    const auto timings = request_timings(pt, n, done);
     if (request_.dialect == ApiDialect::chat) {
         const auto finish = all_calls && reason == "stop" ? "tool_calls"
                             : reason == "cancel"          ? "stop"
@@ -761,6 +926,8 @@ J ApiOutput::finish(const J &done, const std::optional<std::string> &stop) {
             chunk["timings"] = timings;
         send("", chunk);
         J msg{{"role", "assistant"}, {"content", content_.empty() ? J(nullptr) : J(content_)}};
+        if (!mcp_events_.empty())
+            msg["strata_mcp"] = mcp_events_;
         if (!reasoning_.empty())
             msg["reasoning_content"] = reasoning_;
         if (!clean.empty())
@@ -804,10 +971,12 @@ J ApiOutput::finish(const J &done, const std::optional<std::string> &stop) {
         response_["usage"] = u;
         return response_;
     }
+    if (request_.format.enabled())
+        release_json();
     const bool unfinished = output_ >= 0 && (response_["output"][output_]["type"] == "function_call" ||
                                              response_["output"][output_]["type"] == "custom_tool_call");
     response_close(reason == "length" || unfinished ? "incomplete" : "completed");
-    response_["status"] = reason == "length" || unfinished ? "incomplete" : "completed";
+    response_["status"] = reason == "length" ? "incomplete" : "completed";
     response_["completed_at"] = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     if (response_["status"] == "incomplete")
         response_["incomplete_details"] = {{"reason", "max_output_tokens"}};
@@ -823,7 +992,10 @@ J ApiOutput::finish(const J &done, const std::optional<std::string> &stop) {
 }
 void ApiOutput::failed(const ApiError &error) {
     if (request_.dialect == ApiDialect::responses) {
-        response_close("incomplete");
+        if (output_ >= 0) {
+            response_["output"][output_]["status"] = "incomplete";
+            output_ = -1;
+        }
         response_["status"] = "failed";
         response_["error"] = {{"code", error.code.empty() ? "server_error" : error.code},
                               {"message", error.what()}};

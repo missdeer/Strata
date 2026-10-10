@@ -41,16 +41,16 @@
 
 ### 4. 主机 API 和引擎管理
 
-- [ ] 实现原生 HTTP/SSE 服务及 `/v1/models`、chat completions、Responses、Anthropic messages/count_tokens、健康/状态/用量和现有 web app 路由。
-  - [x] 已提供 `strata-server`、上述生成接口及 SSE、静态页面、settings/config、load/unload、slots、API monitor 和基础 Prometheus 计数。
-  - [ ] 完整监控/Prometheus 指标对照、`/v1/vram`、磁盘 session save/restore 和可选安全/生命周期设置仍待迁移；目前明确拒绝相应配置/请求。
-- [ ] 迁移持久引擎进程协议、请求排队、取消、错误恢复、上下文检查、会话缓存和 engine 参数生成。
+- [x] 实现原生 HTTP/SSE 服务及 `/v1/models`、chat completions、Responses、Anthropic messages/count_tokens、健康/状态/用量和现有 web app 路由。
+  - [x] `strata-server` 提供上述生成接口、SSE、静态页面、settings/config、load/unload、slots 和 API monitor。
+  - [x] 完整 Prometheus 指标/标签/histogram 对照、GPU 多卡/磁盘监控、`/v1/vram`、磁盘 session save/restore、安全和生命周期设置。
+- [x] 迁移持久引擎进程协议、请求排队、取消、错误恢复、上下文检查、会话缓存和 engine 参数生成。
   - [x] 单引擎 FIFO、READY/INFO/GEN/T/PP/RESUME/DONE、STOP 排空、管道写入/静默/启动截止时间、失败后下一请求重启、上下文检查和会话复用已验证。
   - [x] 思考预算、强制工具调用续写、采样参数、用量与缓存计数已对照；续写全程持有同一 FIFO 位置。
-  - [ ] batch admission、可选 reasoning recovery、profile 参数派生、磁盘 session 和 vram control 仍未迁移，相关配置明确拒绝。
-- [x] 盘点本机多机配置实际启用的 server 依赖；原生 tokenizer/template、工具输出、HTTP、监控、环境和 DLL 路径已迁移。配置未启用 MCP；MCP 执行、vision、并行 batch 等暂不支持时明确拒绝，不能静默丢弃功能。
+  - [x] batch admission、独立取消、solo/batch 切换、短请求让行、reasoning recovery、profile/multi-GPU 参数派生、磁盘 session 和 vram control。
+- [x] 迁移 server 可选运行依赖：MCP stdio/Streamable HTTP 和服务端执行轮次、vision 编码器/原生图片转换、环境和 DLL 路径；不依赖 Python 实现这些功能。
 - [x] 复用 web 静态资源；服务端及引擎子进程不启动 Python。
-- [x] API 行为对照与真实引擎短/长提示词、多轮、工具调用和客户端断开验证（Windows 单机 IQ3_S；真实 LAN API 链路仍待第 6 步）。
+- [x] API 行为对照与真实引擎短/长提示词、多轮、工具调用、双槽并行和客户端断开验证（Windows 单机 IQ3_S；真实 LAN API 链路仍待第 6 步）。
 
 ### 5. 原生构建/打包和部署切换
 
@@ -71,6 +71,8 @@
 所有多机节点的部署和运行均不需要 Python；原有集群能力和客户端接口有对应的兼容验证；性能结论有可复现测量。仅完成原生 worker 不视为全部迁移完成。
 
 ## 当前记录
+
+以下按实施顺序保留历史记录；第 4 步最初的“核心路径”限制已由末尾的完整实现记录取代。第 5/6 步和 Linux 实机验证仍未完成。
 
 - 2026-10-09：已完成范围和兼容要求梳理，开始第 1 步。已有原生 coordinator、CPU/GPU 后端、有限数校验和远端汇总可以复用。
 - 当前实测对照保存在 `tmp/network-opt-worker-timing-analysis.json` 和 `docs/MULTI_HOST.md`；新运行时尚无速度测量。
@@ -99,4 +101,16 @@
 - Windows 便携 CPU（IntelLLVM）、CUDA sm_89（IntelLLVM）、HIP gfx1102/gfx1103（ROCm clang）、SYCL 主机服务（icx-cl）均构建通过。SYCL 仍警告忽略既有 `-fp-model=precise`，没有构建/运行 SYCL 推理或新增其网络专家后端。没有运行 HIP GPU 推理，也未验证 Linux。
 - 原生 API 21 项测试全部通过，Python 仅作驱动/对照：三种生成接口、完整 JSON/SSE、思考/工具、namespace、reasoning replay、预算续写、forced call、chunked body、重复 JSON 字段、认证、静态页面、停止、长度、上下文拒绝、FIFO、断开后下一请求、失败不重放、下一请求成功重启、静默超时、共享设置/配置保存均覆盖。System32-only PATH 下 launcher→原生 API→原生引擎夹具完成生成。报告 `tmp/native-server-parity.json`。文本层 15 组回归通过（727 次 token ID、984 次 parser 对照等），worker 15 项通过，launcher 16 项 Windows 检查通过，另 1 项 POSIX 权限检查跳过。
 - 同日 Windows、i9-12900HK、RTX 4060 Ti 16 GiB、IQ3_S、同一 `build-intel/strata.exe` 0.1.41、context 8192、prefill 512、temperature 0 下，Python/native 真实输出和用量的 8 组对照全部通过。短提示词 18 token、长提示词 2029 token、多轮第 2 轮复用 17 token；真实 echo 工具调用、Responses、Anthropic、SSE 客户端断开后 fresh 请求通过。报告 `tmp/native-server-real-parity.json`；这是单机正确性验证，没有配置远端专家，没有速度结论。
-- 第 4 步尚未全部完成：MCP stdio/Streamable HTTP 及执行轮次、vision、并行 batch、idle unload/before_load、vram/磁盘 session、部分安全配置/恢复选项和完整监控兼容仍需移植。原生配置允许列表在启动引擎前拒绝这些未支持字段；请求中的未支持功能也明确拒绝。不能将本轮核心路径验证当作全部 Python server 兼容或无 Python 部署包验收。现有服务和部署包未切换，继续第 4 步剩余项或第 5/6 步前保留 Python 对照入口。
+- 核心路径提交 `63c8dfcb` 时，第 4 步尚未全部完成：MCP、vision、batch、生命周期、磁盘会话、VRAM 和完整监控仍待迁移。这是该提交时的历史边界，后续完整实现见下。
+
+### 第 4 步完整实现记录（2026-10-10）
+
+- 剩余主机服务功能已迁移到 C++：MCP stdio/Streamable HTTP(S) 及自动工具轮次、vision、batch admission/独立取消/solo 切换、短请求让行、VRAM 控制、磁盘 SAVE/RESTORE、lazy/idle unload、before_load、空闲 VRAM 门槛、安全设置、参数派生、reasoning recovery、Codex title/compaction、prefix、完整监控和 Prometheus。Python 保留为测试对照；服务自身和引擎子进程不依赖 Python。
+- `EngineChannel` 单线程读取引擎输出，分发 control 和每槽 BT/BDONE；异常按进程代际失效所有请求，旧请求不能读到新进程的输出或结束新进程。STOP/BSTOP 排空、协议失步、写入/静默截止时间和 CPU/I/O/GPU 活动检查均保留。普通单请求使用 GEN，重叠时转 BGEN，独立取消不影响其他槽；图片编码与控制操作等待活动请求结束。
+- MCP 支持初始化、工具分页、命名冲突处理、独立 server 启动、HTTP 会话/SSE、取消/超时/重启、结果字符上限和执行轮次；调用期间释放引擎位置。vision 保留原有原生 encoder 协议，支持 data/http/local 图片、EXIF 方向、白底透明合成、SHA256 缓存和当前请求 embedding 引用。WebP/AVIF/AOM 使用固定版本及 SHA256，离线源码覆盖和许可证路径见 `docs/MULTI_HOST.md`。
+- `/v1/vram` 在模型卸载时记住 reserve，并在下次 READY 后应用；磁盘会话保留 SESSION/SWAIT/SERR 的进度、截止时间、错误类别和 published 标记，文件名校验覆盖 Unicode 和 Windows 设备名。磁盘 session 与 batch 不结合，与 Python 行为相同。
+- 安全设置覆盖 allowed_hosts/trusted_origins/CORS、own-page 控制、API 多 key 和 UTF-8/Latin-1 header。子进程环境单独构造，GPU 顺序、split、HIP ordinal、TEMP/lib_dirs 和 expert profile 参数派生已对照。监控覆盖 NVML 多卡、Windows PDH 磁盘、全部 Prometheus 指标族/标签/histogram；API monitor 保留校验失败及执行失败记录，正文按 Unicode 字符截断，列表不带正文。
+- 最终 Windows CPU、CUDA sm_89、HIP gfx1102/gfx1103、SYCL host 主机服务均构建通过。SYCL 仍有既有 `-fp-model=precise` 和 x64 stdcall 忽略警告；没有构建/运行 SYCL 专家网络后端，也没有运行 HIP/SYCL 推理或 Linux 构建。
+- 原生 API 51 项检查全部通过，无跳过；覆盖上述功能、完整 JSON/SSE、错误重启、单请求/双槽断开、安全和图片格式，以及逐 token reasoning recovery 和 canonical structured output 对照。报告 `tmp/native-server-stage4-final.json`。最终文本层回归 15 组通过，727 次完整 token ID 和 984 次 parser 对照；报告 `tmp/native-server-stage4-text-regression.json`。worker 15 项、launcher 16 项 Windows 回归通过，另 1 项 POSIX 权限检查跳过。
+- 同日 Windows、i9-12900HK、RTX 4060 Ti 16 GiB、IQ3_S、同一 `build-intel/strata.exe` 0.1.41、context 8192、prefill 512、temperature 0 下，单请求 8 项、双槽并行 9 项 Python/native 对照全部通过；包括短/长提示词、多轮、工具、Responses、Anthropic、断开后 fresh 请求和同时生成。报告 `tmp/native-server-stage4-real.json`、`tmp/native-server-stage4-real-batch.json`。没有配置远端专家，不构成 LAN 或速度测量。
+- MCP/vision 的验证使用原生协议夹具及实际图片转换，没有测试外部 MCP 提供方或真实 GPU vision 编码。第 4 步实现已完成；第 5/6 步的无 Python 打包、部署切换、清洁环境/LAN 验收和性能测量仍保留未完成。没有停止现有服务或替换现有部署包。
