@@ -95,6 +95,8 @@ public:
     std::vector<OutputEvent> finish(const std::string& reason = "stop");
     size_t rescued() const;
     size_t refused() const;
+    std::string state() const;
+    bool boundary() const;
 };
 
 // Schemas are compiled and checked against their meta-schema before execution;

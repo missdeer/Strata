@@ -42,10 +42,15 @@
 ### 4. 主机 API 和引擎管理
 
 - [ ] 实现原生 HTTP/SSE 服务及 `/v1/models`、chat completions、Responses、Anthropic messages/count_tokens、健康/状态/用量和现有 web app 路由。
+  - [x] 已提供 `strata-server`、上述生成接口及 SSE、静态页面、settings/config、load/unload、slots、API monitor 和基础 Prometheus 计数。
+  - [ ] 完整监控/Prometheus 指标对照、`/v1/vram`、磁盘 session save/restore 和可选安全/生命周期设置仍待迁移；目前明确拒绝相应配置/请求。
 - [ ] 迁移持久引擎进程协议、请求排队、取消、错误恢复、上下文检查、会话缓存和 engine 参数生成。
-- [ ] 盘点并迁移多机部署实际启用的 server 依赖（包括工具/MCP 和监控入口）；未支持的配置明确拒绝，不能静默丢弃功能。
-- [ ] 复用 web 静态资源；服务端不再启动 Python。
-- [ ] API 行为对照与真实引擎短/长提示词、多轮、工具调用和客户端断开验证。
+  - [x] 单引擎 FIFO、READY/INFO/GEN/T/PP/RESUME/DONE、STOP 排空、管道写入/静默/启动截止时间、失败后下一请求重启、上下文检查和会话复用已验证。
+  - [x] 思考预算、强制工具调用续写、采样参数、用量与缓存计数已对照；续写全程持有同一 FIFO 位置。
+  - [ ] batch admission、可选 reasoning recovery、profile 参数派生、磁盘 session 和 vram control 仍未迁移，相关配置明确拒绝。
+- [x] 盘点本机多机配置实际启用的 server 依赖；原生 tokenizer/template、工具输出、HTTP、监控、环境和 DLL 路径已迁移。配置未启用 MCP；MCP 执行、vision、并行 batch 等暂不支持时明确拒绝，不能静默丢弃功能。
+- [x] 复用 web 静态资源；服务端及引擎子进程不启动 Python。
+- [x] API 行为对照与真实引擎短/长提示词、多轮、工具调用和客户端断开验证（Windows 单机 IQ3_S；真实 LAN API 链路仍待第 6 步）。
 
 ### 5. 原生构建/打包和部署切换
 
@@ -87,3 +92,11 @@
 - Windows 便携 CPU（IntelLLVM）、CUDA sm_89 配置（IntelLLVM）、HIP gfx1102/gfx1103 配置（ROCm clang）的文本目标均构建通过；SYCL 工程显式 `STRATA_BUILD_NATIVE_TEXT=ON` 的 host 文本目标也构建通过。SYCL 使用 Windows icx-cl，工程既有 `-fp-model=precise` 参数会被该驱动忽略并警告；这里只验证文本目标，未构建/运行 SYCL 引擎或增加 SYCL 专家网络后端。Linux、真实 GPU 推理及 Swift 专属模板尚未验证。
 - 原生 worker 15 项和 launcher 16 项 Windows 回归通过，另 1 项 POSIX 权限检查跳过。System32-only PATH 下原生文本程序完成 tokenizer 和模板任务；Python 只用作测试驱动/行为对照。整套集群无 Python 启动仍待第 4/5 步验收。
 - 第 3 步没有改动现有 Python 入口、模板文件或引擎计算源文件；普通 CPU/CUDA/HIP 工程仍由 `STRATA_BUILD_NATIVE_CLUSTER=ON` 启用新增目标，SYCL 的新增开关默认 OFF。没有更改默认参数、部署包或运行服务，也没有性能结论；原生主机 API 和引擎管理继续在第 4 步实现。
+- 2026-10-10，第 4 步核心路径已实现：`strata-server` 复用第 3 步文本层和固定 llama.cpp 中的 cpp-httplib；cluster 显式构建自动包含该目标，SYCL 通过 `STRATA_BUILD_NATIVE_TEXT=ON` 和 `STRATA_BUILD_NATIVE_SERVER=ON` 构建主机服务。全部默认开关仍为 OFF；没有改动 Python 服务、现有引擎计算源文件、模型模板、默认参数或部署包。
+- 原生服务提供 OpenAI chat、stateless Responses（含 namespace/custom tools、reasoning replay）、Anthropic messages/count_tokens、SSE、停止字符串、结构化输出验证、工具/思考输出、用量、timings、缓存计数、健康/状态、web 静态页面、配置备份/原子保存、共享设置和内存 API 请求记录。Windows 配置保存文件为 owner-only ACL；非 loopback 监听必须有 API key，拒绝 foreign Origin 和 loopback 上的不匹配 Host。工具协议输出支持不代表已迁移服务端 MCP 执行。
+- Windows engine 先挂起创建并加入 kill-on-close job，显式限制继承的管道句柄，再运行；每次管道写入上限 15 秒。FIFO 内 STOP 排空至本次 DONE；故障或失步会结束子进程，不重放当前请求，下一请求重新读取 READY。思考预算和强制工具调用续写期间不让其他请求插队；自然结束、长度、停止字符串、取消和失步使用独立状态，不能读到旧请求 DONE。正常 unload/退出先发 QUIT，异常路径结束进程树。
+- 原生硬件监控用 Windows 系统 API 读取 CPU/RAM，以动态加载驱动 NVML 的方式读取 NVIDIA GPU/VRAM/温度/功率/PCIe；不运行 Python、nvidia-smi 或其他采样子进程。AMD Windows 无读数时与 Python 一样显示缺失；Linux 代码尚未实机验证。完整 GPU 多卡、磁盘采样和 Prometheus histogram/标签等兼容项尚未完成。
+- Windows 便携 CPU（IntelLLVM）、CUDA sm_89（IntelLLVM）、HIP gfx1102/gfx1103（ROCm clang）、SYCL 主机服务（icx-cl）均构建通过。SYCL 仍警告忽略既有 `-fp-model=precise`，没有构建/运行 SYCL 推理或新增其网络专家后端。没有运行 HIP GPU 推理，也未验证 Linux。
+- 原生 API 21 项测试全部通过，Python 仅作驱动/对照：三种生成接口、完整 JSON/SSE、思考/工具、namespace、reasoning replay、预算续写、forced call、chunked body、重复 JSON 字段、认证、静态页面、停止、长度、上下文拒绝、FIFO、断开后下一请求、失败不重放、下一请求成功重启、静默超时、共享设置/配置保存均覆盖。System32-only PATH 下 launcher→原生 API→原生引擎夹具完成生成。报告 `tmp/native-server-parity.json`。文本层 15 组回归通过（727 次 token ID、984 次 parser 对照等），worker 15 项通过，launcher 16 项 Windows 检查通过，另 1 项 POSIX 权限检查跳过。
+- 同日 Windows、i9-12900HK、RTX 4060 Ti 16 GiB、IQ3_S、同一 `build-intel/strata.exe` 0.1.41、context 8192、prefill 512、temperature 0 下，Python/native 真实输出和用量的 8 组对照全部通过。短提示词 18 token、长提示词 2029 token、多轮第 2 轮复用 17 token；真实 echo 工具调用、Responses、Anthropic、SSE 客户端断开后 fresh 请求通过。报告 `tmp/native-server-real-parity.json`；这是单机正确性验证，没有配置远端专家，没有速度结论。
+- 第 4 步尚未全部完成：MCP stdio/Streamable HTTP 及执行轮次、vision、并行 batch、idle unload/before_load、vram/磁盘 session、部分安全配置/恢复选项和完整监控兼容仍需移植。原生配置允许列表在启动引擎前拒绝这些未支持字段；请求中的未支持功能也明确拒绝。不能将本轮核心路径验证当作全部 Python server 兼容或无 Python 部署包验收。现有服务和部署包未切换，继续第 4 步剩余项或第 5/6 步前保留 Python 对照入口。
