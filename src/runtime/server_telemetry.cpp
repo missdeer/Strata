@@ -2,6 +2,7 @@
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
 #include <windows.h>
+#include <pdh.h>
 #else
 #include <dlfcn.h>
 #endif
@@ -13,6 +14,7 @@
 #include <mutex>
 #include <sstream>
 #include <thread>
+#include <algorithm>
 namespace strata::runtime {
 using J = TextJson;
 struct ServerTelemetry::Impl {
@@ -26,10 +28,18 @@ struct ServerTelemetry::Impl {
     };
 #ifdef _WIN32
     HMODULE library = nullptr;
+    PDH_HQUERY disk_query = nullptr;
+    PDH_HCOUNTER disk_read = nullptr, disk_write = nullptr;
 #else
     void *library = nullptr;
 #endif
     void *gpu = nullptr;
+    std::vector<std::pair<int, void *>> devices;
+#ifndef _WIN32
+    std::vector<std::pair<int, std::filesystem::path>> amd_devices;
+    uint64_t last_disk_read = 0, last_disk_write = 0;
+    std::chrono::steady_clock::time_point disk_at{};
+#endif
     bool initialized = false, stopping = false;
     int (*init)() = nullptr, (*shutdown)() = nullptr;
     int (*handle)(unsigned int, void **) = nullptr;
@@ -38,6 +48,7 @@ struct ServerTelemetry::Impl {
     int (*util)(void *, Utilization *) = nullptr;
     int (*temperature)(void *, int, unsigned int *) = nullptr;
     int (*power)(void *, unsigned int *) = nullptr;
+    int (*power_limit)(void *, unsigned int *) = nullptr;
     int (*pcie)(void *, int, unsigned int *) = nullptr;
     std::mutex mutex;
     std::condition_variable changed;
@@ -52,7 +63,8 @@ struct ServerTelemetry::Impl {
         function = reinterpret_cast<T>(dlsym(library, key));
 #endif
     }
-    Impl(int index, bool amd, std::function<J()> callback) : extra(std::move(callback)) {
+    Impl(int index, bool amd, std::function<J()> callback, const std::vector<int> &requested)
+        : extra(std::move(callback)) {
         fixed = {{"gpu_name", nullptr},
                  {"gpu_count", 0},
                  {"cpu_name", nullptr},
@@ -66,6 +78,29 @@ struct ServerTelemetry::Impl {
             fixed["cpu_name"] = trim_text(path_utf8(std::filesystem::path(cpu)));
         if (!amd)
             library = LoadLibraryExW(L"nvml.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
+        DWORD logical_bytes = 0;
+        GetLogicalProcessorInformationEx(RelationProcessorCore, nullptr, &logical_bytes);
+        std::vector<unsigned char> logical(logical_bytes);
+        if (logical_bytes &&
+            GetLogicalProcessorInformationEx(
+                RelationProcessorCore,
+                reinterpret_cast<PSYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX>(logical.data()), &logical_bytes)) {
+            int cores = 0;
+            for (size_t at = 0; at + 8 <= logical_bytes;) {
+                auto *entry = reinterpret_cast<PSYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX>(logical.data() + at);
+                if (entry->Size < 8 || at + entry->Size > logical_bytes)
+                    break;
+                ++cores;
+                at += entry->Size;
+            }
+            fixed["cores"] = cores;
+        }
+        if (PdhOpenQueryW(nullptr, 0, &disk_query) == ERROR_SUCCESS) {
+            PdhAddEnglishCounterW(disk_query, L"\\PhysicalDisk(_Total)\\Disk Read Bytes/sec", 0, &disk_read);
+            PdhAddEnglishCounterW(disk_query, L"\\PhysicalDisk(_Total)\\Disk Write Bytes/sec", 0,
+                                  &disk_write);
+            PdhCollectQueryData(disk_query);
+        }
         if (amd)
             fixed["gpu_note"] = "no GPU load or VRAM readings for AMD cards on Windows yet; the engine's "
                                 "VRAM figures are in its log";
@@ -79,6 +114,21 @@ struct ServerTelemetry::Impl {
             }
         if (!amd)
             library = dlopen("libnvidia-ml.so.1", RTLD_NOW | RTLD_LOCAL);
+        if (amd) {
+            std::error_code error;
+            std::vector<std::filesystem::path> cards;
+            for (const auto &entry : std::filesystem::directory_iterator("/sys/class/drm", error)) {
+                const auto name = entry.path().filename().string();
+                if (name.starts_with("card") && name.find('-') == std::string::npos &&
+                    std::filesystem::exists(entry.path() / "device/mem_info_vram_total"))
+                    cards.push_back(entry.path() / "device");
+            }
+            std::sort(cards.begin(), cards.end());
+            const auto selected = requested.empty() ? std::vector<int>{index} : requested;
+            for (int i : selected)
+                if (i >= 0 && static_cast<size_t>(i) < cards.size())
+                    amd_devices.emplace_back(i, cards[i]);
+        }
 #endif
         if (library) {
             symbol(init, "nvmlInit_v2");
@@ -89,13 +139,30 @@ struct ServerTelemetry::Impl {
             symbol(util, "nvmlDeviceGetUtilizationRates");
             symbol(temperature, "nvmlDeviceGetTemperature");
             symbol(power, "nvmlDeviceGetPowerUsage");
+            symbol(power_limit, "nvmlDeviceGetEnforcedPowerLimit");
             symbol(pcie, "nvmlDeviceGetPcieThroughput");
             initialized = init && shutdown && init() == 0;
-            if (initialized && handle && index >= 0 && handle(static_cast<unsigned int>(index), &gpu) == 0) {
-                char text[256]{};
-                if (name && name(gpu, text, sizeof(text)) == 0)
-                    fixed["gpu_name"] = text;
-                fixed["gpu_count"] = 1;
+            if (initialized && handle) {
+                const auto selected = requested.empty() ? std::vector<int>{index} : requested;
+                std::string names;
+                for (int i : selected) {
+                    void *dev = nullptr;
+                    if (i >= 0 && handle(static_cast<unsigned int>(i), &dev) == 0) {
+                        devices.emplace_back(i, dev);
+                        char text[256]{};
+                        if (name && name(dev, text, sizeof(text)) == 0) {
+                            if (!names.empty())
+                                names += " + ";
+                            names += text;
+                        }
+                    }
+                }
+                if (!devices.empty()) {
+                    gpu = devices.front().second;
+                    fixed["gpu_count"] = devices.size();
+                    if (!names.empty())
+                        fixed["gpu_name"] = names;
+                }
             }
         }
         sampler = std::thread([this] {
@@ -135,6 +202,17 @@ struct ServerTelemetry::Impl {
             idle = count(a);
             total = count(b) + count(c);
         }
+        if (disk_query && PdhCollectQueryData(disk_query) == ERROR_SUCCESS) {
+            PDH_FMT_COUNTERVALUE value{};
+            if (disk_read &&
+                PdhGetFormattedCounterValue(disk_read, PDH_FMT_DOUBLE, nullptr, &value) == ERROR_SUCCESS &&
+                value.CStatus == ERROR_SUCCESS)
+                s["disk_read_mb"] = value.doubleValue / (1u << 20);
+            if (disk_write &&
+                PdhGetFormattedCounterValue(disk_write, PDH_FMT_DOUBLE, nullptr, &value) == ERROR_SUCCESS &&
+                value.CStatus == ERROR_SUCCESS)
+                s["disk_write_mb"] = value.doubleValue / (1u << 20);
+        }
 #else
         std::ifstream stat("/proc/stat");
         std::string label, line;
@@ -161,29 +239,117 @@ struct ServerTelemetry::Impl {
             s["ram_total"] = capacity;
             s["ram_used"] = capacity - available;
         }
+        std::ifstream disks("/proc/diskstats");
+        std::string disk_line;
+        uint64_t reads = 0, writes = 0;
+        while (std::getline(disks, disk_line)) {
+            std::istringstream row(disk_line);
+            int major = 0, minor = 0;
+            std::string device;
+            uint64_t nread = 0, merged = 0, sectors = 0, time = 0, nwrite = 0, wmerge = 0, wsectors = 0;
+            if (row >> major >> minor >> device >> nread >> merged >> sectors >> time >> nwrite >> wmerge >>
+                wsectors) {
+                if (!std::filesystem::exists(std::filesystem::path("/sys/class/block") / device /
+                                             "partition")) {
+                    reads += sectors * 512;
+                    writes += wsectors * 512;
+                }
+            }
+        }
+        const auto now_ = std::chrono::steady_clock::now();
+        if (disk_at.time_since_epoch().count() != 0) {
+            const auto dt = std::chrono::duration<double>(now_ - disk_at).count();
+            if (dt > 0 && reads >= last_disk_read && writes >= last_disk_write) {
+                s["disk_read_mb"] = (reads - last_disk_read) / dt / (1u << 20);
+                s["disk_write_mb"] = (writes - last_disk_write) / dt / (1u << 20);
+            }
+        }
+        last_disk_read = reads;
+        last_disk_write = writes;
+        disk_at = now_;
 #endif
         if (previous_total && total > previous_total && idle >= previous_idle)
             s["cpu"] = 100. * (1. - double(idle - previous_idle) / double(total - previous_total));
         previous_total = total;
         previous_idle = idle;
-        if (gpu) {
+        J gpu_readings = J::array();
+        for (const auto &[index, dev] : devices) {
+            const auto gpu = dev;
+            J card{{"index", index}};
             Memory m{};
             Utilization u{};
             unsigned int n = 0;
             if (memory && memory(gpu, &m) == 0) {
-                s["gpu_mem_used"] = m.used;
-                s["gpu_mem_total"] = m.total;
+                card["mem_used"] = m.used;
+                card["mem_total"] = m.total;
+                card["mem_free"] = m.free;
             }
             if (util && util(gpu, &u) == 0)
-                s["gpu_util"] = u.gpu;
+                card["util"] = u.gpu;
             if (temperature && temperature(gpu, 0, &n) == 0)
-                s["gpu_temp"] = n;
+                card["temp"] = n;
             if (power && power(gpu, &n) == 0)
-                s["gpu_power"] = n / 1000.;
+                card["power"] = n / 1000.;
+            if (power_limit && power_limit(gpu, &n) == 0)
+                card["power_limit"] = n / 1000.;
             if (pcie && pcie(gpu, 1, &n) == 0)
-                s["gpu_pcie_rx_mb"] = n / 1024.;
+                card["pcie_rx_mb"] = n / 1024.;
             if (pcie && pcie(gpu, 0, &n) == 0)
-                s["gpu_pcie_tx_mb"] = n / 1024.;
+                card["pcie_tx_mb"] = n / 1024.;
+            gpu_readings.push_back(card);
+        }
+#ifndef _WIN32
+        for (const auto &[index, path] : amd_devices) {
+            auto read = [](const std::filesystem::path &file) -> J {
+                std::ifstream in(file);
+                double value = 0;
+                if (in >> value)
+                    return value;
+                return nullptr;
+            };
+            J card{{"index", index},
+                   {"util", read(path / "gpu_busy_percent")},
+                   {"mem_used", read(path / "mem_info_vram_used")},
+                   {"mem_total", read(path / "mem_info_vram_total")}};
+            if (card["mem_total"].is_number() && card["mem_used"].is_number())
+                card["mem_free"] = card["mem_total"].get<double>() - card["mem_used"].get<double>();
+            std::error_code error;
+            for (const auto &hw : std::filesystem::directory_iterator(path / "hwmon", error)) {
+                auto temperature = read(hw.path() / "temp1_input"),
+                     power_ = read(hw.path() / "power1_average"), limit = read(hw.path() / "power1_cap");
+                if (temperature.is_number())
+                    card["temp"] = temperature.get<double>() / 1000.;
+                if (power_.is_number())
+                    card["power"] = power_.get<double>() / 1000000.;
+                if (limit.is_number())
+                    card["power_limit"] = limit.get<double>() / 1000000.;
+                break;
+            }
+            gpu_readings.push_back(card);
+        }
+#endif
+        if (!gpu_readings.empty()) {
+            if (gpu_readings.size() > 1)
+                s["gpus"] = gpu_readings;
+            s["gpu_mem_free"] = gpu_readings[0].value("mem_free", J(nullptr));
+            for (auto key : {"util", "mem_used", "mem_total", "temp", "power", "power_limit", "pcie_rx_mb",
+                             "pcie_tx_mb"}) {
+                double sum = 0, max = -1;
+                int count = 0;
+                for (const auto &card : gpu_readings) {
+                    const auto v = card.value(key, J(nullptr));
+                    if (v.is_number()) {
+                        const auto n = v.get<double>();
+                        sum += n;
+                        max = std::max(max, n);
+                        ++count;
+                    }
+                }
+                if (count)
+                    s["gpu_" + std::string(key)] = std::string(key) == "util"   ? sum / count
+                                                   : std::string(key) == "temp" ? max
+                                                                                : sum;
+            }
         }
         try {
             if (extra)
@@ -203,6 +369,8 @@ struct ServerTelemetry::Impl {
         if (initialized)
             shutdown();
 #ifdef _WIN32
+        if (disk_query)
+            PdhCloseQuery(disk_query);
         if (library)
             FreeLibrary(library);
 #else
@@ -211,9 +379,20 @@ struct ServerTelemetry::Impl {
 #endif
     }
 };
-ServerTelemetry::ServerTelemetry(int gpu, bool amd, std::function<J()> extra)
-    : impl_(std::make_unique<Impl>(gpu, amd, std::move(extra))) {}
+ServerTelemetry::ServerTelemetry(int gpu, bool amd, std::function<J()> extra, const std::vector<int> &indices)
+    : impl_(std::make_unique<Impl>(gpu, amd, std::move(extra), indices)) {}
 ServerTelemetry::~ServerTelemetry() = default;
+void ServerTelemetry::close() {
+    if (!impl_)
+        return;
+    {
+        std::lock_guard<std::mutex> lock(impl_->mutex);
+        impl_->stopping = true;
+        impl_->changed.notify_all();
+    }
+    if (impl_->sampler.joinable())
+        impl_->sampler.join();
+}
 J ServerTelemetry::snapshot() {
     std::lock_guard<std::mutex> lock(impl_->mutex);
     return {{"now", impl_->now}, {"history", impl_->history}, {"static", impl_->fixed}};
