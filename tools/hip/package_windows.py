@@ -73,7 +73,10 @@ def main() -> int:
     ap.add_argument("--rocm-version", required=True)
     ap.add_argument("--out", required=True, type=Path)
     ap.add_argument("--network", action="store_true", help="include the LAN expert worker library and checker")
+    ap.add_argument("--native-host", action="store_true", help="replace diagnostic tools and Python worker with strata-host")
     a = ap.parse_args()
+    if a.native_host and not a.network:
+        ap.error("--native-host requires --network")
     a.out = a.out.resolve()
     archs = [x for x in re.split(r"[;, ]+", a.archs) if x]
     rbin = a.rocm / "bin"
@@ -85,12 +88,19 @@ def main() -> int:
     (stage / "rocm" / "bin").mkdir(parents=True)
 
     programs = PROGRAMS + (("strata_network_backend.dll", "strata-network-check.exe") if a.network else ())
+    if a.native_host:
+        programs = ("strata.exe", "strata-host.exe", "strata_network_backend.dll")
     for p in programs:
         shutil.copy2(a.build / p, stage / p)
-    if a.network:
+    if a.network and not a.native_host:
         (stage / "tools").mkdir()
         for name in ("network_worker.py", "gguf_reader.py", "cluster_config.py"):
             shutil.copy2(ROOT / "tools" / name, stage / "tools" / name)
+
+    if a.native_host:
+        sys.path.insert(0, str(ROOT / "tools"))
+        from native_host_package import add_resources
+        add_resources(stage, a.build, "host17")
 
     # the ROCm DLLs: the programs' imports, followed through the ROCm DLLs themselves
     rocm_dlls = {p.name.lower(): p for p in rbin.glob("*.dll")}
@@ -164,10 +174,16 @@ def main() -> int:
     meta = {"source": "prebuilt", "backend": "hip", "platform": "windows-x64", "version": version, "archs": archs,
             "rocm": a.rocm_version, "hipblaslt_version": hlv[0] * 100000 + hlv[1] * 100 + hlv[2], "vision": "none",
             "lib_dirs": ["rocm/bin"]}
+    if a.native_host:
+        meta.update(native_host=True, vision="builtin-cpu")
     (stage / "BUILD.json").write_text(json.dumps(meta, indent=1), encoding="utf-8")
 
     z = a.out / ASSET
     z.unlink(missing_ok=True)
+    if a.native_host:
+        from native_host_package import verify_binaries
+        verify_binaries(stage, programs)
+
     with zipfile.ZipFile(z, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as f:
         for p in sorted(stage.rglob("*")):
             if p.is_file():

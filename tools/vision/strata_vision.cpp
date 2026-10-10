@@ -54,7 +54,12 @@ bool parse_enc(const std::string& line, std::string& img, std::string& out) {
 
 }  // namespace
 
+#ifdef STRATA_HOST_BUILD
+#include "strata/runtime/host_commands.hpp"
+static int encode_main(int argc, char** argv) {
+#else
 int main(int argc, char** argv) {
+#endif
     std::string mmproj, model;
     bool gpu = false;
     int threads = 0, max_tokens = 0, min_tokens = 0;
@@ -66,6 +71,13 @@ int main(int argc, char** argv) {
             if (i + 1 >= argc) { std::fprintf(stderr, "%s needs a value\n", a.c_str()); std::exit(2); }
             return argv[++i];
         };
+#ifdef STRATA_HOST_BUILD
+        if (a == "--help") {
+            std::cout << "usage: strata-host vision --mmproj FILE --model FILE [--threads N] "
+                         "[--max-tokens N] [--min-tokens N] [--flash-attn on|off|auto]\n";
+            return 0;
+        }
+#endif
         if (a == "--mmproj") mmproj = next();
         else if (a == "--model") model = next();
         else if (a == "--gpu") gpu = true;
@@ -97,6 +109,14 @@ int main(int argc, char** argv) {
     llama_log_set(quiet_log, nullptr);
     mtmd_helper_log_set(quiet_log, nullptr);
     llama_backend_init();
+#ifdef STRATA_HOST_BUILD
+    if (gpu && !llama_supports_gpu_offload()) {
+        std::printf("ERR this host encoder has only a CPU backend; omit --gpu\n");
+        std::fflush(stdout);
+        llama_backend_free();
+        return 1;
+    }
+#endif
 
     const auto load_t0 = std::chrono::steady_clock::now();
 #if !defined(_WIN32) && !defined(__APPLE__)   // macOS has no posix_fadvise
@@ -237,3 +257,12 @@ int main(int argc, char** argv) {
     llama_backend_free();
     return 0;
 }
+
+#ifdef STRATA_HOST_BUILD
+int strata::runtime::vision_main(const std::vector<std::string>& args) {
+    std::vector<std::string> values = args;
+    std::vector<char*> argv;
+    for (auto& value : values) argv.push_back(value.data());
+    return encode_main(static_cast<int>(argv.size()), argv.data());
+}
+#endif

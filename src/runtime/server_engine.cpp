@@ -257,7 +257,9 @@ void validate_server_config(const TextJson &cfg) {
     if (cfg.contains("vision") && !cfg["vision"].is_null()) {
         if (!cfg["vision"].is_object())
             throw std::invalid_argument("vision must be an object");
-        for (auto key : {"exe", "mmproj", "model"})
+        if (cfg["vision"].contains("exe") && (!cfg["vision"]["exe"].is_string() || cfg["vision"]["exe"].get<std::string>().empty()))
+            throw std::invalid_argument("vision exe must be a nonempty string");
+        for (auto key : {"mmproj", "model"})
             if (!cfg["vision"].contains(key) || !cfg["vision"][key].is_string() ||
                 cfg["vision"][key].get<std::string>().empty())
                 throw std::invalid_argument(std::string("vision requires ") + key);

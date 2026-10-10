@@ -17,6 +17,14 @@
 - 对外监听必须配置 API key；worker 保留 coordinator IP 限制和密钥认证。密钥不得写入配置、日志或包清单。
 - C++ 重写本身不构成性能证明。只报告同日、同硬件、同模型、同参数的测量。
 
+## 正式目标收敛（2026-10-10）
+
+- 原生运行入口合并为 `strata-host cluster/worker/serve/vision`，角色之间重新启动当前宿主，保留进程隔离及退出清理。
+- 保留 `strata.exe` 推理引擎和 `strata_network_backend.dll` 专家后端；原生完整包最多两个 exe、一个项目 DLL。辅助节点仅一个 exe。
+- 图片编码静态链接 llama/mtmd，复用 CPU ggml；省略 `vision.exe` 时使用宿主的 `vision` 子命令。外部编码器设置保持兼容；内置编码器不声称支持 GPU。
+- `tools/build_cluster.py --native` 和 HIP 的 `native-network` 模式收集原生程序、Web、模板、示例配置和许可证，排除 Python、测试及诊断程序，并检查目标数量。
+- 旧 Python 安装器及默认打包路径保留；不切换正在运行的服务。下文阶段记录中的旧 exe 名称为迁移历史，当前命令见 `docs/MULTI_HOST.md`。
+
 ## 实施顺序
 
 ### 1. 原生 worker 和基础配置
@@ -53,6 +61,8 @@
 - [x] API 行为对照与真实引擎短/长提示词、多轮、工具调用、双槽并行和客户端断开验证（Windows 单机 IQ3_S；真实 LAN API 链路仍待第 6 步）。
 
 ### 5. 原生构建/打包和部署切换
+
+- [x] 增加显式原生打包模式和正式二进制数量检查；运行包无 Python 文件。
 
 - [ ] 迁移 `build_cluster.py` 的计划、构建、依赖收集、清单、原子替换及失败处理；批处理/ shell 可作为轻量入口。
 - [ ] Windows/Linux 包包含原生程序、必要 DLL/共享库、静态资源及许可证；不包含或依赖 Python。
@@ -114,3 +124,7 @@
 - 原生 API 51 项检查全部通过，无跳过；覆盖上述功能、完整 JSON/SSE、错误重启、单请求/双槽断开、安全和图片格式，以及逐 token reasoning recovery 和 canonical structured output 对照。报告 `tmp/native-server-stage4-final.json`。最终文本层回归 15 组通过，727 次完整 token ID 和 984 次 parser 对照；报告 `tmp/native-server-stage4-text-regression.json`。worker 15 项、launcher 16 项 Windows 回归通过，另 1 项 POSIX 权限检查跳过。
 - 同日 Windows、i9-12900HK、RTX 4060 Ti 16 GiB、IQ3_S、同一 `build-intel/strata.exe` 0.1.41、context 8192、prefill 512、temperature 0 下，单请求 8 项、双槽并行 9 项 Python/native 对照全部通过；包括短/长提示词、多轮、工具、Responses、Anthropic、断开后 fresh 请求和同时生成。报告 `tmp/native-server-stage4-real.json`、`tmp/native-server-stage4-real-batch.json`。没有配置远端专家，不构成 LAN 或速度测量。
 - MCP/vision 的验证使用原生协议夹具及实际图片转换，没有测试外部 MCP 提供方或真实 GPU vision 编码。第 4 步实现已完成；第 5/6 步的无 Python 打包、部署切换、清洁环境/LAN 验收和性能测量仍保留未完成。没有停止现有服务或替换现有部署包。
+
+### 正式目标收敛验证
+
+Windows CPU/CUDA/HIP/SYCL host 构建通过；统一入口 4 项、worker 15 项、launcher 17 项（POSIX ACL 跳过 1 项）、API 52 项、文本 15 组和打包 13 项检查通过。三个原生包的 exe 数为 host16=2、host11=1、host17=2，项目 DLL 各 1 个，无 Python 文件；子命令在精简 PATH 下通过。CUDA/HIP 包的 launcher→serve 链路在无 Python PATH 下完成测试引擎请求。CUDA 引擎文件 SHA256 保持相同；HIP 当前构建原生开关 ON/OFF 字节相同。本轮没有实际图片编码模型、真实 GPU/LAN 推理、Linux 或性能验收，不切换现有运行服务。
