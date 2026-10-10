@@ -13,6 +13,8 @@ import subprocess
 import sys
 import tempfile
 import time
+import socket
+from concurrent.futures import ThreadPoolExecutor
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT / "tmp/native-text-test-deps"), str(ROOT), str(ROOT / "tools")]
@@ -47,10 +49,13 @@ def main():
     ap.add_argument("--config", type=Path, required=True)
     ap.add_argument("--port", type=int, default=18085)
     ap.add_argument("--report", type=Path, required=True)
+    ap.add_argument("--parallel",type=int,default=1)
     a = ap.parse_args()
     source = json.loads(a.config.read_text(encoding="utf-8-sig"))
-    report = {"config":str(a.config), "runs":{}, "performance_claim":False}
+    report = {"config":str(a.config), "runs":{}, "performance_claim":False,"parallel":a.parallel}
     args = list(source["args"])
+    while "--batch" in args:
+        index=args.index("--batch");del args[index:index+2]
     for flag, value in (("--max-context", "8192"), ("--prefill", "512")):
         while flag in args:
             i = args.index(flag); del args[i:i+2]
@@ -71,7 +76,13 @@ def main():
         folder = Path(tmp)
         for native in (True, False):
             label = "native" if native else "python"
-            cfg = {**source,"args":args,"host":"127.0.0.1","port":a.port,"open_browser":False,"log":str(folder/(label+"-engine.log"))}
+            if not native:
+                # Windows exclusive listeners cannot immediately reuse every
+                # port left in TIME_WAIT by a forcibly ended test server.
+                with socket.socket() as available:
+                    available.bind(("127.0.0.1",0));a.port=available.getsockname()[1]
+            report.setdefault("ports",{})[label]=a.port
+            cfg = {**source,"args":args,"parallel":a.parallel,"host":"127.0.0.1","port":a.port,"open_browser":False,"log":str(folder/(label+"-engine.log"))}
             cfg.pop("api_key",None)
             path=folder/(label+".json");path.write_text(json.dumps(cfg),encoding="utf-8")
             cmd=[str(a.exe.resolve())] if native else [sys.executable,"-m","serve.server"]
@@ -88,6 +99,8 @@ def main():
                         time.sleep(.5)
                     if not ready: raise AssertionError("real engine READY timeout")
                     print(label+": ready",flush=True)
+                    info=request(a.port,"/metrics");report.setdefault("engines",{})[label]=info.get("engine",{})
+                    if a.parallel>1 and info.get("engine",{}).get("batch_slots",0)<a.parallel:raise AssertionError("real engine did not provide requested batch slots")
                     results={}
                     for name,route,body in checks:
                         results[name]=normalize(request(a.port,route,body))
@@ -110,6 +123,11 @@ def main():
                     fresh=request(a.port,"/v1/chat/completions",{**base,"messages":[user("Reply with exactly: fresh")]})
                     results["disconnect"]={"next_request_completed":fresh["choices"][0]["message"]["content"].strip()=="fresh"}
                     if not results["disconnect"]["next_request_completed"]:raise AssertionError(fresh)
+                    if a.parallel>1:
+                        jobs=[{**base,"max_tokens":64,"messages":[user("List the first twelve positive even integers, separated by commas.")]},{**base,"max_tokens":64,"messages":[user("List the first twelve positive odd integers, separated by commas.")]}]
+                        with ThreadPoolExecutor(max_workers=a.parallel) as pool:
+                            futures=[pool.submit(request,a.port,"/v1/chat/completions",body) for body in jobs]
+                            results["concurrent"]=[normalize(f.result()) for f in futures]
                     report["runs"][label]=results
                     a.report.write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding="utf-8")
                 finally:

@@ -4,16 +4,17 @@
 统一配置方案在启动时固定在线节点和专家范围，之后不自动发现机器、不自动变更分工。
 这是同一个模型、同一条生成请求的分工，不是将三个完整模型放在负载均衡器后面。
 
-## C++ 运行时迁移（第一至第四阶段核心路径，2026-10-10）
+## C++ 运行时迁移（第一至第四阶段，2026-10-10）
 
 完整迁移计划和进度见 [PLAN.md](../PLAN.md)。目前已增加原生专家 worker、共享配置校验、集群启动器、
-tokenizer/模板/输出层及原生主机 API 核心路径。第 4 步的可选功能和第 5/6 步打包/验收尚未全部完成；
+tokenizer/模板/输出层及原生主机 API，已完成第 4 步的可选功能。第 5/6 步打包/验收尚未完成；
 当前安装器和部署包仍使用 Python，不能视为整套部署已不依赖 Python。
 
 构建时显式设置 `-DSTRATA_BUILD_NATIVE_CLUSTER=ON`，然后构建 `strata-network-worker` 和 `strata-cluster`。
 该选项默认为 OFF，需要现有原生专家和网络后端构建；CPU-only、CUDA 和 HIP 配置都支持该目标。
 JSON 和 SHA256 使用项目固定版本的 llama.cpp 中已有的 vendor 源码，不额外下载依赖。
-SYCL 的独立工程目前没有这个目标。
+SYCL 的独立工程没有专家网络后端；可显式设置 `STRATA_BUILD_NATIVE_TEXT=ON` 和
+`STRATA_BUILD_NATIVE_SERVER=ON` 构建相同主机 API。
 
 辅助节点可以采用新的入口，继续使用相同共享 JSON 和 `STRATA_NETWORK_KEY`：
 
@@ -76,7 +77,7 @@ coordinator 继续监听 `127.0.0.1`，保留本地 server 设置中的 API 认�
 第 4 阶段已提供该服务；缺少它仍会明确失败。配置导出和测试子进程不能算作真实模型/LAN API 验收。
 原生服务的启动接口为 `--engine strata --config 临时配置 --port 端口`。
 
-### 原生主机 API（第 4 阶段核心路径，2026-10-10）
+### 原生主机 API（第 4 阶段，2026-10-10）
 
 显式开启 `STRATA_BUILD_NATIVE_CLUSTER` 时构建 `strata-server`，与 `strata-cluster` 放在同一目录。
 直接运行时可先检查配置，检查不启动引擎、不监听端口：
@@ -89,47 +90,72 @@ build-network/strata-server.exe --engine strata --config strata-iq3_s.json --por
 服务需要 pack 的 tokenizer 和 chat template，以及现有 `serve/web` 静态资源；可以用配置
 `web_root` 或 `--web-root` 指向 web 目录。模板默认先寻找 tokenizer 目录内的 `chat_template.jinja`，
 否则使用 web 目录上级的同名文件；配置 `template` 可以覆盖路径。打包收集这些资源和许可证待第 5 步。
-cpp-httplib 使用项目固定版本的 llama.cpp vendor，许可证在构建目录 `native-text-licenses`。
+cpp-httplib 使用项目固定版本的 llama.cpp vendor。原生图片转换使用固定版本 libwebp 1.6.0、
+libavif 1.4.2、libaom 3.14.1，CMake 下载时验证 SHA256；可分别用 `STRATA_WEBP_DIR`、
+`STRATA_AVIF_DIR`、`STRATA_AOM_DIR` 指向这些版本的离线源码。许可证和专利文件复制到构建目录
+`native-text-licenses`，第 5 步需收集进包。Windows HTTP 客户端/图片转换使用 WinHTTP/WIC；
+Linux 分支需要 libcurl/libpng，尚未实机构建或运行。
 
 支持 OpenAI chat completions、stateless Responses、Anthropic messages/count_tokens，以及 JSON/SSE、
 思考/工具调用、namespace/custom tools、reasoning replay、思考预算、强制工具调用、停止字符串、
-结构化输出验证、用量、timings 和缓存计数。工具定义及结果传递给模型；客户端自行执行返回的调用。
-`/v1/models`、健康/状态、`/props`、`/slots`、web 静态路由、settings/config、load/unload、
-API monitor 和基础 Prometheus 计数可用。共享设置写入配置旁的 `.shared-settings.json`；
+结构化输出验证及 canonical JSON、用量、timings 和缓存计数。普通工具调用由客户端执行；
+配置 MCP 后，chat 请求可用 `strata_mcp: true` 让服务执行 MCP 工具并继续生成。
+`/v1/models`、健康/状态、`/props`、`/slots`、`/v1/vram`、`/mcp`、web 静态路由、settings/config、
+load/unload、API monitor 和完整 Prometheus 指标可用。共享设置写入配置旁的 `.shared-settings.json`；
 配置编辑仅允许服务已支持的字段，先保存 `.bak`，再以私有临时文件原子替换。
 
-常驻引擎按 FIFO 一次生成一条请求。取消时 STOP 并读到本次 DONE 后才放行；断开、协议错误或
-引擎崩溃不重放当前请求，下一请求重启引擎。多段思考/工具续写持有相同队列位置。
+未启用并行时，常驻引擎按 FIFO 一次生成一条请求。取消时 STOP 并读到本次 DONE 后才放行；
+配置 `parallel` 后支持 batch admission、每槽独立取消、短请求让行、缓存前缀/LRU 槽选择及
+solo/batch 切换，只有一个请求时使用 GEN 路径。断开、协议错误或引擎崩溃不重放当前请求，
+下一请求重启引擎；失步前排入的旧 DONE 不会成为下一请求的结果。多段思考/强制工具续写保留请求位置。
 原生服务保留引擎自身的 prompt/conversation cache，API 的 cached_tokens 来自本次 DONE。
 启动、静默、STOP 和管道写入有截止时间；Windows job 在服务被强制结束时清理引擎子树。
 
 API key 支持配置及 `STRATA_API_KEY`，请求使用 Bearer 或 x-api-key。非 loopback 监听必须配置 key；
-密钥不会出现在健康信息、监控响应或配置视图。拒绝 foreign Origin，loopback 监听拒绝不匹配的 Host。
-原生 CPU/RAM 监控使用系统 API，NVIDIA 监控动态加载驱动 NVML，不启动 Python 或采样子进程。
-NVML 不可用和 AMD Windows 未有读数时返回缺失值；完整监控及 Prometheus 指标对照仍待补齐。
+密钥不会出现在健康信息、监控响应或配置视图。支持 `allowed_hosts`、`trusted_origins`、
+`cors_origins` 和 CORS 预检；无 key 时限制 foreign Origin 和不匹配的 Host。有 key 时按 Python
+入口的认证/CORS 规则处理 API；配置编辑、加载、磁盘会话和 MCP 执行仍要求自己的页面，foreign
+页面不能选取本地图片文件。
 
-目前明确拒绝的配置包括 MCP 执行、vision、parallel/batch、idle unload、before_load、vram control、
-磁盘 session save/restore、部分恢复/安全/模型参数派生设置。未知字段会在引擎启动前报错，不会被
-静默忽略。多机本机配置没有启用 MCP；MCP stdio/HTTP 和执行轮次仍列在 PLAN 第 4 步剩余项。
-这些边界意味着主机 API 核心路径可验证，但不能宣称 Python 服务的所有可选能力已迁移。
+MCP 配置沿用 `mcp_servers`/`mcpServers` 和 `mcp` 选项，支持 stdio、Streamable HTTP(S)、
+会话、分页、取消、结果长度限制及工具轮次。每个 MCP server 串行执行自己的 RPC，调用期间释放
+引擎位置。`vision` 使用原有原生编码器的 READY/ENC/OK 和 GENI/BGENI 协议，支持 data URL、
+HTTP(S) 和本地图片、EXIF 方向、透明像素白底合成及 SHA256 缓存；请求持有其所需 embedding，
+超过缓存容量也不会丢失当前图片。服务自身的实现不启动 Python。
+
+支持 `lazy_load`、`idle_unload_s`、`before_load`、`min_free_vram_mib`，以及 GPU 排序、multi-GPU
+split、HIP ordinal、expert profile 参数派生、reasoning close/loop recovery、tail effort、
+Codex title/compaction 和 `strata_prefix`。用 `slot_save_path` 或 `--slot-save-path` 开启
+`POST /slots/0?action=save|restore`，文件名限制为目录内的普通文件名；与 Python 一样不和 batch
+结合。`vram_elastic` 开启后，`/v1/vram` 可调整 reserve；模型卸载时设置的值在下次 READY 后应用。
+未知配置字段仍在引擎启动前报错。
+
+CPU/RAM 监控使用系统 API，NVIDIA 多卡监控动态加载 NVML，Windows 磁盘监控使用 PDH；不启动
+采样子进程。NVML 不可用和 AMD Windows 未有读数时返回缺失值。Prometheus 包含指标族、标签和
+histogram；API monitor 内存保留最多 100 条请求，生成历史最多 500 条，列表不返回请求/输出正文。
 
 验证（Python 只作驱动和行为对照）：
 
 ```powershell
-python tools/test_native_server.py --exe build-network/strata-server.exe --engine build-network/strata-server-test-engine.exe --report tmp/native-server-parity.json
-python tools/test_native_server_real.py --exe build-network/strata-server.exe --config tmp/dual-host-test/server.json --report tmp/native-server-real-parity.json
+python tools/test_native_server.py --exe build-network/strata-server.exe --engine build-network/strata-server-test-engine.exe --report tmp/native-server-stage4-final.json
+python tools/test_native_server_real.py --exe build-network/strata-server.exe --config tmp/dual-host-test/server.json --report tmp/native-server-stage4-real.json
+python tools/test_native_server_real.py --exe build-network/strata-server.exe --config tmp/dual-host-test/server.json --parallel 2 --port 18088 --report tmp/native-server-stage4-real-batch.json
 ```
 
-第一个命令需 CPU 测试构建的 `STRATA_BUILD_TESTS=ON` 和 `strata-server-test-engine`；测试夹具不进入部署包。
-第二个命令顺序启动两套隔离的 loopback 服务，使用同一真实引擎；临时配置将 context 设为 8192、
+第一个命令需 CPU 测试构建的 `STRATA_BUILD_TESTS=ON`，并构建 `strata-server-test-engine`、
+`strata-server-batch-test-engine`、`strata-mcp-test-server`、`strata-vision-test-encoder` 和
+`strata-server-check`；测试夹具不进入部署包。图片对照需要测试环境中的 Pillow。
+后两个命令顺序启动两套隔离的 loopback 服务，使用同一真实引擎；临时配置将 context 设为 8192、
 prefill 设为 512，不改输入配置或停止已有服务。它不产生性能结论。
 
-Windows 本机 21 项 API 检查、15 组文本回归、15 项 worker 和 16 项 launcher 检查通过；launcher
+Windows 本机 51 项 API 检查、15 组文本回归、15 项 worker 和 16 项 launcher 检查通过；launcher
 另跳过 1 项 POSIX 权限检查。System32-only PATH 下 launcher→原生 API→原生引擎夹具完成生成。
 CPU、CUDA sm_89、HIP gfx1102/gfx1103 和 SYCL 主机服务目标均构建通过；SYCL 不包含新专家网络后端。
-同日 i9-12900HK、RTX 4060 Ti 16 GiB、IQ3_S、同一引擎 0.1.41 下的 8 组真实检查，短/长提示词、
-多轮、工具调用、Responses、Anthropic 的输出与用量相同，SSE 断开后下一请求成功。
-长提示词为 2029 token，多轮复用 17 token。没有运行 HIP/SYCL 推理、Linux 或真实 LAN API 性能测试，
+同日 i9-12900HK、RTX 4060 Ti 16 GiB、IQ3_S、同一引擎 0.1.41 下，单请求 8 组、双槽 9 组
+真实检查通过：短/长提示词、多轮、工具调用、Responses、Anthropic 的输出与用量相同，
+SSE 断开后下一请求成功，双请求并发输出与 Python 相同。
+长提示词为 2029 token，多轮复用 17 token。MCP 和 vision 使用原生夹具验证协议、轮次及图片转换，
+没有测试外部 MCP 提供方或真实 GPU vision 编码。没有运行 HIP/SYCL 推理、Linux 或真实 LAN API 性能测试，
 没有切换部署包，也没有无 Python 的完整部署包验收。
 
 Windows 角色进程先挂起创建，加入 kill-on-close job 后再运行，避免创建孙进程时逃出 job。
@@ -774,8 +800,8 @@ python tools/test_cluster_config.py --build build-network-cpu --pack D:/Strata-d
 
 显式开启 `STRATA_BUILD_NATIVE_CLUSTER=ON` 后可构建 `strata-text-check`，它读取 pack 的
 `tokenizer/` 目录和模型的 Jinja 模板，提供原生分词、消息归一化、模板渲染、思考/工具调用解析、
-增量 UTF-8、停止字符串和 JSON Schema 输出验证。它是 JSON-lines 诊断程序，主机 API 的迁移在
-`PLAN.md` 第 4 步；当前 `strata-cluster` 仍需要单独的 `strata-server` 才能启动原生主机服务。
+增量 UTF-8、停止字符串和 JSON Schema 输出验证。它是 JSON-lines 诊断程序，第 4 步的
+`strata-server` 复用该文本层；`strata-cluster` 启动同目录的 `strata-server` 提供主机 API。
 
 文本层复用 llama.cpp 的 Unicode/Jinja 实现，并使用 jsoncons v1.7.0（Boost Software License 1.0）。
 CMake 下载固定版本并校验 SHA256；离线构建可传 `-DSTRATA_JSONCONS_DIR=/path/to/jsoncons-1.7.0`。
