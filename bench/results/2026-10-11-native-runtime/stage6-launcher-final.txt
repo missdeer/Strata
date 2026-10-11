@@ -1,0 +1,22 @@
+test_api_spawn_failure_removes_runtime_directory (__main__.LauncherTests.test_api_spawn_failure_removes_runtime_directory) ... ok
+test_bad_cli_offline_and_worker_overrides (__main__.LauncherTests.test_bad_cli_offline_and_worker_overrides) ... ok
+test_child_exit_removes_descendants (__main__.LauncherTests.test_child_exit_removes_descendants) ... ok
+test_config_matches_python_without_changing_inputs (__main__.LauncherTests.test_config_matches_python_without_changing_inputs) ... ok
+test_exports_never_overwrite_inputs_or_existing_files (__main__.LauncherTests.test_exports_never_overwrite_inputs_or_existing_files) ... ok
+test_graceful_stop_removes_descendants (__main__.LauncherTests.test_graceful_stop_removes_descendants) ... ok
+test_invalid_json_and_source (__main__.LauncherTests.test_invalid_json_and_source) ... ok
+test_json_error_does_not_log_private_values (__main__.LauncherTests.test_json_error_does_not_log_private_values) ... ok
+test_killed_launcher_removes_descendants (__main__.LauncherTests.test_killed_launcher_removes_descendants) ... ok
+test_native_child_argv_key_cwd_exit_and_cleanup (__main__.LauncherTests.test_native_child_argv_key_cwd_exit_and_cleanup) ... ok
+test_network_key_length_and_missing_api (__main__.LauncherTests.test_network_key_length_and_missing_api) ... ok
+test_overrides_reduce_and_ram (__main__.LauncherTests.test_overrides_reduce_and_ram) ... ok
+test_private_config_acl (__main__.LauncherTests.test_private_config_acl) ... ok
+test_private_config_permissions (__main__.LauncherTests.test_private_config_permissions) ... skipped 'POSIX permissions'
+test_real_worker_with_no_python_in_path (__main__.LauncherTests.test_real_worker_with_no_python_in_path) ... ok
+test_stop_timeout_kills_unresponsive_child (__main__.LauncherTests.test_stop_timeout_kills_unresponsive_child) ... ok
+test_validate_shipped_plans (__main__.LauncherTests.test_validate_shipped_plans) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 14.641s
+
+OK (skipped=1)
