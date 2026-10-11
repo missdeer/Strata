@@ -1,0 +1,30 @@
+test_duplicate_keys_and_oversize (__main__.ConfigParity.test_duplicate_keys_and_oversize) ... ok
+test_invalid_plans_agree (__main__.ConfigParity.test_invalid_plans_agree) ... ok
+test_shipped_plans_unicode_and_order (__main__.ConfigParity.test_shipped_plans_unicode_and_order) ... ok
+test_auth_model_and_sequence (__main__.ProtocolParity.test_auth_model_and_sequence) ... ok
+test_backend_failure_poisoning (__main__.ProtocolParity.test_backend_failure_poisoning) ... ok
+test_fragment_deadline_and_reconnect (__main__.ProtocolParity.test_fragment_deadline_and_reconnect) ... ok
+test_fragmented_raw_parity_and_cache_eviction (__main__.ProtocolParity.test_fragmented_raw_parity_and_cache_eviction) ... ok
+test_geometry_routing_and_nonfinite (__main__.ProtocolParity.test_geometry_routing_and_nonfinite) ... ok
+test_idle_and_client_allowlist (__main__.ProtocolParity.test_idle_and_client_allowlist) ... ok
+test_mode_sequence_and_oversize (__main__.ProtocolParity.test_mode_sequence_and_oversize) ... ok
+test_no_python_on_path_and_unicode_key (__main__.ProtocolParity.test_no_python_on_path_and_unicode_key) ... ok
+test_preload_complete_assignment (__main__.ProtocolParity.test_preload_complete_assignment) ... ok
+test_preload_rejected_before_listening (__main__.ProtocolParity.test_preload_rejected_before_listening) ... ok
+test_preload_releases_source_mapping_pages (__main__.ProtocolParity.test_preload_releases_source_mapping_pages) ... ok
+test_reduced_parity_empty_positions_and_bad_weight (__main__.ProtocolParity.test_reduced_parity_empty_positions_and_bad_weight) ... ok
+test_shared_plan_and_mismatches (__main__.ProtocolParity.test_shared_plan_and_mismatches) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 6.899s
+
+OK
+round=0 tokens=1 max_abs=0 reference_max=0.0125296768 local_hit_preserved=1
+round=1 tokens=3 max_abs=0 reference_max=0.00906345062 local_hit_preserved=1
+round=2 tokens=1 max_abs=0 reference_max=0.0131399259 local_hit_preserved=1
+round=3 tokens=3 max_abs=0 reference_max=0.00693702698 local_hit_preserved=1
+round=0 tokens=1 max_abs=0 reference_max=0.00441394607 local_hit_preserved=1
+round=1 tokens=3 max_abs=0 reference_max=0.00289350585 local_hit_preserved=1
+round=2 tokens=1 max_abs=0 reference_max=0.0054779416 local_hit_preserved=1
+round=3 tokens=3 max_abs=0 reference_max=0.00322212256 local_hit_preserved=1
+real pack: 42 byte-identical Python/native cases; C++ coordinator raw/reduced: PASS

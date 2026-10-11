@@ -37,11 +37,13 @@ public:
             CloseHandle(file); throw std::runtime_error("invalid expert file size");
         }
         size_ = static_cast<size_t>(size.QuadPart);
-        HANDLE mapping = CreateFileMappingW(file, nullptr, PAGE_READONLY, 0, 0, nullptr);
-        if (mapping) data_ = static_cast<const uint8_t*>(MapViewOfFile(mapping, FILE_MAP_READ, 0, 0, 0));
-        if (mapping) CloseHandle(mapping);
+        mapping_ = CreateFileMappingW(file, nullptr, PAGE_READONLY, 0, 0, nullptr);
+        if (mapping_) data_ = static_cast<const uint8_t*>(MapViewOfFile(mapping_, FILE_MAP_READ, 0, 0, 0));
         CloseHandle(file);
-        if (!data_) throw std::runtime_error("cannot map expert file");
+        if (!data_) {
+            if (mapping_) CloseHandle(mapping_);
+            throw std::runtime_error("cannot map expert file");
+        }
 #else
         int fd = open(path.c_str(), O_RDONLY);
         if (fd < 0) throw std::runtime_error("cannot open expert file: " + path.string());
@@ -59,6 +61,7 @@ public:
     ~MappedFile() {
 #ifdef _WIN32
         if (data_) UnmapViewOfFile(data_);
+        if (mapping_) CloseHandle(mapping_);
 #else
         if (data_) munmap(const_cast<uint8_t*>(data_), size_);
 #endif
@@ -70,7 +73,25 @@ public:
         return data_ + static_cast<size_t>(offset);
     }
     size_t size() const { return size_; }
+    void release_pages() {
+#ifdef _WIN32
+        // Preload owns independent copies. Drop the completed layer's mapped
+        // pages from the process working set so they do not displace that RAM
+        // cache. Retain the section and map the replacement before unmapping
+        // the old view, avoiding a reopen or a dangling view on failure.
+        const auto* next = static_cast<const uint8_t*>(MapViewOfFile(mapping_, FILE_MAP_READ, 0, 0, 0));
+        if (!next) throw std::runtime_error("cannot remap expert file during preload");
+        if (!UnmapViewOfFile(data_)) {
+            UnmapViewOfFile(next);
+            throw std::runtime_error("cannot release expert mapping pages during preload");
+        }
+        data_ = next;
+#endif
+    }
 private:
+#ifdef _WIN32
+    HANDLE mapping_ = nullptr;
+#endif
     const uint8_t* data_ = nullptr;
     size_t size_ = 0;
 };
@@ -331,6 +352,7 @@ void ExpertStore::preload(int index, int count, const std::string& assignment, c
                 if (cancelled && cancelled()) throw std::runtime_error("worker stopping");
                 get(static_cast<int>(l), e);
             }
+            for (auto& [path, file] : maps_) file->release_pages();
             std::cout << "preload: layer " << l + 1 << '/' << layers_.size() << " cache=" << cached_ << std::endl;
         }
         for (size_t l = 0; l < layers_.size(); ++l) for (int e : owned)

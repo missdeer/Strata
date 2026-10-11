@@ -1,4 +1,6 @@
 #include "strata/runtime/engine_channel.hpp"
+#include "strata/runtime/path.hpp"
+#include <fstream>
 #include <sstream>
 #include <stdexcept>
 namespace strata::runtime {
@@ -8,12 +10,26 @@ EngineChannel::EngineChannel(const std::vector<std::string> &args, const std::fi
                              std::function<void()> on_end,
                              const std::vector<std::string> &removed_environment)
     : process_(args, cwd, log, environment, 1u << 20, removed_environment), on_end_(std::move(on_end)) {
-    reader_ = std::thread([this] {
+    // An explicit development trace records only generated tokens and DONE,
+    // never commands, prompts or authentication/environment values.
+    const auto trace = environment.find("STRATA_NATIVE_TOKEN_TRACE");
+    const auto trace_path = trace == environment.end() ? std::string() : trace->second;
+    reader_ = std::thread([this, trace_path] {
         try {
+            std::ofstream token_trace;
+            if (!trace_path.empty()) {
+                token_trace.open(utf8_path(trace_path), std::ios::app);
+                if (!token_trace) throw std::runtime_error("cannot open native token trace");
+            }
             while (!stopped_) {
                 std::string line;
                 if (!process_.receive(line, std::chrono::milliseconds(100)))
                     continue;
+                if (token_trace && (line.starts_with("T ") || line.starts_with("DONE ") ||
+                                    line.starts_with("BT ") || line.starts_with("BDONE ")))
+                    token_trace << line << '\n';
+                if (token_trace && (line.starts_with("DONE ") || line.starts_with("BDONE ")))
+                    token_trace.flush();
                 std::unique_lock<std::mutex> lock(mutex_);
                 auto *queue = &control_;
                 if (line.starts_with("BT ") || line.starts_with("BDONE ")) {

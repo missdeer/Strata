@@ -51,6 +51,8 @@ int main(int argc, char **argv) {
     if (setting("STRATA_TEST_READY_DELAY") != "")
         std::this_thread::sleep_for(std::chrono::milliseconds(std::stoi(setting("STRATA_TEST_READY_DELAY"))));
     print("INFO engine=test-native batch_slots=0");
+    if (setting("STRATA_TEST_STDERR") == "1")
+        std::cerr << "fixture loading experts\n" << std::flush;
     print("READY " + setting("STRATA_TEST_CONTEXT", "4096") + " stop");
     std::thread worker;
     std::atomic<bool> stop{false};
@@ -183,6 +185,8 @@ int main(int argc, char **argv) {
                 std::this_thread::sleep_for(
                     std::chrono::milliseconds(std::stoi(setting("STRATA_TEST_DELAY", "0"))));
             }
+            if (setting("STRATA_TEST_STDERR") == "1")
+                std::cerr << "fixture decode 12.5 tok/s\n" << std::flush;
             print("DONE " + std::to_string(n) + " " + std::to_string(prompt.size()) + " 1 2 " +
                   (stop           ? "cancel"
                    : n >= max_new ? "length"

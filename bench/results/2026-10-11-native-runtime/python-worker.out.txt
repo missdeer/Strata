@@ -1,0 +1,53 @@
+cluster config_sha256=62ec61c4a84a2a026788035f842573ee4536c660e56070f9477d0fdbce97a120
+worker finite checks: native
+preload: reading 24576 experts (46.84 GiB) into RAM before listening
+preload: layer 1/48, 512/24576 experts, cache 1.04 GiB, 4.5 s
+preload: layer 2/48, 1024/24576 experts, cache 1.76 GiB, 8.3 s
+preload: layer 3/48, 1536/24576 experts, cache 2.70 GiB, 13.0 s
+preload: layer 4/48, 2048/24576 experts, cache 3.64 GiB, 17.7 s
+preload: layer 5/48, 2560/24576 experts, cache 4.58 GiB, 22.3 s
+preload: layer 6/48, 3072/24576 experts, cache 5.52 GiB, 27.0 s
+preload: layer 7/48, 3584/24576 experts, cache 6.46 GiB, 31.6 s
+preload: layer 8/48, 4096/24576 experts, cache 7.50 GiB, 36.1 s
+preload: layer 9/48, 4608/24576 experts, cache 8.22 GiB, 39.9 s
+preload: layer 10/48, 5120/24576 experts, cache 9.16 GiB, 44.5 s
+preload: layer 11/48, 5632/24576 experts, cache 9.88 GiB, 48.3 s
+preload: layer 12/48, 6144/24576 experts, cache 10.82 GiB, 52.9 s
+preload: layer 13/48, 6656/24576 experts, cache 11.63 GiB, 56.7 s
+preload: layer 14/48, 7168/24576 experts, cache 12.35 GiB, 60.6 s
+preload: layer 15/48, 7680/24576 experts, cache 13.39 GiB, 65.1 s
+preload: layer 16/48, 8192/24576 experts, cache 14.33 GiB, 69.7 s
+preload: layer 17/48, 8704/24576 experts, cache 15.37 GiB, 74.2 s
+preload: layer 18/48, 9216/24576 experts, cache 16.48 GiB, 79.1 s
+preload: layer 19/48, 9728/24576 experts, cache 17.52 GiB, 83.6 s
+preload: layer 20/48, 10240/24576 experts, cache 18.46 GiB, 88.2 s
+preload: layer 21/48, 10752/24576 experts, cache 19.27 GiB, 92.0 s
+preload: layer 22/48, 11264/24576 experts, cache 20.17 GiB, 96.1 s
+preload: layer 23/48, 11776/24576 experts, cache 21.20 GiB, 100.6 s
+preload: layer 24/48, 12288/24576 experts, cache 22.14 GiB, 105.1 s
+preload: layer 25/48, 12800/24576 experts, cache 23.08 GiB, 109.6 s
+preload: layer 26/48, 13312/24576 experts, cache 24.19 GiB, 114.4 s
+preload: layer 27/48, 13824/24576 experts, cache 25.13 GiB, 119.0 s
+preload: layer 28/48, 14336/24576 experts, cache 26.25 GiB, 229.0 s
+preload: layer 29/48, 14848/24576 experts, cache 27.36 GiB, 247.9 s
+preload: layer 30/48, 15360/24576 experts, cache 28.47 GiB, 253.2 s
+preload: layer 31/48, 15872/24576 experts, cache 29.28 GiB, 258.0 s
+preload: layer 32/48, 16384/24576 experts, cache 30.32 GiB, 268.8 s
+preload: layer 33/48, 16896/24576 experts, cache 31.26 GiB, 274.3 s
+preload: layer 34/48, 17408/24576 experts, cache 32.30 GiB, 279.8 s
+preload: layer 35/48, 17920/24576 experts, cache 33.24 GiB, 289.1 s
+preload: layer 36/48, 18432/24576 experts, cache 34.35 GiB, 295.1 s
+preload: layer 37/48, 18944/24576 experts, cache 35.07 GiB, 299.4 s
+preload: layer 38/48, 19456/24576 experts, cache 36.11 GiB, 305.0 s
+preload: layer 39/48, 19968/24576 experts, cache 37.15 GiB, 310.7 s
+preload: layer 40/48, 20480/24576 experts, cache 38.09 GiB, 316.2 s
+preload: layer 41/48, 20992/24576 experts, cache 39.20 GiB, 322.1 s
+preload: layer 42/48, 21504/24576 experts, cache 40.23 GiB, 327.9 s
+preload: layer 43/48, 22016/24576 experts, cache 41.27 GiB, 333.6 s
+preload: layer 44/48, 22528/24576 experts, cache 42.31 GiB, 339.2 s
+preload: layer 45/48, 23040/24576 experts, cache 43.42 GiB, 345.2 s
+preload: layer 46/48, 23552/24576 experts, cache 44.53 GiB, 351.2 s
+preload: layer 47/48, 24064/24576 experts, cache 45.57 GiB, 356.9 s
+preload: layer 48/48, 24576/24576 experts, cache 46.84 GiB, 363.7 s
+preload complete: 24576 experts, 46.84 GiB, 363.8 s
+worker ready: 192.168.233.126:18506 shard=0/1 backend=cpu fingerprint=e9ab9f14d9955f81
