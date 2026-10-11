@@ -87,16 +87,18 @@ coordinator 继续监听 `127.0.0.1`，保留本地 server 设置中的 API 认�
 第三方 CUDA/HIP、Intel、MSVC 运行库仍按依赖收集，不计入项目 DLL 目标数。
 
 ```powershell
-python tools/build_cluster.py --native --hosts host16 host11 host17 --out-root dist/cluster-native
-# 复用已开启 STRATA_BUILD_NATIVE_CLUSTER 的 Intel 编译目录：
-python tools/build_cluster.py --native --package-only --hosts host16 host11 --build-dir host16=build-intel --build-dir host11=build-network --out-root dist/cluster-native
+tools/build_cluster.bat --native --hosts host16 host11 host17 --out-root dist/cluster-native
+# 复用已开启 STRATA_BUILD_NATIVE_CLUSTER 的三个编译目录：
+tools/build_cluster_native.bat --package-only --build-dir host16=build-intel --build-dir host11=build-network --build-dir host17=build-cluster/host17-core --out-root dist/cluster-native
 strata-host.exe cluster --config cluster.json --node host16
 strata-host.exe worker --cluster-config cluster.json --node host11
 strata-host.exe serve --engine strata --config strata-iq3_s.json
 strata-host.exe vision --mmproj mmproj.gguf --model model.gguf
 ```
 
-`--native` 是显式选择；原有 Python 打包和安装器路径保留。打包器收集 Web、模板、许可证和
+`tools/build_cluster.bat --native` 显式选择 C++ 构建器；不加该参数的 Python 打包和安装器路径保留。
+直接运行 `python tools/build_cluster.py --native` 仅保留为迁移前的打包行为对照。
+打包器收集 Web、模板、许可证和
 示例配置，并拒绝额外 exe、额外项目 DLL 或 Python 文件。不要把整个测试构建目录复制进部署包。
 原生图片配置保留 `mmproj`、`model`，省略 `vision.exe` 时，服务运行自身的 `vision` 子命令。
 已有外部编码器配置仍可使用；将 `vision.exe` 指向当前宿主也会自动加入 `vision` 子命令。
@@ -112,6 +114,66 @@ host16/host17 各 2 个 exe、1 个项目 DLL，host11 为 1 个 exe、1 个项�
 CUDA 引擎与本次改动前的文件 SHA256 相同；HIP 当前构建在原生开关 ON/OFF 下字节相同。
 没有运行真实 GPU 推理或完整 LAN，没有图片 projector 可用来验收实际图片编码，没有验证 Linux，
 也没有测量性能或切换现有部署服务。
+
+### C++ 构建和发布入口（第 5 阶段，Windows）
+
+`tools/build_cluster_native.bat` 首次用 CMake/Ninja 和 Visual Studio C++ 工具构建
+`build-cluster/builder/strata-cluster-build.exe`，随后直接运行该工具。它是开发工具，不进入节点包。
+也可自行构建 `tools/cluster_build` 后直接执行；`--dry-run` 在构建器已存在时只读计划，不写文件、
+不调用工具、不下载。轻量批处理入口在首次使用时仍需编译构建器。
+
+Windows 上的 host16 保留 oneAPI `/O3 /QxHost`、CUDA sm_89；host11 保留 oneAPI `/O3` 和
+便携 AVX2；host17 使用 ROCm Clang/MSVC ABI、便携 AVX2，默认 gfx1102/gfx1103。三个编译目录
+互相独立；C++ 工具在打包前检查缓存的后端、编译器、CPU 参数和 GPU 架构，拒绝 host11 的
+`/QxHost` 或 ggml AVX-512/AMX 设置。SYCL 没有集群网络后端，不在这些节点包的构建范围。
+
+构建前需安装 oneAPI、CUDA 和 Visual Studio，HIP 需提供已解包的 ROCm SDK。原生构建器不调用
+Python、pip 或 `rocm-sdk`，不安装 SDK。`--rocm-root` 指向含 `bin`、`share/doc`、`.kpack` 的 SDK，
+`--rocm-compiler-root` 指向含 `lib/llvm/bin/clang++.exe` 的编译器根目录。兼容已有 TheRock 解包目录；
+可自动发现 `.rocm-win/Lib/site-packages/_rocm_sdk_devel` 和相邻 `_rocm_sdk_core`，不会运行其中的 Python。
+离线依赖源码可用 `--ggml-dir`、`--jsoncons-dir`、`--webp-dir`、`--avif-dir`、`--aom-dir` 指定，
+版本和 SHA256 规则仍由项目 CMake 管理。其他 DLL 搜索目录可重复指定 `--runtime-dir`。
+
+```powershell
+build-cluster/builder/strata-cluster-build.exe --dry-run --hosts host16 host11 host17
+build-cluster/builder/strata-cluster-build.exe --hosts host17 --rocm-root D:/ROCm/sdk --rocm-compiler-root D:/ROCm/compiler
+# 原 HIP 入口的 native-network 模式也转入 C++ 构建器：
+tools/hip/build_windows.bat native-network
+```
+
+原生 HIP 模式发布到 `DIST_DIR/host17`（默认 `dist/cluster-native/host17`）；不再生成旧安装器使用的
+`strata-windows-x64-hip.zip`。普通、`tests` 和 `network` 模式保留旧的 SDK 安装及 ZIP 行为。
+C++ 工具直接读取 PE 普通/延迟导入表，递归收集 DLL；HIP 同时收集动态加载的 amd_comgr、
+rocBLAS/hipBLASLt 设备数据、所选架构的 `.kpack` 和许可证。HIP runtime 的依赖放在 exe 旁，
+BLAS 及其相对路径数据保留在 `rocm/bin`。主机配置使用 HIP 引擎时将该目录加入 `lib_dirs`。
+
+输出先在同一输出根目录下的随机暂存目录完成，校验通过后才发布。`CLUSTER_BUILD.json` 记录
+编译参数和程序/全部资源的 SHA256，`build-summary.json` 记录每个节点成功或失败。已有输出只有
+匹配该节点的清单才可替换；替换前移到 `host*.previous-*`，发布失败尝试恢复。多个节点逐个发布，
+一个节点失败不撤回其他节点已成功的包。每节点锁拒绝并发构建；强制结束后需确认构建进程已退出，
+再删除空的 `.cluster-lock-host*`，不会自动抢锁。重定向的节点目录和互相包含的构建/输出目录被拒绝。
+此工具不停止服务。切换服务前保留旧包，手动停止相应节点后修改启动路径；回退时恢复旧包及原配置。
+
+不需要 GPU、Python 或下载的构建器测试：
+
+```powershell
+cmake -S tools/cluster_build -B build-cluster/builder -G Ninja -DSTRATA_BUILDER_TESTS=ON
+cmake --build build-cluster/builder
+ctest --test-dir build-cluster/builder --output-on-failure
+```
+
+本轮按要求只处理 Windows。Linux 构建、共享库收集和发布验证仍未完成；不能将 Windows 的
+精简 PATH 启动检查算作 Linux 或真实三机 LAN 验收。
+
+2026-10-11 在本机 Windows、i9-12900HK、RTX 4060 Ti 上，C++ 构建器的 28 项测试、旧 Python
+打包的 13 项回归通过；host16 CUDA sm_89、host11 便携 CPU、host17 HIP gfx1102/gfx1103 的完整
+原生目标构建及打包通过。`dist/cluster-native` 的三个包分别验证 45/32/559 个文件 SHA256，
+项目 exe 为 2/1/2，项目 DLL 各 1 个，无 Python 文件。打包在 System32-only PATH 下完成；宿主
+子命令和引擎帮助使用包内 runtime 加 System32 的 PATH，通过全部启动检查。
+CUDA/HIP 包各通过 3 项 API/Web/内置 vision 入口检查，launcher 链路用原生测试引擎完成请求；
+CPU 包的 14 项配置/协议检查通过，1 项诊断 DLL 检查跳过。未在全新 Windows VM 上测试，
+未执行 HIP GPU、真实模型/LAN 推理或性能对照；现有服务继续使用原配置。
+报告保存在 `tmp/stage5-package-verification.json` 和 `tmp/stage5-{cuda,hip}-package-api.json`。
 
 ### 原生主机 API（第 4 阶段，2026-10-10）
 
