@@ -112,3 +112,9 @@ node_modules/
 /tmp/stage5-*.json
 /tmp/build-stage5*.cmd
 /tmp/verify-stage5-*.py
+
+# Stage 6 local packages, source transfer archives, temporary configs and drivers.
+/tmp/stage6/
+/tmp/stage6-*.py
+/tmp/stage6-*.cmd
+/tmp/stage6-known-hosts

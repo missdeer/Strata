@@ -1,0 +1,1303 @@
+{
+  "measured_at_utc": "2026-10-11T08:00:01.139091+00:00",
+  "label": "native",
+  "python_is_test_driver_only": true,
+  "notes": [
+    "TTFT is time to first nonempty content delta, including prefill and transport.",
+    "Decode rate is the engine's predicted_per_second from /v1/status.",
+    "HTTP body bytes exclude HTTP headers and TCP/IP overhead.",
+    "Identical prompts are repeated with the configured session/prompt cache.",
+    "Warmups are excluded; output hashes and usage must match the other runtime."
+  ],
+  "samples": [
+    {
+      "prompt": "code",
+      "ttft_ms": 8184.077099998831,
+      "wall_ms": 14864.766799997597,
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 36,
+        "prompt_ms": 8063.7,
+        "prompt_per_token_ms": 223.992,
+        "prompt_per_second": 4.5,
+        "predicted_n": 113,
+        "predicted_ms": 6796.5,
+        "predicted_per_token_ms": 60.146,
+        "predicted_per_second": 16.6,
+        "draft_n": 93,
+        "draft_n_accepted": 81,
+        "at": 1791705616
+      },
+      "started_at_utc": "2026-10-11T08:00:01.168505+00:00",
+      "finished_at_utc": "2026-10-11T08:00:16.033286+00:00",
+      "usage": {
+        "prompt_tokens": 36,
+        "completion_tokens": 113,
+        "total_tokens": 149,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 345,
+      "http_rx_body_bytes": 23090,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": -21936,
+          "entries": -721507,
+          "tx": -860848164,
+          "rx": -851839104
+        }
+      },
+      "output_sha256": "f936727574ca2dacc58e5cf27cd91e87ee7212a063fcbe20a94e66761fbe420c",
+      "output_text": "```python\ndef binary_search(arr: list[int], target: int) -> int:\n    if not arr:\n        return -1\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1\n```",
+      "warmup": true
+    },
+    {
+      "prompt": "code",
+      "ttft_ms": 2058.1177000021853,
+      "wall_ms": 9898.063100001309,
+      "timings": {
+        "cache_n": 29,
+        "prompt_n": 7,
+        "prompt_ms": 1942.7,
+        "prompt_per_token_ms": 277.529,
+        "prompt_per_second": 3.6,
+        "predicted_n": 113,
+        "predicted_ms": 7931.9,
+        "predicted_per_token_ms": 70.194,
+        "predicted_per_second": 14.2,
+        "draft_n": 93,
+        "draft_n_accepted": 81,
+        "at": 1791705625
+      },
+      "started_at_utc": "2026-10-11T08:00:16.036645+00:00",
+      "finished_at_utc": "2026-10-11T08:00:25.934723+00:00",
+      "usage": {
+        "prompt_tokens": 36,
+        "completion_tokens": 113,
+        "total_tokens": 149,
+        "prompt_tokens_details": {
+          "cached_tokens": 29
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 345,
+      "http_rx_body_bytes": 23077,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": 1536,
+          "entries": 52624,
+          "tx": 62132928,
+          "rx": 61476864
+        }
+      },
+      "output_sha256": "f936727574ca2dacc58e5cf27cd91e87ee7212a063fcbe20a94e66761fbe420c",
+      "output_text": "```python\ndef binary_search(arr: list[int], target: int) -> int:\n    if not arr:\n        return -1\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1\n```",
+      "warmup": true
+    },
+    {
+      "prompt": "code",
+      "ttft_ms": 2045.7628000003751,
+      "wall_ms": 9932.053000000451,
+      "timings": {
+        "cache_n": 29,
+        "prompt_n": 7,
+        "prompt_ms": 1940.2,
+        "prompt_per_token_ms": 277.171,
+        "prompt_per_second": 3.6,
+        "predicted_n": 113,
+        "predicted_ms": 7961.4,
+        "predicted_per_token_ms": 70.455,
+        "predicted_per_second": 14.2,
+        "draft_n": 93,
+        "draft_n_accepted": 81,
+        "at": 1791705635
+      },
+      "started_at_utc": "2026-10-11T08:00:25.965943+00:00",
+      "finished_at_utc": "2026-10-11T08:00:35.898009+00:00",
+      "usage": {
+        "prompt_tokens": 36,
+        "completion_tokens": 113,
+        "total_tokens": 149,
+        "prompt_tokens_details": {
+          "cached_tokens": 29
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 345,
+      "http_rx_body_bytes": 23077,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": 1536,
+          "entries": 52631,
+          "tx": 62133012,
+          "rx": 61476864
+        }
+      },
+      "output_sha256": "f936727574ca2dacc58e5cf27cd91e87ee7212a063fcbe20a94e66761fbe420c",
+      "output_text": "```python\ndef binary_search(arr: list[int], target: int) -> int:\n    if not arr:\n        return -1\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1\n```",
+      "warmup": false
+    },
+    {
+      "prompt": "code",
+      "ttft_ms": 2039.5103999981075,
+      "wall_ms": 8855.737499998213,
+      "timings": {
+        "cache_n": 29,
+        "prompt_n": 7,
+        "prompt_ms": 1935.1,
+        "prompt_per_token_ms": 276.443,
+        "prompt_per_second": 3.6,
+        "predicted_n": 113,
+        "predicted_ms": 6902.1,
+        "predicted_per_token_ms": 61.081,
+        "predicted_per_second": 16.4,
+        "draft_n": 89,
+        "draft_n_accepted": 81,
+        "at": 1791705644
+      },
+      "started_at_utc": "2026-10-11T08:00:35.915357+00:00",
+      "finished_at_utc": "2026-10-11T08:00:44.771104+00:00",
+      "usage": {
+        "prompt_tokens": 36,
+        "completion_tokens": 113,
+        "total_tokens": 149,
+        "prompt_tokens_details": {
+          "cached_tokens": 29
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 345,
+      "http_rx_body_bytes": 23077,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": 1536,
+          "entries": 50930,
+          "tx": 60146520,
+          "rx": 59510784
+        }
+      },
+      "output_sha256": "f936727574ca2dacc58e5cf27cd91e87ee7212a063fcbe20a94e66761fbe420c",
+      "output_text": "```python\ndef binary_search(arr: list[int], target: int) -> int:\n    if not arr:\n        return -1\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1\n```",
+      "warmup": false
+    },
+    {
+      "prompt": "code",
+      "ttft_ms": 2058.4859999980836,
+      "wall_ms": 8937.354799996683,
+      "timings": {
+        "cache_n": 29,
+        "prompt_n": 7,
+        "prompt_ms": 1941.4,
+        "prompt_per_token_ms": 277.343,
+        "prompt_per_second": 3.6,
+        "predicted_n": 113,
+        "predicted_ms": 6970.3,
+        "predicted_per_token_ms": 61.684,
+        "predicted_per_second": 16.2,
+        "draft_n": 90,
+        "draft_n_accepted": 81,
+        "at": 1791705653
+      },
+      "started_at_utc": "2026-10-11T08:00:44.774190+00:00",
+      "finished_at_utc": "2026-10-11T08:00:53.711555+00:00",
+      "usage": {
+        "prompt_tokens": 36,
+        "completion_tokens": 113,
+        "total_tokens": 149,
+        "prompt_tokens_details": {
+          "cached_tokens": 29
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 345,
+      "http_rx_body_bytes": 23077,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": 1536,
+          "entries": 51343,
+          "tx": 60642996,
+          "rx": 60002304
+        }
+      },
+      "output_sha256": "f936727574ca2dacc58e5cf27cd91e87ee7212a063fcbe20a94e66761fbe420c",
+      "output_text": "```python\ndef binary_search(arr: list[int], target: int) -> int:\n    if not arr:\n        return -1\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1\n```",
+      "warmup": false
+    },
+    {
+      "prompt": "code",
+      "ttft_ms": 2032.383599998866,
+      "wall_ms": 10520.974399998522,
+      "timings": {
+        "cache_n": 29,
+        "prompt_n": 7,
+        "prompt_ms": 1933.3,
+        "prompt_per_token_ms": 276.186,
+        "prompt_per_second": 3.6,
+        "predicted_n": 113,
+        "predicted_ms": 8574.1,
+        "predicted_per_token_ms": 75.877,
+        "predicted_per_second": 13.2,
+        "draft_n": 91,
+        "draft_n_accepted": 83,
+        "at": 1791705664
+      },
+      "started_at_utc": "2026-10-11T08:00:53.714723+00:00",
+      "finished_at_utc": "2026-10-11T08:01:04.235708+00:00",
+      "usage": {
+        "prompt_tokens": 36,
+        "completion_tokens": 113,
+        "total_tokens": 149,
+        "prompt_tokens_details": {
+          "cached_tokens": 29
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 345,
+      "http_rx_body_bytes": 23077,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": 1584,
+          "entries": 52181,
+          "tx": 61638012,
+          "rx": 60986496
+        }
+      },
+      "output_sha256": "f936727574ca2dacc58e5cf27cd91e87ee7212a063fcbe20a94e66761fbe420c",
+      "output_text": "```python\ndef binary_search(arr: list[int], target: int) -> int:\n    if not arr:\n        return -1\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1\n```",
+      "warmup": false
+    },
+    {
+      "prompt": "code",
+      "ttft_ms": 2080.728500000987,
+      "wall_ms": 10624.114800000825,
+      "timings": {
+        "cache_n": 29,
+        "prompt_n": 7,
+        "prompt_ms": 1973.5,
+        "prompt_per_token_ms": 281.929,
+        "prompt_per_second": 3.5,
+        "predicted_n": 113,
+        "predicted_ms": 8618.8,
+        "predicted_per_token_ms": 76.273,
+        "predicted_per_second": 13.1,
+        "draft_n": 95,
+        "draft_n_accepted": 83,
+        "at": 1791705674
+      },
+      "started_at_utc": "2026-10-11T08:01:04.253914+00:00",
+      "finished_at_utc": "2026-10-11T08:01:14.878040+00:00",
+      "usage": {
+        "prompt_tokens": 36,
+        "completion_tokens": 113,
+        "total_tokens": 149,
+        "prompt_tokens_details": {
+          "cached_tokens": 29
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 345,
+      "http_rx_body_bytes": 23077,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": 1584,
+          "entries": 53899,
+          "tx": 63624708,
+          "rx": 62952576
+        }
+      },
+      "output_sha256": "f936727574ca2dacc58e5cf27cd91e87ee7212a063fcbe20a94e66761fbe420c",
+      "output_text": "```python\ndef binary_search(arr: list[int], target: int) -> int:\n    if not arr:\n        return -1\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1\n```",
+      "warmup": false
+    },
+    {
+      "prompt": "code",
+      "ttft_ms": 2083.611699999892,
+      "wall_ms": 9129.282400001102,
+      "timings": {
+        "cache_n": 29,
+        "prompt_n": 7,
+        "prompt_ms": 1971.3,
+        "prompt_per_token_ms": 281.614,
+        "prompt_per_second": 3.6,
+        "predicted_n": 113,
+        "predicted_ms": 7119.8,
+        "predicted_per_token_ms": 63.007,
+        "predicted_per_second": 15.9,
+        "draft_n": 95,
+        "draft_n_accepted": 83,
+        "at": 1791705684
+      },
+      "started_at_utc": "2026-10-11T08:01:14.881172+00:00",
+      "finished_at_utc": "2026-10-11T08:01:24.010464+00:00",
+      "usage": {
+        "prompt_tokens": 36,
+        "completion_tokens": 113,
+        "total_tokens": 149,
+        "prompt_tokens_details": {
+          "cached_tokens": 29
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 345,
+      "http_rx_body_bytes": 23077,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": 1584,
+          "entries": 53892,
+          "tx": 63624624,
+          "rx": 62952576
+        }
+      },
+      "output_sha256": "f936727574ca2dacc58e5cf27cd91e87ee7212a063fcbe20a94e66761fbe420c",
+      "output_text": "```python\ndef binary_search(arr: list[int], target: int) -> int:\n    if not arr:\n        return -1\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1\n```",
+      "warmup": false
+    },
+    {
+      "prompt": "code",
+      "ttft_ms": 2047.4036000014166,
+      "wall_ms": 9081.92990000316,
+      "timings": {
+        "cache_n": 29,
+        "prompt_n": 7,
+        "prompt_ms": 1934.3,
+        "prompt_per_token_ms": 276.329,
+        "prompt_per_second": 3.6,
+        "predicted_n": 113,
+        "predicted_ms": 7125.7,
+        "predicted_per_token_ms": 63.059,
+        "predicted_per_second": 15.9,
+        "draft_n": 95,
+        "draft_n_accepted": 83,
+        "at": 1791705693
+      },
+      "started_at_utc": "2026-10-11T08:01:24.023630+00:00",
+      "finished_at_utc": "2026-10-11T08:01:33.105571+00:00",
+      "usage": {
+        "prompt_tokens": 36,
+        "completion_tokens": 113,
+        "total_tokens": 149,
+        "prompt_tokens_details": {
+          "cached_tokens": 29
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 345,
+      "http_rx_body_bytes": 23077,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": 1584,
+          "entries": 53875,
+          "tx": 63624420,
+          "rx": 62952576
+        }
+      },
+      "output_sha256": "f936727574ca2dacc58e5cf27cd91e87ee7212a063fcbe20a94e66761fbe420c",
+      "output_text": "```python\ndef binary_search(arr: list[int], target: int) -> int:\n    if not arr:\n        return -1\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1\n```",
+      "warmup": false
+    },
+    {
+      "prompt": "code",
+      "ttft_ms": 2058.951099999831,
+      "wall_ms": 10628.57090000034,
+      "timings": {
+        "cache_n": 29,
+        "prompt_n": 7,
+        "prompt_ms": 1949.7,
+        "prompt_per_token_ms": 278.529,
+        "prompt_per_second": 3.6,
+        "predicted_n": 113,
+        "predicted_ms": 8646.2,
+        "predicted_per_token_ms": 76.515,
+        "predicted_per_second": 13.1,
+        "draft_n": 94,
+        "draft_n_accepted": 83,
+        "at": 1791705703
+      },
+      "started_at_utc": "2026-10-11T08:01:33.128655+00:00",
+      "finished_at_utc": "2026-10-11T08:01:43.757239+00:00",
+      "usage": {
+        "prompt_tokens": 36,
+        "completion_tokens": 113,
+        "total_tokens": 149,
+        "prompt_tokens_details": {
+          "cached_tokens": 29
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 345,
+      "http_rx_body_bytes": 23077,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": 1584,
+          "entries": 53481,
+          "tx": 63128172,
+          "rx": 62461056
+        }
+      },
+      "output_sha256": "f936727574ca2dacc58e5cf27cd91e87ee7212a063fcbe20a94e66761fbe420c",
+      "output_text": "```python\ndef binary_search(arr: list[int], target: int) -> int:\n    if not arr:\n        return -1\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1\n```",
+      "warmup": false
+    },
+    {
+      "prompt": "code",
+      "ttft_ms": 2063.45379999766,
+      "wall_ms": 10621.27540000074,
+      "timings": {
+        "cache_n": 29,
+        "prompt_n": 7,
+        "prompt_ms": 1948.4,
+        "prompt_per_token_ms": 278.343,
+        "prompt_per_second": 3.6,
+        "predicted_n": 113,
+        "predicted_ms": 8645.1,
+        "predicted_per_token_ms": 76.505,
+        "predicted_per_second": 13.1,
+        "draft_n": 95,
+        "draft_n_accepted": 83,
+        "at": 1791705714
+      },
+      "started_at_utc": "2026-10-11T08:01:43.760626+00:00",
+      "finished_at_utc": "2026-10-11T08:01:54.381912+00:00",
+      "usage": {
+        "prompt_tokens": 36,
+        "completion_tokens": 113,
+        "total_tokens": 149,
+        "prompt_tokens_details": {
+          "cached_tokens": 29
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 345,
+      "http_rx_body_bytes": 23077,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": 1584,
+          "entries": 53905,
+          "tx": 63624780,
+          "rx": 62952576
+        }
+      },
+      "output_sha256": "f936727574ca2dacc58e5cf27cd91e87ee7212a063fcbe20a94e66761fbe420c",
+      "output_text": "```python\ndef binary_search(arr: list[int], target: int) -> int:\n    if not arr:\n        return -1\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1\n```",
+      "warmup": false
+    },
+    {
+      "prompt": "code",
+      "ttft_ms": 2056.171500000346,
+      "wall_ms": 9430.933899999218,
+      "timings": {
+        "cache_n": 29,
+        "prompt_n": 7,
+        "prompt_ms": 1947.4,
+        "prompt_per_token_ms": 278.2,
+        "prompt_per_second": 3.6,
+        "predicted_n": 113,
+        "predicted_ms": 7445.3,
+        "predicted_per_token_ms": 65.888,
+        "predicted_per_second": 15.2,
+        "draft_n": 94,
+        "draft_n_accepted": 83,
+        "at": 1791705723
+      },
+      "started_at_utc": "2026-10-11T08:01:54.403450+00:00",
+      "finished_at_utc": "2026-10-11T08:02:03.834396+00:00",
+      "usage": {
+        "prompt_tokens": 36,
+        "completion_tokens": 113,
+        "total_tokens": 149,
+        "prompt_tokens_details": {
+          "cached_tokens": 29
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 345,
+      "http_rx_body_bytes": 23075,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": 1584,
+          "entries": 53487,
+          "tx": 63128244,
+          "rx": 62461056
+        }
+      },
+      "output_sha256": "f936727574ca2dacc58e5cf27cd91e87ee7212a063fcbe20a94e66761fbe420c",
+      "output_text": "```python\ndef binary_search(arr: list[int], target: int) -> int:\n    if not arr:\n        return -1\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1\n```",
+      "warmup": false
+    },
+    {
+      "prompt": "code",
+      "ttft_ms": 2035.2775999999722,
+      "wall_ms": 9066.757900000084,
+      "timings": {
+        "cache_n": 29,
+        "prompt_n": 7,
+        "prompt_ms": 1930.7,
+        "prompt_per_token_ms": 275.814,
+        "prompt_per_second": 3.6,
+        "predicted_n": 113,
+        "predicted_ms": 7112.5,
+        "predicted_per_token_ms": 62.942,
+        "predicted_per_second": 15.9,
+        "draft_n": 98,
+        "draft_n_accepted": 83,
+        "at": 1791705732
+      },
+      "started_at_utc": "2026-10-11T08:02:03.851590+00:00",
+      "finished_at_utc": "2026-10-11T08:02:12.918359+00:00",
+      "usage": {
+        "prompt_tokens": 36,
+        "completion_tokens": 113,
+        "total_tokens": 149,
+        "prompt_tokens_details": {
+          "cached_tokens": 29
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 345,
+      "http_rx_body_bytes": 23077,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": 1584,
+          "entries": 55201,
+          "tx": 65114892,
+          "rx": 64427136
+        }
+      },
+      "output_sha256": "f936727574ca2dacc58e5cf27cd91e87ee7212a063fcbe20a94e66761fbe420c",
+      "output_text": "```python\ndef binary_search(arr: list[int], target: int) -> int:\n    if not arr:\n        return -1\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1\n```",
+      "warmup": false
+    },
+    {
+      "prompt": "code",
+      "ttft_ms": 2064.905200000794,
+      "wall_ms": 9790.109000001394,
+      "timings": {
+        "cache_n": 29,
+        "prompt_n": 7,
+        "prompt_ms": 1943.0,
+        "prompt_per_token_ms": 277.571,
+        "prompt_per_second": 3.6,
+        "predicted_n": 113,
+        "predicted_ms": 7824.0,
+        "predicted_per_token_ms": 69.239,
+        "predicted_per_second": 14.4,
+        "draft_n": 95,
+        "draft_n_accepted": 83,
+        "at": 1791705742
+      },
+      "started_at_utc": "2026-10-11T08:02:12.921559+00:00",
+      "finished_at_utc": "2026-10-11T08:02:22.711678+00:00",
+      "usage": {
+        "prompt_tokens": 36,
+        "completion_tokens": 113,
+        "total_tokens": 149,
+        "prompt_tokens_details": {
+          "cached_tokens": 29
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 345,
+      "http_rx_body_bytes": 23077,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": 1584,
+          "entries": 53878,
+          "tx": 63624456,
+          "rx": 62952576
+        }
+      },
+      "output_sha256": "f936727574ca2dacc58e5cf27cd91e87ee7212a063fcbe20a94e66761fbe420c",
+      "output_text": "```python\ndef binary_search(arr: list[int], target: int) -> int:\n    if not arr:\n        return -1\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1\n```",
+      "warmup": false
+    },
+    {
+      "prompt": "long",
+      "ttft_ms": 41267.056100001355,
+      "wall_ms": 41680.5110000023,
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 2029,
+        "prompt_ms": 41136.1,
+        "prompt_per_token_ms": 20.274,
+        "prompt_per_second": 49.3,
+        "predicted_n": 6,
+        "predicted_ms": 523.4,
+        "predicted_per_token_ms": 87.233,
+        "predicted_per_second": 11.5,
+        "draft_n": 6,
+        "draft_n_accepted": 6,
+        "at": 1791705784
+      },
+      "started_at_utc": "2026-10-11T08:02:22.734715+00:00",
+      "finished_at_utc": "2026-10-11T08:03:04.415239+00:00",
+      "usage": {
+        "prompt_tokens": 2029,
+        "completion_tokens": 6,
+        "total_tokens": 2035,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 7686,
+      "http_rx_body_bytes": 2044,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": 144,
+          "entries": 3228,
+          "tx": 4468176,
+          "rx": 4427136
+        }
+      },
+      "output_sha256": "52ae4fd504d855f1dd094ab54e2da8402c96250ef75ef775a3cf20ff39d0cb2b",
+      "output_text": "The sky is blue.",
+      "warmup": true
+    },
+    {
+      "prompt": "long",
+      "ttft_ms": 1840.9170000013546,
+      "wall_ms": 3682.4669000016,
+      "timings": {
+        "cache_n": 2022,
+        "prompt_n": 7,
+        "prompt_ms": 1735.2,
+        "prompt_per_token_ms": 247.886,
+        "prompt_per_second": 4.0,
+        "predicted_n": 6,
+        "predicted_ms": 1925.0,
+        "predicted_per_token_ms": 320.833,
+        "predicted_per_second": 3.1,
+        "draft_n": 6,
+        "draft_n_accepted": 6,
+        "at": 1791705788
+      },
+      "started_at_utc": "2026-10-11T08:03:04.434393+00:00",
+      "finished_at_utc": "2026-10-11T08:03:08.116871+00:00",
+      "usage": {
+        "prompt_tokens": 2029,
+        "completion_tokens": 6,
+        "total_tokens": 2035,
+        "prompt_tokens_details": {
+          "cached_tokens": 2022
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 7686,
+      "http_rx_body_bytes": 1977,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": 144,
+          "entries": 3227,
+          "tx": 4468164,
+          "rx": 4427136
+        }
+      },
+      "output_sha256": "52ae4fd504d855f1dd094ab54e2da8402c96250ef75ef775a3cf20ff39d0cb2b",
+      "output_text": "The sky is blue.",
+      "warmup": true
+    },
+    {
+      "prompt": "long",
+      "ttft_ms": 1854.167100002087,
+      "wall_ms": 2241.167600001063,
+      "timings": {
+        "cache_n": 2022,
+        "prompt_n": 7,
+        "prompt_ms": 1738.0,
+        "prompt_per_token_ms": 248.286,
+        "prompt_per_second": 4.0,
+        "predicted_n": 6,
+        "predicted_ms": 473.9,
+        "predicted_per_token_ms": 78.983,
+        "predicted_per_second": 12.7,
+        "draft_n": 6,
+        "draft_n_accepted": 6,
+        "at": 1791705790
+      },
+      "started_at_utc": "2026-10-11T08:03:08.136382+00:00",
+      "finished_at_utc": "2026-10-11T08:03:10.377562+00:00",
+      "usage": {
+        "prompt_tokens": 2029,
+        "completion_tokens": 6,
+        "total_tokens": 2035,
+        "prompt_tokens_details": {
+          "cached_tokens": 2022
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 7686,
+      "http_rx_body_bytes": 1976,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": 144,
+          "entries": 3229,
+          "tx": 4468188,
+          "rx": 4427136
+        }
+      },
+      "output_sha256": "52ae4fd504d855f1dd094ab54e2da8402c96250ef75ef775a3cf20ff39d0cb2b",
+      "output_text": "The sky is blue.",
+      "warmup": false
+    },
+    {
+      "prompt": "long",
+      "ttft_ms": 1849.7047999990173,
+      "wall_ms": 2254.459700001462,
+      "timings": {
+        "cache_n": 2022,
+        "prompt_n": 7,
+        "prompt_ms": 1742.4,
+        "prompt_per_token_ms": 248.914,
+        "prompt_per_second": 4.0,
+        "predicted_n": 6,
+        "predicted_ms": 483.2,
+        "predicted_per_token_ms": 80.533,
+        "predicted_per_second": 12.4,
+        "draft_n": 6,
+        "draft_n_accepted": 6,
+        "at": 1791705792
+      },
+      "started_at_utc": "2026-10-11T08:03:10.399820+00:00",
+      "finished_at_utc": "2026-10-11T08:03:12.654291+00:00",
+      "usage": {
+        "prompt_tokens": 2029,
+        "completion_tokens": 6,
+        "total_tokens": 2035,
+        "prompt_tokens_details": {
+          "cached_tokens": 2022
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 7686,
+      "http_rx_body_bytes": 1976,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": 144,
+          "entries": 3233,
+          "tx": 4468236,
+          "rx": 4427136
+        }
+      },
+      "output_sha256": "52ae4fd504d855f1dd094ab54e2da8402c96250ef75ef775a3cf20ff39d0cb2b",
+      "output_text": "The sky is blue.",
+      "warmup": false
+    },
+    {
+      "prompt": "long",
+      "ttft_ms": 1866.776700000628,
+      "wall_ms": 2275.4012000004877,
+      "timings": {
+        "cache_n": 2022,
+        "prompt_n": 7,
+        "prompt_ms": 1732.5,
+        "prompt_per_token_ms": 247.5,
+        "prompt_per_second": 4.0,
+        "predicted_n": 6,
+        "predicted_ms": 507.4,
+        "predicted_per_token_ms": 84.567,
+        "predicted_per_second": 11.8,
+        "draft_n": 6,
+        "draft_n_accepted": 6,
+        "at": 1791705794
+      },
+      "started_at_utc": "2026-10-11T08:03:12.657988+00:00",
+      "finished_at_utc": "2026-10-11T08:03:14.933401+00:00",
+      "usage": {
+        "prompt_tokens": 2029,
+        "completion_tokens": 6,
+        "total_tokens": 2035,
+        "prompt_tokens_details": {
+          "cached_tokens": 2022
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 7686,
+      "http_rx_body_bytes": 1974,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": 144,
+          "entries": 3233,
+          "tx": 4468236,
+          "rx": 4427136
+        }
+      },
+      "output_sha256": "52ae4fd504d855f1dd094ab54e2da8402c96250ef75ef775a3cf20ff39d0cb2b",
+      "output_text": "The sky is blue.",
+      "warmup": false
+    },
+    {
+      "prompt": "long",
+      "ttft_ms": 1847.6532999993651,
+      "wall_ms": 2228.9121999965573,
+      "timings": {
+        "cache_n": 2022,
+        "prompt_n": 7,
+        "prompt_ms": 1723.9,
+        "prompt_per_token_ms": 246.271,
+        "prompt_per_second": 4.1,
+        "predicted_n": 6,
+        "predicted_ms": 482.4,
+        "predicted_per_token_ms": 80.4,
+        "predicted_per_second": 12.4,
+        "draft_n": 6,
+        "draft_n_accepted": 6,
+        "at": 1791705797
+      },
+      "started_at_utc": "2026-10-11T08:03:14.956057+00:00",
+      "finished_at_utc": "2026-10-11T08:03:17.184981+00:00",
+      "usage": {
+        "prompt_tokens": 2029,
+        "completion_tokens": 6,
+        "total_tokens": 2035,
+        "prompt_tokens_details": {
+          "cached_tokens": 2022
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 7686,
+      "http_rx_body_bytes": 1974,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": 144,
+          "entries": 3242,
+          "tx": 4468344,
+          "rx": 4427136
+        }
+      },
+      "output_sha256": "52ae4fd504d855f1dd094ab54e2da8402c96250ef75ef775a3cf20ff39d0cb2b",
+      "output_text": "The sky is blue.",
+      "warmup": false
+    },
+    {
+      "prompt": "long",
+      "ttft_ms": 1867.2813000011956,
+      "wall_ms": 2269.7612999982084,
+      "timings": {
+        "cache_n": 2022,
+        "prompt_n": 7,
+        "prompt_ms": 1759.1,
+        "prompt_per_token_ms": 251.3,
+        "prompt_per_second": 4.0,
+        "predicted_n": 6,
+        "predicted_ms": 479.8,
+        "predicted_per_token_ms": 79.967,
+        "predicted_per_second": 12.5,
+        "draft_n": 6,
+        "draft_n_accepted": 6,
+        "at": 1791705799
+      },
+      "started_at_utc": "2026-10-11T08:03:17.215643+00:00",
+      "finished_at_utc": "2026-10-11T08:03:19.485421+00:00",
+      "usage": {
+        "prompt_tokens": 2029,
+        "completion_tokens": 6,
+        "total_tokens": 2035,
+        "prompt_tokens_details": {
+          "cached_tokens": 2022
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 7686,
+      "http_rx_body_bytes": 1974,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": 144,
+          "entries": 3239,
+          "tx": 4468308,
+          "rx": 4427136
+        }
+      },
+      "output_sha256": "52ae4fd504d855f1dd094ab54e2da8402c96250ef75ef775a3cf20ff39d0cb2b",
+      "output_text": "The sky is blue.",
+      "warmup": false
+    },
+    {
+      "prompt": "long",
+      "ttft_ms": 1824.8050000001967,
+      "wall_ms": 2203.4139999996114,
+      "timings": {
+        "cache_n": 2022,
+        "prompt_n": 7,
+        "prompt_ms": 1721.2,
+        "prompt_per_token_ms": 245.886,
+        "prompt_per_second": 4.1,
+        "predicted_n": 6,
+        "predicted_ms": 472.2,
+        "predicted_per_token_ms": 78.7,
+        "predicted_per_second": 12.7,
+        "draft_n": 6,
+        "draft_n_accepted": 6,
+        "at": 1791705801
+      },
+      "started_at_utc": "2026-10-11T08:03:19.489226+00:00",
+      "finished_at_utc": "2026-10-11T08:03:21.692650+00:00",
+      "usage": {
+        "prompt_tokens": 2029,
+        "completion_tokens": 6,
+        "total_tokens": 2035,
+        "prompt_tokens_details": {
+          "cached_tokens": 2022
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 7686,
+      "http_rx_body_bytes": 1974,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": 144,
+          "entries": 3234,
+          "tx": 4468248,
+          "rx": 4427136
+        }
+      },
+      "output_sha256": "52ae4fd504d855f1dd094ab54e2da8402c96250ef75ef775a3cf20ff39d0cb2b",
+      "output_text": "The sky is blue.",
+      "warmup": false
+    },
+    {
+      "prompt": "long",
+      "ttft_ms": 1879.9727000005078,
+      "wall_ms": 2265.610899998137,
+      "timings": {
+        "cache_n": 2022,
+        "prompt_n": 7,
+        "prompt_ms": 1764.5,
+        "prompt_per_token_ms": 252.071,
+        "prompt_per_second": 4.0,
+        "predicted_n": 6,
+        "predicted_ms": 478.0,
+        "predicted_per_token_ms": 79.667,
+        "predicted_per_second": 12.6,
+        "draft_n": 6,
+        "draft_n_accepted": 6,
+        "at": 1791705803
+      },
+      "started_at_utc": "2026-10-11T08:03:21.696140+00:00",
+      "finished_at_utc": "2026-10-11T08:03:23.961760+00:00",
+      "usage": {
+        "prompt_tokens": 2029,
+        "completion_tokens": 6,
+        "total_tokens": 2035,
+        "prompt_tokens_details": {
+          "cached_tokens": 2022
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 7686,
+      "http_rx_body_bytes": 1976,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": 144,
+          "entries": 3245,
+          "tx": 4468380,
+          "rx": 4427136
+        }
+      },
+      "output_sha256": "52ae4fd504d855f1dd094ab54e2da8402c96250ef75ef775a3cf20ff39d0cb2b",
+      "output_text": "The sky is blue.",
+      "warmup": false
+    },
+    {
+      "prompt": "long",
+      "ttft_ms": 1835.2975000016158,
+      "wall_ms": 2227.1126999985427,
+      "timings": {
+        "cache_n": 2022,
+        "prompt_n": 7,
+        "prompt_ms": 1729.8,
+        "prompt_per_token_ms": 247.114,
+        "prompt_per_second": 4.0,
+        "predicted_n": 6,
+        "predicted_ms": 477.4,
+        "predicted_per_token_ms": 79.567,
+        "predicted_per_second": 12.6,
+        "draft_n": 6,
+        "draft_n_accepted": 6,
+        "at": 1791705806
+      },
+      "started_at_utc": "2026-10-11T08:03:23.965326+00:00",
+      "finished_at_utc": "2026-10-11T08:03:26.192449+00:00",
+      "usage": {
+        "prompt_tokens": 2029,
+        "completion_tokens": 6,
+        "total_tokens": 2035,
+        "prompt_tokens_details": {
+          "cached_tokens": 2022
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 7686,
+      "http_rx_body_bytes": 1976,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": 144,
+          "entries": 3227,
+          "tx": 4468164,
+          "rx": 4427136
+        }
+      },
+      "output_sha256": "52ae4fd504d855f1dd094ab54e2da8402c96250ef75ef775a3cf20ff39d0cb2b",
+      "output_text": "The sky is blue.",
+      "warmup": false
+    },
+    {
+      "prompt": "long",
+      "ttft_ms": 1845.7493999994767,
+      "wall_ms": 2241.221200001746,
+      "timings": {
+        "cache_n": 2022,
+        "prompt_n": 7,
+        "prompt_ms": 1746.1,
+        "prompt_per_token_ms": 249.443,
+        "prompt_per_second": 4.0,
+        "predicted_n": 6,
+        "predicted_ms": 474.9,
+        "predicted_per_token_ms": 79.15,
+        "predicted_per_second": 12.6,
+        "draft_n": 6,
+        "draft_n_accepted": 6,
+        "at": 1791705808
+      },
+      "started_at_utc": "2026-10-11T08:03:26.216859+00:00",
+      "finished_at_utc": "2026-10-11T08:03:28.458092+00:00",
+      "usage": {
+        "prompt_tokens": 2029,
+        "completion_tokens": 6,
+        "total_tokens": 2035,
+        "prompt_tokens_details": {
+          "cached_tokens": 2022
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 7686,
+      "http_rx_body_bytes": 1975,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": 144,
+          "entries": 3229,
+          "tx": 4468188,
+          "rx": 4427136
+        }
+      },
+      "output_sha256": "52ae4fd504d855f1dd094ab54e2da8402c96250ef75ef775a3cf20ff39d0cb2b",
+      "output_text": "The sky is blue.",
+      "warmup": false
+    },
+    {
+      "prompt": "long",
+      "ttft_ms": 1845.140099998389,
+      "wall_ms": 2252.030799998465,
+      "timings": {
+        "cache_n": 2022,
+        "prompt_n": 7,
+        "prompt_ms": 1733.6,
+        "prompt_per_token_ms": 247.657,
+        "prompt_per_second": 4.0,
+        "predicted_n": 6,
+        "predicted_ms": 495.7,
+        "predicted_per_token_ms": 82.617,
+        "predicted_per_second": 12.1,
+        "draft_n": 6,
+        "draft_n_accepted": 6,
+        "at": 1791705810
+      },
+      "started_at_utc": "2026-10-11T08:03:28.480060+00:00",
+      "finished_at_utc": "2026-10-11T08:03:30.732102+00:00",
+      "usage": {
+        "prompt_tokens": 2029,
+        "completion_tokens": 6,
+        "total_tokens": 2035,
+        "prompt_tokens_details": {
+          "cached_tokens": 2022
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 7686,
+      "http_rx_body_bytes": 1976,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": 144,
+          "entries": 3231,
+          "tx": 4468212,
+          "rx": 4427136
+        }
+      },
+      "output_sha256": "52ae4fd504d855f1dd094ab54e2da8402c96250ef75ef775a3cf20ff39d0cb2b",
+      "output_text": "The sky is blue.",
+      "warmup": false
+    },
+    {
+      "prompt": "long",
+      "ttft_ms": 1835.5387999981758,
+      "wall_ms": 2237.3886999994284,
+      "timings": {
+        "cache_n": 2022,
+        "prompt_n": 7,
+        "prompt_ms": 1727.6,
+        "prompt_per_token_ms": 246.8,
+        "prompt_per_second": 4.1,
+        "predicted_n": 6,
+        "predicted_ms": 483.5,
+        "predicted_per_token_ms": 80.583,
+        "predicted_per_second": 12.4,
+        "draft_n": 6,
+        "draft_n_accepted": 6,
+        "at": 1791705812
+      },
+      "started_at_utc": "2026-10-11T08:03:30.750310+00:00",
+      "finished_at_utc": "2026-10-11T08:03:32.987710+00:00",
+      "usage": {
+        "prompt_tokens": 2029,
+        "completion_tokens": 6,
+        "total_tokens": 2035,
+        "prompt_tokens_details": {
+          "cached_tokens": 2022
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 7686,
+      "http_rx_body_bytes": 1974,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": 144,
+          "entries": 3230,
+          "tx": 4468200,
+          "rx": 4427136
+        }
+      },
+      "output_sha256": "52ae4fd504d855f1dd094ab54e2da8402c96250ef75ef775a3cf20ff39d0cb2b",
+      "output_text": "The sky is blue.",
+      "warmup": false
+    },
+    {
+      "prompt": "long",
+      "ttft_ms": 1994.3337999975483,
+      "wall_ms": 2387.8805999993347,
+      "timings": {
+        "cache_n": 2022,
+        "prompt_n": 7,
+        "prompt_ms": 1745.1,
+        "prompt_per_token_ms": 249.3,
+        "prompt_per_second": 4.0,
+        "predicted_n": 6,
+        "predicted_ms": 609.4,
+        "predicted_per_token_ms": 101.567,
+        "predicted_per_second": 9.8,
+        "draft_n": 6,
+        "draft_n_accepted": 6,
+        "at": 1791705815
+      },
+      "started_at_utc": "2026-10-11T08:03:33.010893+00:00",
+      "finished_at_utc": "2026-10-11T08:03:35.398785+00:00",
+      "usage": {
+        "prompt_tokens": 2029,
+        "completion_tokens": 6,
+        "total_tokens": 2035,
+        "prompt_tokens_details": {
+          "cached_tokens": 2022
+        }
+      },
+      "finish": "stop",
+      "http_tx_body_bytes": 7686,
+      "http_rx_body_bytes": 1974,
+      "network_counters_delta": {
+        "192.168.233.126:18506": {
+          "tasks": 144,
+          "entries": 3240,
+          "tx": 4468320,
+          "rx": 4427136
+        }
+      },
+      "output_sha256": "52ae4fd504d855f1dd094ab54e2da8402c96250ef75ef775a3cf20ff39d0cb2b",
+      "output_text": "The sky is blue.",
+      "warmup": false
+    }
+  ],
+  "warmup": 2,
+  "repeats": 12,
+  "groups": [
+    {
+      "prompt": "code",
+      "request_max_tokens": 128,
+      "ttft_ms": {
+        "count": 12,
+        "p50": 2057.328749999215,
+        "p95": 2083.611699999892,
+        "min": 2032.383599998866,
+        "max": 2083.611699999892
+      },
+      "wall_ms": {
+        "count": 12,
+        "p50": 9610.521450000306,
+        "p95": 10628.57090000034,
+        "min": 8855.737499998213,
+        "max": 10628.57090000034
+      },
+      "decode_tok_s": {
+        "count": 12,
+        "p50": 14.8,
+        "p95": 16.4,
+        "min": 13.1,
+        "max": 16.4
+      }
+    },
+    {
+      "prompt": "long",
+      "request_max_tokens": 32,
+      "ttft_ms": {
+        "count": 12,
+        "p50": 1848.6790499991912,
+        "p95": 1994.3337999975483,
+        "min": 1824.8050000001967,
+        "max": 1994.3337999975483
+      },
+      "wall_ms": {
+        "count": 12,
+        "p50": 2246.6260000001057,
+        "p95": 2387.8805999993347,
+        "min": 2203.4139999996114,
+        "max": 2387.8805999993347
+      },
+      "decode_tok_s": {
+        "count": 12,
+        "p50": 12.45,
+        "p95": 12.7,
+        "min": 9.8,
+        "max": 12.7
+      }
+    }
+  ],
+  "engine": {
+    "version": "0.1.42",
+    "logit_bias": 1,
+    "context": 8192,
+    "kv": "int8",
+    "kv_resident": 0,
+    "expert_slots": 3107,
+    "expert_cache_mib": 6092,
+    "expert_slots_primary": 3107,
+    "expert_cache_primary_mib": 6092,
+    "spec": 6,
+    "mtp_max": 4,
+    "lookup": 3,
+    "vram_free_mib": 2860,
+    "cvec": 0,
+    "arena_mib": 1023,
+    "pool_workers": 5,
+    "pcie_frac": "0.00",
+    "spec_min_p": "0.50",
+    "conversation_cache_mib": 0,
+    "conversation_cache_slots": 4,
+    "conversation_cache_min_free_mib": 2560,
+    "conversation_cache_min_tokens": 0,
+    "tail_role_token": -1,
+    "vram_elastic": 0,
+    "engine": "0.1.42",
+    "model": "qwen3.8-flash-next-iq3_s-network",
+    "max_context": 8192,
+    "images": false,
+    "native": true
+  }
+}

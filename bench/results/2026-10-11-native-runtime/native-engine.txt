@@ -1,0 +1,767 @@
+[strata] 2026-10-11 14:27:11 engine started: D:\Projects\Strata\tmp\stage6\packages-final\host16\strata.exe --serve --pack D:\Projects\Strata-data\packs\iq3_s --native D:\Projects\Strata-data\models\IQ3_S\Qwen3.8-Flash-Next-GSQ-RCO-IQ3_S-00001-of-00002.gguf --ple-gguf D:\Projects\Strata-data\models\IQ3_S\Qwen3.8-Flash-Next-GSQ-RCO-IQ3_S-00002-of-00002.gguf --expert-profile D:\Projects\Strata\data\expert-profile.bin --expert-cache 2400 --spec 4 --mtp D:\Projects\Strata-data\mtp\rt --kv int8 --spec-min-p 0.5 --prompt-cache 6 --adapt-every 0 --vram-reserve-mib 1200 --pool-affinity p-cores --network-workers 192.168.233.126:18506 --network-timeout-ms 5000 --mmap-experts --pcie-frac 0 --short-read 0 --max-context 8192 --prefill 512 --network-reduce --network-local-ram-mib 1024 --prefill 512 --network-assignment 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 --network-config-id 62ec61c4a84a2a026788035f842573ee4536c660e56070f9477d0fdbce97a120 --network-timeout-ms 5000
+strata generate: memory guard: limit 31.8 GiB (source: meminfo), current 11.7 GiB, reclaimable cache credited 0.0 GiB; available 20.0 GiB (MemAvailable 20.0 GiB), floor 2560 MiB
+strata: LAN expert workers enabled; mmap experts, local prefill, PCIe share 0
+strata generate: this CPU has no AVX-512: the expert kernels run on AVX-2 (multi-token for the i-quant gate/up rows)
+strata generate: native pack: D:\Projects\Strata-data\packs\iq3_s experts (largest blob 2.66 MB), token embedding IQ4_XS in mapped host memory (322 MiB, 0.4 s)
+strata generate: 1466 MiB of weights loaded from D:\Projects\Strata-data\packs\iq3_s in 0.5 s (302 canonical tensors skipped: served natively)
+strata generate: 300 native projection matrices, 2018.88 MiB of weights, in 1.0 s
+strata generate: PLE direct read probe: 43515 rows/s (fine)
+strata generate: the SSD is kept awake while rows are read: one page of the table after 100 ms without a read, until 60 s after the last request (STRATA_SSD_KEEPALIVE=0 turns it off)
+strata generate: profile D:\Projects\Strata\data\expert-profile.bin: 24576 ranked pairs, built for 24576 slots
+strata generate: PLE on, table 320001536 rows of D:\Projects\Strata-data\models\IQ3_S\Qwen3.8-Flash-Next-GSQ-RCO-IQ3_S-00002-of-00002.gguf
+strata mtp: draft layer loaded, 802 MiB of VRAM (experts 675, dense 111), files read in 0.28 s (2827 MiB/s)
+strata generate: experimental native Q5_K head, 521472000 bytes, in 0.2 s
+strata generate: GPU 0: NVIDIA GeForce RTX 4060 Ti, compute capability 8.9
+strata generate: experts via mmap (--mmap-experts; the GGUF shards in place, no experts.bin)
+strata generate: the file tier reads unbuffered (STRATA_UNBUFFERED_LOAD=1)
+strata generate: CPU pool tasks/phase: 18 (automatic), participating threads: 6
+strata generate: hybrid CPU detected (6 P-cores / 12 threads, 8 E-cores), pool workers: 5, affinity: p-cores
+strata generate: 5 pool workers on logical processors 2,4,6,8,10, the host thread on 0 (draining too) (--host-core first)
+strata aux cpus: not available on this system
+strata generate: expert cache 3107 slots, 5.95 GiB of VRAM; policy is
+strata generate: the GPU computes the experts in the cache; it rounds differently from the CPU,
+                 so a reply can differ slightly from a run without the cache (same quality:
+                 bench/results/2026-09-27-cache-parity).
+                 PROFILE, ranked by routing frequency, no eviction.
+strata generate: pre-filled 3107 of 3107 slots from the profile in 4.6 s (1376 MB/s); slot 0 verified
+strata: network workers connected: 192.168.233.126:18506
+strata generate: R4 hit path ON - resident experts are computed on the GPU
+strata generate: 5 expert-pool workers + the host thread
+strata generate: session is up (engine 0.1.42)
+strata generate: expert arena: 5.92 GiB of VRAM-held experts handed back to the OS
+strata generate: token graph hit path: 3107 resident experts, decided on the device
+FileExpertSource: available RAM 19.64 GiB, 19.84 GiB after the mapped experts left the process working set (#467)
+FileExpertSource: RAM budget 1.00 GiB: 528 of the 40.89 GiB of experts the GPU cache does not hold, by profile rank; the rest are read from the files
+FileExpertSource: allocating 1.00 GiB pageable resident cache complement
+FileExpertSource: before complement allocation: requested 1.00 GiB, available RAM 19.84 GiB, available commit 7.25 GiB (limit 35.64 GiB), available virtual address space 130947.61 GiB
+FileExpertSource: copied cache complement through layer 8/48 (0.17 GiB, 0 s)
+FileExpertSource: copied cache complement through layer 16/48 (0.33 GiB, 0 s)
+FileExpertSource: copied cache complement through layer 24/48 (0.50 GiB, 0 s)
+FileExpertSource: copied cache complement through layer 32/48 (0.67 GiB, 0 s)
+FileExpertSource: copied cache complement through layer 40/48 (0.84 GiB, 1 s)
+FileExpertSource: copied cache complement through layer 48/48 (1.00 GiB, 1 s)
+FileExpertSource: pageable resident cache complement ready: resident 1.00 GiB, pinned 0.00 GiB in 1 s
+strata generate: resident RAM mode: 1.00 GiB of experts in RAM (pageable), 3107 in the GPU cache; adaptive swaps off
+strata generate: the file tier reads unbuffered (STRATA_UNBUFFERED_LOAD=1)
+strata generate: the mapped view of the experts stays open (the GGUF in place keeps its maps (token embedding, PLE))
+strata serve: Windows commit: 6.2 GiB left of a 35.6 GiB limit (RAM + page file)
+prefill: the CPU share is ON by default for prompt chunks below 1024 tokens (the idle CPU takes some of the experts the GPU would stream; answers can differ slightly from 0.1.40.3, mean KL ~0.004). STRATA_PREFILL_CPU_SHARE=0 turns it off.
+strata serve: the prompt path borrows 194 CUDA0 cache slots (0.37 GiB)
+strata hc: CUDA0: the hyper-connection read runs as staged (the norm per token and stream, the down projection's activations staged ahead by cp.async); checked bit for bit against the plain read on this card (STRATA_HC_SPLIT=1 or 0 for the earlier ones)
+strata verify: window up to 6 tokens, 74.4 MiB of device buffers
+strata mtp: draft head over 106299 tokens (212.9 MiB)
+strata serve: STRATA_ROUTE_TAIL_SKIP=7 is ON (default): a missed expert that every token of a verify window routes at rank 7 or lower is skipped (+10..20% decode on 12-16 GB cards that miss experts, answers differ slightly from 0.1.41); STRATA_ROUTE_TAIL_SKIP=0 turns it off
+strata serve: 2979 MiB of VRAM free with everything loaded
+strata verify: capturing the 1-token window (2943 MiB of VRAM free)
+strata verify: captured the 1-token window (upload no error, sync no error)
+strata verify: capturing the 4-token window (2927 MiB of VRAM free)
+strata verify: captured the 4-token window (upload no error, sync no error)
+strata serve: prompt 36 tokens = 0 reused + 36 read in 8433 ms (4.3 tok/s), 113 generated in 10531 ms (10.7 tok/s), drafts accepted 81 of 93, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.8% (6489 hits / 59840 lookups)
+strata serve: route tail skip: 11323 missed experts skipped (160 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 145 blob reads from the file
+strata serve: expert tiers: GPU 6489 hits this request; since the start RAM 735 blobs, files 145 blobs 16348.0 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=1536 entries=52630 tx=62133000 rx=61476864 roundtrip_ms=9487.610
+strata network local: entries=721 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 2004 ms (3.5 tok/s), 113 generated in 9055 ms (12.5 tok/s), drafts accepted 81 of 93, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.8% (6486 hits / 59846 lookups)
+strata serve: route tail skip: 22620 missed experts skipped (314 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 290 blob reads from the file
+strata serve: expert tiers: GPU 6486 hits this request; since the start RAM 1266 blobs, files 290 blobs 18754.7 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=3072 entries=105263 tx=124266036 rx=122953728 roundtrip_ms=17562.417
+strata network local: entries=1448 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1964 ms (3.6 tok/s), 113 generated in 7232 ms (15.6 tok/s), drafts accepted 81 of 93, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.8% (6471 hits / 59843 lookups)
+strata serve: route tail skip: 33948 missed experts skipped (471 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 435 blob reads from the file
+strata serve: expert tiers: GPU 6471 hits this request; since the start RAM 1797 blobs, files 435 blobs 21157.6 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=4608 entries=157912 tx=186399264 rx=184430592 roundtrip_ms=23820.230
+strata network local: entries=2171 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1935 ms (3.6 tok/s), 113 generated in 7844 ms (14.4 tok/s), drafts accepted 81 of 93, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.8% (6437 hits / 59849 lookups)
+strata serve: route tail skip: 45307 missed experts skipped (622 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 580 blob reads from the file
+strata serve: expert tiers: GPU 6437 hits this request; since the start RAM 2319 blobs, files 580 blobs 23561.9 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=6144 entries=210599 tx=248532948 rx=245907456 roundtrip_ms=30682.717
+strata network local: entries=2896 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1913 ms (3.7 tok/s), 113 generated in 8375 ms (13.5 tok/s), drafts accepted 81 of 93, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.7% (6413 hits / 59845 lookups)
+strata serve: route tail skip: 56657 missed experts skipped (777 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 725 blob reads from the file
+strata serve: expert tiers: GPU 6413 hits this request; since the start RAM 2841 blobs, files 725 blobs 25961.8 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=7680 entries=263309 tx=310666908 rx=307384320 roundtrip_ms=38075.430
+strata network local: entries=3618 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1930 ms (3.6 tok/s), 113 generated in 7182 ms (15.7 tok/s), drafts accepted 81 of 93, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.8% (6437 hits / 59849 lookups)
+strata serve: route tail skip: 68016 missed experts skipped (928 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 870 blob reads from the file
+strata serve: expert tiers: GPU 6437 hits this request; since the start RAM 3363 blobs, files 870 blobs 28366.1 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=9216 entries=315996 tx=372800592 rx=368861184 roundtrip_ms=44282.232
+strata network local: entries=4343 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1929 ms (3.6 tok/s), 113 generated in 7346 ms (15.4 tok/s), drafts accepted 81 of 93, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.8% (6438 hits / 59849 lookups)
+strata serve: route tail skip: 79372 missed experts skipped (1079 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 1015 blob reads from the file
+strata serve: expert tiers: GPU 6438 hits this request; since the start RAM 3884 blobs, files 1015 blobs 30770.3 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=10752 entries=368683 tx=434934276 rx=430338048 roundtrip_ms=50647.101
+strata network local: entries=5067 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1917 ms (3.7 tok/s), 113 generated in 8157 ms (13.9 tok/s), drafts accepted 81 of 93, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.8% (6465 hits / 59847 lookups)
+strata serve: route tail skip: 90709 missed experts skipped (1232 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 1160 blob reads from the file
+strata serve: expert tiers: GPU 6465 hits this request; since the start RAM 4405 blobs, files 1160 blobs 33172.2 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=12288 entries=421345 tx=497067660 rx=491814912 roundtrip_ms=57826.974
+strata network local: entries=5787 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1922 ms (3.6 tok/s), 113 generated in 8454 ms (13.4 tok/s), drafts accepted 81 of 93, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.9% (6494 hits / 59838 lookups)
+strata serve: route tail skip: 102060 missed experts skipped (1394 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 1305 blob reads from the file
+strata serve: expert tiers: GPU 6494 hits this request; since the start RAM 4936 blobs, files 1305 blobs 35572.6 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=13824 entries=473961 tx=559200492 rx=553291776 roundtrip_ms=65304.630
+strata network local: entries=6515 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1959 ms (3.6 tok/s), 113 generated in 7123 ms (15.9 tok/s), drafts accepted 81 of 93, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.7% (6411 hits / 59833 lookups)
+strata serve: route tail skip: 113404 missed experts skipped (1561 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 1450 blob reads from the file
+strata serve: expert tiers: GPU 6411 hits this request; since the start RAM 5456 blobs, files 1450 blobs 37978.1 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=15360 entries=526666 tx=621334392 rx=614768640 roundtrip_ms=71466.216
+strata network local: entries=7232 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1940 ms (3.6 tok/s), 113 generated in 7126 ms (15.9 tok/s), drafts accepted 81 of 93, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.9% (6496 hits / 59847 lookups)
+strata serve: route tail skip: 124713 missed experts skipped (1714 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 1595 blob reads from the file
+strata serve: expert tiers: GPU 6496 hits this request; since the start RAM 5990 blobs, files 1595 blobs 40386.9 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=16896 entries=579285 tx=683467260 rx=676245504 roundtrip_ms=77627.947
+strata network local: entries=7964 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1963 ms (3.6 tok/s), 113 generated in 7692 ms (14.7 tok/s), drafts accepted 81 of 93, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.8% (6485 hits / 59838 lookups)
+strata serve: route tail skip: 136057 missed experts skipped (1876 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 1740 blob reads from the file
+strata serve: expert tiers: GPU 6485 hits this request; since the start RAM 6520 blobs, files 1740 blobs 42789.1 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=18432 entries=631915 tx=745600260 rx=737722368 roundtrip_ms=84354.512
+strata network local: entries=8687 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1939 ms (3.6 tok/s), 113 generated in 8390 ms (13.5 tok/s), drafts accepted 81 of 93, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.8% (6448 hits / 59841 lookups)
+strata serve: route tail skip: 147386 missed experts skipped (2035 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 1885 blob reads from the file
+strata serve: expert tiers: GPU 6448 hits this request; since the start RAM 7047 blobs, files 1885 blobs 45186.1 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=19968 entries=684589 tx=807733788 rx=799199232 roundtrip_ms=91783.107
+strata network local: entries=9406 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1948 ms (3.6 tok/s), 113 generated in 7281 ms (15.5 tok/s), drafts accepted 81 of 93, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.8% (6440 hits / 59841 lookups)
+strata serve: route tail skip: 158709 missed experts skipped (2194 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 2030 blob reads from the file
+strata serve: expert tiers: GPU 6440 hits this request; since the start RAM 7568 blobs, files 2030 blobs 47583.8 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=21504 entries=737271 tx=869867412 rx=860676096 roundtrip_ms=98090.996
+strata network local: entries=10125 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 0 reused + 2029 read in 41072 ms (49.4 tok/s), 6 generated in 816 ms (7.4 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 22.0% (944 hits / 4300 lookups)
+strata serve: route tail skip: 159488 missed experts skipped (2214 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 2224 blob reads from the file
+strata serve: expert tiers: GPU 944 hits this request; since the start RAM 8524 blobs, files 2224 blobs 119810.2 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=21648 entries=740503 tx=874335636 rx=865103232 roundtrip_ms=98790.022
+strata network local: entries=10249 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1748 ms (4.0 tok/s), 6 generated in 513 ms (11.7 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 22.0% (946 hits / 4297 lookups)
+strata serve: route tail skip: 160264 missed experts skipped (2237 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 2369 blob reads from the file
+strata serve: expert tiers: GPU 946 hits this request; since the start RAM 8668 blobs, files 2369 blobs 121908.4 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=21792 entries=743733 tx=878803836 rx=869530368 roundtrip_ms=99220.624
+strata network local: entries=10370 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1727 ms (4.1 tok/s), 6 generated in 504 ms (11.9 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 21.8% (938 hits / 4297 lookups)
+strata serve: route tail skip: 161055 missed experts skipped (2260 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 2514 blob reads from the file
+strata serve: expert tiers: GPU 938 hits this request; since the start RAM 8813 blobs, files 2514 blobs 124025.9 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=21936 entries=746968 tx=883272096 rx=873957504 roundtrip_ms=99639.547
+strata network local: entries=10494 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1719 ms (4.1 tok/s), 6 generated in 738 ms (8.1 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 21.7% (933 hits / 4295 lookups)
+strata serve: route tail skip: 161850 missed experts skipped (2285 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 2659 blob reads from the file
+strata serve: expert tiers: GPU 933 hits this request; since the start RAM 8957 blobs, files 2659 blobs 126123.4 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=22080 entries=750210 tx=887740440 rx=878384640 roundtrip_ms=100294.252
+strata network local: entries=10614 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1736 ms (4.0 tok/s), 6 generated in 508 ms (11.8 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 22.0% (947 hits / 4299 lookups)
+strata serve: route tail skip: 162624 missed experts skipped (2306 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 2804 blob reads from the file
+strata serve: expert tiers: GPU 947 hits this request; since the start RAM 9102 blobs, files 2804 blobs 128226.5 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=22224 entries=753441 tx=892208652 rx=882811776 roundtrip_ms=100718.743
+strata network local: entries=10735 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1724 ms (4.1 tok/s), 6 generated in 560 ms (10.7 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 22.0% (946 hits / 4300 lookups)
+strata serve: route tail skip: 163404 missed experts skipped (2326 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 2949 blob reads from the file
+strata serve: expert tiers: GPU 946 hits this request; since the start RAM 9248 blobs, files 2949 blobs 130325.6 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=22368 entries=756670 tx=896676840 rx=887238912 roundtrip_ms=101194.610
+strata network local: entries=10860 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1727 ms (4.1 tok/s), 6 generated in 498 ms (12.0 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 21.7% (931 hits / 4300 lookups)
+strata serve: route tail skip: 164205 missed experts skipped (2346 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 3094 blob reads from the file
+strata serve: expert tiers: GPU 931 hits this request; since the start RAM 9393 blobs, files 3094 blobs 132439.6 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=22512 entries=759917 tx=901145244 rx=891666048 roundtrip_ms=101610.663
+strata network local: entries=10982 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1732 ms (4.0 tok/s), 6 generated in 507 ms (11.8 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 21.9% (939 hits / 4296 lookups)
+strata serve: route tail skip: 164995 missed experts skipped (2370 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 3239 blob reads from the file
+strata serve: expert tiers: GPU 939 hits this request; since the start RAM 9538 blobs, files 3239 blobs 134551.7 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=22656 entries=763152 tx=905613504 rx=896093184 roundtrip_ms=102034.585
+strata network local: entries=11104 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1729 ms (4.0 tok/s), 6 generated in 514 ms (11.7 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 22.0% (944 hits / 4299 lookups)
+strata serve: route tail skip: 165789 missed experts skipped (2391 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 3384 blob reads from the file
+strata serve: expert tiers: GPU 944 hits this request; since the start RAM 9682 blobs, files 3384 blobs 136653.5 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=22800 entries=766386 tx=910081752 rx=900520320 roundtrip_ms=102464.704
+strata network local: entries=11225 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1729 ms (4.0 tok/s), 6 generated in 832 ms (7.2 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 21.9% (940 hits / 4298 lookups)
+strata serve: route tail skip: 166576 missed experts skipped (2413 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 3529 blob reads from the file
+strata serve: expert tiers: GPU 940 hits this request; since the start RAM 9827 blobs, files 3529 blobs 138759.7 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=22944 entries=769623 tx=914550036 rx=904947456 roundtrip_ms=103211.716
+strata network local: entries=11346 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1864 ms (3.8 tok/s), 6 generated in 506 ms (11.9 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 21.8% (939 hits / 4299 lookups)
+strata serve: route tail skip: 167361 missed experts skipped (2434 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 3674 blob reads from the file
+strata serve: expert tiers: GPU 939 hits this request; since the start RAM 9972 blobs, files 3674 blobs 140865.3 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=23088 entries=772861 tx=919018332 rx=909374592 roundtrip_ms=103628.640
+strata network local: entries=11468 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1761 ms (4.0 tok/s), 6 generated in 500 ms (12.0 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 21.8% (937 hits / 4295 lookups)
+strata serve: route tail skip: 168149 missed experts skipped (2459 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 3819 blob reads from the file
+strata serve: expert tiers: GPU 937 hits this request; since the start RAM 10116 blobs, files 3819 blobs 142969.1 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=23232 entries=776101 tx=923486652 rx=913801728 roundtrip_ms=104046.096
+strata network local: entries=11586 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1759 ms (4.0 tok/s), 6 generated in 497 ms (12.1 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 21.7% (935 hits / 4299 lookups)
+strata serve: route tail skip: 168937 missed experts skipped (2480 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 3964 blob reads from the file
+strata serve: expert tiers: GPU 935 hits this request; since the start RAM 10262 blobs, files 3964 blobs 145074.0 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=23376 entries=779341 tx=927954972 rx=918228864 roundtrip_ms=104459.648
+strata network local: entries=11710 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 2021 ms (3.5 tok/s), 6 generated in 493 ms (12.2 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 21.7% (932 hits / 4294 lookups)
+strata serve: route tail skip: 169728 missed experts skipped (2506 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 4109 blob reads from the file
+strata serve: expert tiers: GPU 932 hits this request; since the start RAM 10406 blobs, files 4109 blobs 147175.8 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=23520 entries=782584 tx=932423328 rx=922656000 roundtrip_ms=104866.577
+strata network local: entries=11829 RAM budget=1024 MiB
+strata generate: memory guard: limit 31.8 GiB (source: meminfo), current 11.6 GiB, reclaimable cache credited 0.0 GiB; available 20.2 GiB (MemAvailable 20.2 GiB), floor 2560 MiB
+strata: LAN expert workers enabled; mmap experts, local prefill, PCIe share 0
+strata generate: this CPU has no AVX-512: the expert kernels run on AVX-2 (multi-token for the i-quant gate/up rows)
+strata generate: native pack: D:\Projects\Strata-data\packs\iq3_s experts (largest blob 2.66 MB), token embedding IQ4_XS in mapped host memory (322 MiB, 0.4 s)
+strata generate: 1466 MiB of weights loaded from D:\Projects\Strata-data\packs\iq3_s in 0.5 s (302 canonical tensors skipped: served natively)
+strata generate: 300 native projection matrices, 2018.88 MiB of weights, in 1.0 s
+strata generate: PLE direct read probe: 48478 rows/s (fine)
+strata generate: the SSD is kept awake while rows are read: one page of the table after 100 ms without a read, until 60 s after the last request (STRATA_SSD_KEEPALIVE=0 turns it off)
+strata generate: profile D:\Projects\Strata\data\expert-profile.bin: 24576 ranked pairs, built for 24576 slots
+strata generate: PLE on, table 320001536 rows of D:\Projects\Strata-data\models\IQ3_S\Qwen3.8-Flash-Next-GSQ-RCO-IQ3_S-00002-of-00002.gguf
+strata mtp: draft layer loaded, 802 MiB of VRAM (experts 675, dense 111), files read in 0.27 s (2895 MiB/s)
+strata generate: experimental native Q5_K head, 521472000 bytes, in 0.3 s
+strata generate: GPU 0: NVIDIA GeForce RTX 4060 Ti, compute capability 8.9
+strata generate: experts via mmap (--mmap-experts; the GGUF shards in place, no experts.bin)
+strata generate: the file tier reads unbuffered (STRATA_UNBUFFERED_LOAD=1)
+strata generate: CPU pool tasks/phase: 18 (automatic), participating threads: 6
+strata generate: hybrid CPU detected (6 P-cores / 12 threads, 8 E-cores), pool workers: 5, affinity: p-cores
+strata generate: 5 pool workers on logical processors 2,4,6,8,10, the host thread on 0 (draining too) (--host-core first)
+strata aux cpus: not available on this system
+strata generate: expert cache 3107 slots, 5.95 GiB of VRAM; policy is
+strata generate: the GPU computes the experts in the cache; it rounds differently from the CPU,
+                 so a reply can differ slightly from a run without the cache (same quality:
+                 bench/results/2026-09-27-cache-parity).
+                 PROFILE, ranked by routing frequency, no eviction.
+strata generate: pre-filled 3107 of 3107 slots from the profile in 4.6 s (1404 MB/s); slot 0 verified
+strata: network workers connected: 192.168.233.126:18506
+strata generate: R4 hit path ON - resident experts are computed on the GPU
+strata generate: 5 expert-pool workers + the host thread
+strata generate: session is up (engine 0.1.42)
+strata generate: expert arena: 5.92 GiB of VRAM-held experts handed back to the OS
+strata generate: token graph hit path: 3107 resident experts, decided on the device
+FileExpertSource: available RAM 19.83 GiB, 20.04 GiB after the mapped experts left the process working set (#467)
+FileExpertSource: RAM budget 1.00 GiB: 528 of the 40.89 GiB of experts the GPU cache does not hold, by profile rank; the rest are read from the files
+FileExpertSource: allocating 1.00 GiB pageable resident cache complement
+FileExpertSource: before complement allocation: requested 1.00 GiB, available RAM 20.04 GiB, available commit 7.42 GiB (limit 35.64 GiB), available virtual address space 130947.61 GiB
+FileExpertSource: copied cache complement through layer 8/48 (0.17 GiB, 0 s)
+FileExpertSource: copied cache complement through layer 16/48 (0.33 GiB, 0 s)
+FileExpertSource: copied cache complement through layer 24/48 (0.50 GiB, 0 s)
+FileExpertSource: copied cache complement through layer 32/48 (0.67 GiB, 0 s)
+FileExpertSource: copied cache complement through layer 40/48 (0.84 GiB, 1 s)
+FileExpertSource: copied cache complement through layer 48/48 (1.00 GiB, 1 s)
+FileExpertSource: pageable resident cache complement ready: resident 1.00 GiB, pinned 0.00 GiB in 1 s
+strata generate: resident RAM mode: 1.00 GiB of experts in RAM (pageable), 3107 in the GPU cache; adaptive swaps off
+strata generate: the file tier reads unbuffered (STRATA_UNBUFFERED_LOAD=1)
+strata generate: the mapped view of the experts stays open (the GGUF in place keeps its maps (token embedding, PLE))
+strata serve: Windows commit: 6.4 GiB left of a 35.6 GiB limit (RAM + page file)
+prefill: the CPU share is ON by default for prompt chunks below 1024 tokens (the idle CPU takes some of the experts the GPU would stream; answers can differ slightly from 0.1.40.3, mean KL ~0.004). STRATA_PREFILL_CPU_SHARE=0 turns it off.
+strata serve: the prompt path borrows 194 CUDA0 cache slots (0.37 GiB)
+strata hc: CUDA0: the hyper-connection read runs as staged (the norm per token and stream, the down projection's activations staged ahead by cp.async); checked bit for bit against the plain read on this card (STRATA_HC_SPLIT=1 or 0 for the earlier ones)
+strata verify: window up to 6 tokens, 74.4 MiB of device buffers
+strata mtp: draft head over 106299 tokens (212.9 MiB)
+strata serve: STRATA_ROUTE_TAIL_SKIP=7 is ON (default): a missed expert that every token of a verify window routes at rank 7 or lower is skipped (+10..20% decode on 12-16 GB cards that miss experts, answers differ slightly from 0.1.41); STRATA_ROUTE_TAIL_SKIP=0 turns it off
+strata serve: 2979 MiB of VRAM free with everything loaded
+strata verify: capturing the 1-token window (2826 MiB of VRAM free)
+strata verify: captured the 1-token window (upload no error, sync no error)
+strata verify: capturing the 4-token window (2927 MiB of VRAM free)
+strata verify: captured the 4-token window (upload no error, sync no error)
+strata serve: prompt 36 tokens = 0 reused + 36 read in 8178 ms (4.4 tok/s), 113 generated in 6634 ms (17.0 tok/s), drafts accepted 81 of 90, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.9% (6338 hits / 58408 lookups)
+strata serve: route tail skip: 11142 missed experts skipped (152 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 145 blob reads from the file
+strata serve: expert tiers: GPU 6338 hits this request; since the start RAM 725 blobs, files 145 blobs 16357.8 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=1536 entries=51366 tx=60643272 rx=60002304 roundtrip_ms=5587.903
+strata network local: entries=704 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1953 ms (3.6 tok/s), 113 generated in 6677 ms (16.9 tok/s), drafts accepted 81 of 93, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.8% (6436 hits / 59834 lookups)
+strata serve: route tail skip: 22477 missed experts skipped (318 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 290 blob reads from the file
+strata serve: expert tiers: GPU 6436 hits this request; since the start RAM 1252 blobs, files 290 blobs 18767.0 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=3072 entries=104044 tx=122776848 rx=121479168 roundtrip_ms=11287.745
+strata network local: entries=1424 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1925 ms (3.6 tok/s), 113 generated in 6836 ms (16.5 tok/s), drafts accepted 81 of 90, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.9% (6340 hits / 58407 lookups)
+strata serve: route tail skip: 33583 missed experts skipped (471 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 435 blob reads from the file
+strata serve: expert tiers: GPU 6340 hits this request; since the start RAM 1769 blobs, files 435 blobs 21169.9 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=4608 entries=155405 tx=183420060 rx=181481472 roundtrip_ms=17149.097
+strata network local: entries=2130 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1912 ms (3.7 tok/s), 113 generated in 7013 ms (16.1 tok/s), drafts accepted 81 of 93, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.8% (6485 hits / 59844 lookups)
+strata serve: route tail skip: 44918 missed experts skipped (627 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 580 blob reads from the file
+strata serve: expert tiers: GPU 6485 hits this request; since the start RAM 2293 blobs, files 580 blobs 23572.1 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=6144 entries=208047 tx=245553204 rx=242958336 roundtrip_ms=23183.052
+strata network local: entries=2847 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1907 ms (3.7 tok/s), 113 generated in 7860 ms (14.4 tok/s), drafts accepted 81 of 90, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.9% (6369 hits / 58410 lookups)
+strata serve: route tail skip: 56016 missed experts skipped (777 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 725 blob reads from the file
+strata serve: expert tiers: GPU 6369 hits this request; since the start RAM 2814 blobs, files 725 blobs 25974.3 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=7680 entries=259378 tx=306196056 rx=302960640 roundtrip_ms=30069.541
+strata network local: entries=3557 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1941 ms (3.6 tok/s), 113 generated in 7149 ms (15.8 tok/s), drafts accepted 81 of 93, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.8% (6476 hits / 59839 lookups)
+strata serve: route tail skip: 67339 missed experts skipped (938 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 870 blob reads from the file
+strata serve: expert tiers: GPU 6476 hits this request; since the start RAM 3336 blobs, files 870 blobs 28379.1 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=9216 entries=312027 tx=368329284 rx=364437504 roundtrip_ms=36237.214
+strata network local: entries=4271 RAM budget=1024 MiB
+strata verify: capturing the 3-token window (2907 MiB of VRAM free)
+strata verify: captured the 3-token window (upload no error, sync no error)
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1932 ms (3.6 tok/s), 113 generated in 6747 ms (16.7 tok/s), drafts accepted 81 of 92, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.8% (6440 hits / 59371 lookups)
+strata serve: route tail skip: 78623 missed experts skipped (1087 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 1015 blob reads from the file
+strata serve: expert tiers: GPU 6440 hits this request; since the start RAM 3865 blobs, files 1015 blobs 30784.0 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=10752 entries=364235 tx=429965700 rx=425422848 roundtrip_ms=42004.017
+strata network local: entries=4994 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1944 ms (3.6 tok/s), 113 generated in 7235 ms (15.6 tok/s), drafts accepted 81 of 91, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.7% (6322 hits / 58884 lookups)
+strata serve: route tail skip: 89876 missed experts skipped (1243 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 1160 blob reads from the file
+strata serve: expert tiers: GPU 6322 hits this request; since the start RAM 4389 blobs, files 1160 blobs 33191.5 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=12288 entries=416087 tx=491106324 rx=485916672 roundtrip_ms=48278.930
+strata network local: entries=5704 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1947 ms (3.6 tok/s), 113 generated in 8106 ms (13.9 tok/s), drafts accepted 81 of 93, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.8% (6460 hits / 59844 lookups)
+strata serve: route tail skip: 101239 missed experts skipped (1399 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 1305 blob reads from the file
+strata serve: expert tiers: GPU 6460 hits this request; since the start RAM 4922 blobs, files 1305 blobs 35597.6 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=13824 entries=468739 tx=553239588 rx=547393536 roundtrip_ms=55420.765
+strata network local: entries=6436 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1975 ms (3.5 tok/s), 113 generated in 6955 ms (16.2 tok/s), drafts accepted 81 of 93, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.9% (6506 hits / 59843 lookups)
+strata serve: route tail skip: 112551 missed experts skipped (1556 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 1450 blob reads from the file
+strata serve: expert tiers: GPU 6506 hits this request; since the start RAM 5452 blobs, files 1450 blobs 37999.8 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=15360 entries=521359 tx=615372468 rx=608870400 roundtrip_ms=61414.241
+strata network local: entries=7153 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1931 ms (3.6 tok/s), 113 generated in 6730 ms (16.8 tok/s), drafts accepted 81 of 93, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.8% (6489 hits / 59834 lookups)
+strata serve: route tail skip: 123903 missed experts skipped (1722 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 1595 blob reads from the file
+strata serve: expert tiers: GPU 6489 hits this request; since the start RAM 5975 blobs, files 1595 blobs 40399.4 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=16896 entries=573988 tx=677505456 rx=670347264 roundtrip_ms=67185.518
+strata network local: entries=7869 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1960 ms (3.6 tok/s), 113 generated in 8200 ms (13.8 tok/s), drafts accepted 83 of 95, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.8% (6615 hits / 61285 lookups)
+strata serve: route tail skip: 135487 missed experts skipped (1877 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 1740 blob reads from the file
+strata serve: expert tiers: GPU 6615 hits this request; since the start RAM 6521 blobs, files 1740 blobs 42810.4 MB read (the GGUF in place)
+strata serve: suffix drafts: 1 windows, 2 of 2 drafts accepted
+strata network: 192.168.233.126:18506 requests=18480 entries=627902 tx=741130344 rx=733299840 roundtrip_ms=74392.334
+strata network local: entries=8625 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1924 ms (3.6 tok/s), 113 generated in 8564 ms (13.2 tok/s), drafts accepted 83 of 95, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.9% (6654 hits / 61280 lookups)
+strata serve: route tail skip: 147083 missed experts skipped (2037 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 1885 blob reads from the file
+strata serve: expert tiers: GPU 6654 hits this request; since the start RAM 7073 blobs, files 1885 blobs 45203.8 MB read (the GGUF in place)
+strata serve: suffix drafts: 1 windows, 2 of 2 drafts accepted
+strata network: 192.168.233.126:18506 requests=20064 entries=681774 tx=804754728 rx=796252416 roundtrip_ms=81965.649
+strata network local: entries=9379 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1958 ms (3.6 tok/s), 113 generated in 7216 ms (15.7 tok/s), drafts accepted 83 of 95, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.8% (6648 hits / 61280 lookups)
+strata serve: route tail skip: 158716 missed experts skipped (2197 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 2030 blob reads from the file
+strata serve: expert tiers: GPU 6648 hits this request; since the start RAM 7625 blobs, files 2030 blobs 47599.9 MB read (the GGUF in place)
+strata serve: suffix drafts: 1 windows, 2 of 2 drafts accepted
+strata network: 192.168.233.126:18506 requests=21648 entries=735646 tx=868379112 rx=859204992 roundtrip_ms=88191.068
+strata network local: entries=10139 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 0 reused + 2029 read in 40680 ms (49.9 tok/s), 6 generated in 522 ms (11.5 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 21.9% (941 hits / 4296 lookups)
+strata serve: route tail skip: 159509 missed experts skipped (2221 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 2224 blob reads from the file
+strata serve: expert tiers: GPU 941 hits this request; since the start RAM 8553 blobs, files 2224 blobs 119187.6 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=21792 entries=738881 tx=872847372 rx=863632128 roundtrip_ms=88598.997
+strata network local: entries=10259 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1748 ms (4.0 tok/s), 6 generated in 528 ms (11.4 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 21.9% (941 hits / 4296 lookups)
+strata serve: route tail skip: 160300 missed experts skipped (2245 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 2369 blob reads from the file
+strata serve: expert tiers: GPU 941 hits this request; since the start RAM 8697 blobs, files 2369 blobs 121295.2 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=21936 entries=742117 tx=877315644 rx=868059264 roundtrip_ms=89044.056
+strata network local: entries=10378 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1722 ms (4.1 tok/s), 6 generated in 494 ms (12.2 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 21.8% (937 hits / 4297 lookups)
+strata serve: route tail skip: 161103 missed experts skipped (2268 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 2514 blob reads from the file
+strata serve: expert tiers: GPU 937 hits this request; since the start RAM 8841 blobs, files 2514 blobs 123413.5 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=22080 entries=745359 tx=881783988 rx=872486400 roundtrip_ms=89454.715
+strata network local: entries=10496 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1721 ms (4.1 tok/s), 6 generated in 475 ms (12.6 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 22.0% (946 hits / 4293 lookups)
+strata serve: route tail skip: 161892 missed experts skipped (2295 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 2659 blob reads from the file
+strata serve: expert tiers: GPU 946 hits this request; since the start RAM 8984 blobs, files 2659 blobs 125513.5 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=22224 entries=748588 tx=886252176 rx=876913536 roundtrip_ms=89848.430
+strata network local: entries=10614 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1741 ms (4.0 tok/s), 6 generated in 535 ms (11.2 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 22.0% (945 hits / 4297 lookups)
+strata serve: route tail skip: 162673 missed experts skipped (2318 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 2804 blob reads from the file
+strata serve: expert tiers: GPU 945 hits this request; since the start RAM 9129 blobs, files 2804 blobs 127627.1 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=22368 entries=751819 tx=890720388 rx=881340672 roundtrip_ms=90299.425
+strata network local: entries=10735 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1768 ms (4.0 tok/s), 6 generated in 478 ms (12.5 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 21.9% (941 hits / 4295 lookups)
+strata serve: route tail skip: 163467 missed experts skipped (2343 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 2949 blob reads from the file
+strata serve: expert tiers: GPU 941 hits this request; since the start RAM 9273 blobs, files 2949 blobs 129738.8 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=22512 entries=755052 tx=895188624 rx=885767808 roundtrip_ms=90694.414
+strata network local: entries=10856 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1728 ms (4.1 tok/s), 6 generated in 469 ms (12.8 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 22.0% (946 hits / 4294 lookups)
+strata serve: route tail skip: 164263 missed experts skipped (2369 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 3094 blob reads from the file
+strata serve: expert tiers: GPU 946 hits this request; since the start RAM 9415 blobs, files 3094 blobs 131862.1 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=22656 entries=758284 tx=899656848 rx=890194944 roundtrip_ms=91081.984
+strata network local: entries=10972 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1736 ms (4.0 tok/s), 6 generated in 479 ms (12.5 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 22.1% (947 hits / 4293 lookups)
+strata serve: route tail skip: 165057 missed experts skipped (2396 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 3239 blob reads from the file
+strata serve: expert tiers: GPU 947 hits this request; since the start RAM 9558 blobs, files 3239 blobs 133976.8 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=22800 entries=761513 tx=904125036 rx=894622080 roundtrip_ms=91477.595
+strata network local: entries=11089 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1734 ms (4.0 tok/s), 6 generated in 493 ms (12.2 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 21.9% (940 hits / 4298 lookups)
+strata serve: route tail skip: 165851 missed experts skipped (2418 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 3384 blob reads from the file
+strata serve: expert tiers: GPU 940 hits this request; since the start RAM 9704 blobs, files 3384 blobs 136092.4 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=22944 entries=764749 tx=908593308 rx=899049216 roundtrip_ms=91884.630
+strata network local: entries=11211 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1745 ms (4.0 tok/s), 6 generated in 482 ms (12.4 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 22.0% (945 hits / 4293 lookups)
+strata serve: route tail skip: 166645 missed experts skipped (2445 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 3529 blob reads from the file
+strata serve: expert tiers: GPU 945 hits this request; since the start RAM 9847 blobs, files 3529 blobs 138212.1 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=23088 entries=767980 tx=913061520 rx=903476352 roundtrip_ms=92284.584
+strata network local: entries=11328 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1762 ms (4.0 tok/s), 6 generated in 1557 ms (3.9 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 22.1% (947 hits / 4293 lookups)
+strata serve: route tail skip: 167436 missed experts skipped (2472 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 3674 blob reads from the file
+strata serve: expert tiers: GPU 947 hits this request; since the start RAM 9990 blobs, files 3674 blobs 140331.1 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=23232 entries=771209 tx=917529708 rx=907903488 roundtrip_ms=93758.336
+strata network local: entries=11445 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1736 ms (4.0 tok/s), 6 generated in 471 ms (12.7 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 22.0% (946 hits / 4291 lookups)
+strata serve: route tail skip: 168238 missed experts skipped (2501 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 3819 blob reads from the file
+strata serve: expert tiers: GPU 946 hits this request; since the start RAM 10133 blobs, files 3819 blobs 142434.9 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=23376 entries=774436 tx=921997872 rx=912330624 roundtrip_ms=94146.755
+strata network local: entries=11563 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1734 ms (4.0 tok/s), 6 generated in 478 ms (12.6 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 21.9% (942 hits / 4298 lookups)
+strata serve: route tail skip: 169028 missed experts skipped (2523 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 3964 blob reads from the file
+strata serve: expert tiers: GPU 942 hits this request; since the start RAM 10278 blobs, files 3964 blobs 144548.4 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=23520 entries=777674 tx=926466168 rx=916757760 roundtrip_ms=94541.521
+strata network local: entries=11681 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1719 ms (4.1 tok/s), 6 generated in 475 ms (12.6 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 21.7% (934 hits / 4300 lookups)
+strata serve: route tail skip: 169820 missed experts skipped (2543 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 4109 blob reads from the file
+strata serve: expert tiers: GPU 934 hits this request; since the start RAM 10424 blobs, files 4109 blobs 146653.7 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=23664 entries=780917 tx=930934524 rx=921184896 roundtrip_ms=94935.363
+strata network local: entries=11804 RAM budget=1024 MiB
+strata generate: memory guard: limit 31.8 GiB (source: meminfo), current 11.7 GiB, reclaimable cache credited 0.0 GiB; available 20.1 GiB (MemAvailable 20.1 GiB), floor 2560 MiB
+strata: LAN expert workers enabled; mmap experts, local prefill, PCIe share 0
+strata generate: this CPU has no AVX-512: the expert kernels run on AVX-2 (multi-token for the i-quant gate/up rows)
+strata generate: native pack: D:\Projects\Strata-data\packs\iq3_s experts (largest blob 2.66 MB), token embedding IQ4_XS in mapped host memory (322 MiB, 0.4 s)
+strata generate: 1466 MiB of weights loaded from D:\Projects\Strata-data\packs\iq3_s in 0.5 s (302 canonical tensors skipped: served natively)
+strata generate: 300 native projection matrices, 2018.88 MiB of weights, in 1.0 s
+strata generate: PLE direct read probe: 47060 rows/s (fine)
+strata generate: the SSD is kept awake while rows are read: one page of the table after 100 ms without a read, until 60 s after the last request (STRATA_SSD_KEEPALIVE=0 turns it off)
+strata generate: profile D:\Projects\Strata\data\expert-profile.bin: 24576 ranked pairs, built for 24576 slots
+strata generate: PLE on, table 320001536 rows of D:\Projects\Strata-data\models\IQ3_S\Qwen3.8-Flash-Next-GSQ-RCO-IQ3_S-00002-of-00002.gguf
+strata mtp: draft layer loaded, 802 MiB of VRAM (experts 675, dense 111), files read in 0.27 s (2867 MiB/s)
+strata generate: experimental native Q5_K head, 521472000 bytes, in 0.3 s
+strata generate: GPU 0: NVIDIA GeForce RTX 4060 Ti, compute capability 8.9
+strata generate: experts via mmap (--mmap-experts; the GGUF shards in place, no experts.bin)
+strata generate: the file tier reads unbuffered (STRATA_UNBUFFERED_LOAD=1)
+strata generate: CPU pool tasks/phase: 18 (automatic), participating threads: 6
+strata generate: hybrid CPU detected (6 P-cores / 12 threads, 8 E-cores), pool workers: 5, affinity: p-cores
+strata generate: 5 pool workers on logical processors 2,4,6,8,10, the host thread on 0 (draining too) (--host-core first)
+strata aux cpus: not available on this system
+strata generate: expert cache 3107 slots, 5.95 GiB of VRAM; policy is
+strata generate: the GPU computes the experts in the cache; it rounds differently from the CPU,
+                 so a reply can differ slightly from a run without the cache (same quality:
+                 bench/results/2026-09-27-cache-parity).
+                 PROFILE, ranked by routing frequency, no eviction.
+strata generate: pre-filled 3107 of 3107 slots from the profile in 4.6 s (1390 MB/s); slot 0 verified
+strata: network workers connected: 192.168.233.126:18506
+strata generate: R4 hit path ON - resident experts are computed on the GPU
+strata generate: 5 expert-pool workers + the host thread
+strata generate: session is up (engine 0.1.42)
+strata generate: expert arena: 5.92 GiB of VRAM-held experts handed back to the OS
+strata generate: token graph hit path: 3107 resident experts, decided on the device
+FileExpertSource: available RAM 19.68 GiB, 19.90 GiB after the mapped experts left the process working set (#467)
+FileExpertSource: RAM budget 1.00 GiB: 528 of the 40.89 GiB of experts the GPU cache does not hold, by profile rank; the rest are read from the files
+FileExpertSource: allocating 1.00 GiB pageable resident cache complement
+FileExpertSource: before complement allocation: requested 1.00 GiB, available RAM 19.90 GiB, available commit 7.30 GiB (limit 35.64 GiB), available virtual address space 130947.61 GiB
+FileExpertSource: copied cache complement through layer 8/48 (0.17 GiB, 0 s)
+FileExpertSource: copied cache complement through layer 16/48 (0.33 GiB, 0 s)
+FileExpertSource: copied cache complement through layer 24/48 (0.50 GiB, 0 s)
+FileExpertSource: copied cache complement through layer 32/48 (0.67 GiB, 0 s)
+FileExpertSource: copied cache complement through layer 40/48 (0.84 GiB, 1 s)
+FileExpertSource: copied cache complement through layer 48/48 (1.00 GiB, 1 s)
+FileExpertSource: pageable resident cache complement ready: resident 1.00 GiB, pinned 0.00 GiB in 1 s
+strata generate: resident RAM mode: 1.00 GiB of experts in RAM (pageable), 3107 in the GPU cache; adaptive swaps off
+strata generate: the file tier reads unbuffered (STRATA_UNBUFFERED_LOAD=1)
+strata generate: the mapped view of the experts stays open (the GGUF in place keeps its maps (token embedding, PLE))
+strata serve: Windows commit: 6.3 GiB left of a 35.6 GiB limit (RAM + page file)
+prefill: the CPU share is ON by default for prompt chunks below 1024 tokens (the idle CPU takes some of the experts the GPU would stream; answers can differ slightly from 0.1.40.3, mean KL ~0.004). STRATA_PREFILL_CPU_SHARE=0 turns it off.
+strata serve: the prompt path borrows 194 CUDA0 cache slots (0.37 GiB)
+strata hc: CUDA0: the hyper-connection read runs as staged (the norm per token and stream, the down projection's activations staged ahead by cp.async); checked bit for bit against the plain read on this card (STRATA_HC_SPLIT=1 or 0 for the earlier ones)
+strata verify: window up to 6 tokens, 74.4 MiB of device buffers
+strata mtp: draft head over 106299 tokens (212.9 MiB)
+strata serve: STRATA_ROUTE_TAIL_SKIP=7 is ON (default): a missed expert that every token of a verify window routes at rank 7 or lower is skipped (+10..20% decode on 12-16 GB cards that miss experts, answers differ slightly from 0.1.41); STRATA_ROUTE_TAIL_SKIP=0 turns it off
+strata serve: 2979 MiB of VRAM free with everything loaded
+strata verify: capturing the 1-token window (2943 MiB of VRAM free)
+strata verify: captured the 1-token window (upload no error, sync no error)
+strata verify: capturing the 4-token window (2927 MiB of VRAM free)
+strata verify: captured the 4-token window (upload no error, sync no error)
+strata verify: capturing the 3-token window (2890 MiB of VRAM free)
+strata verify: captured the 3-token window (upload no error, sync no error)
+strata serve: prompt 36 tokens = 0 reused + 36 read in 8059 ms (4.5 tok/s), 113 generated in 6480 ms (17.4 tok/s), drafts accepted 82 of 89, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.9% (6264 hits / 57455 lookups)
+strata serve: route tail skip: 10864 missed experts skipped (145 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 145 blob reads from the file
+strata serve: expert tiers: GPU 6264 hits this request; since the start RAM 744 blobs, files 145 blobs 16352.8 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=1488 entries=50470 tx=59647560 rx=59018112 roundtrip_ms=5467.478
+strata network local: entries=721 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1917 ms (3.7 tok/s), 113 generated in 6709 ms (16.8 tok/s), drafts accepted 81 of 93, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.8% (6480 hits / 59849 lookups)
+strata serve: route tail skip: 22175 missed experts skipped (296 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 290 blob reads from the file
+strata serve: expert tiers: GPU 6480 hits this request; since the start RAM 1276 blobs, files 290 blobs 18752.6 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=3024 entries=103110 tx=121780680 rx=120494976 roundtrip_ms=11203.365
+strata network local: entries=1450 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1909 ms (3.7 tok/s), 113 generated in 6930 ms (16.3 tok/s), drafts accepted 81 of 92, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.8% (6416 hits / 59373 lookups)
+strata serve: route tail skip: 33503 missed experts skipped (443 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 435 blob reads from the file
+strata serve: expert tiers: GPU 6416 hits this request; since the start RAM 1805 blobs, files 435 blobs 21155.2 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=4560 entries=155341 tx=183417372 rx=181480320 roundtrip_ms=17175.995
+strata network local: entries=2176 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1908 ms (3.7 tok/s), 113 generated in 7735 ms (14.6 tok/s), drafts accepted 82 of 90, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.9% (6339 hits / 57937 lookups)
+strata serve: route tail skip: 44391 missed experts skipped (586 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 580 blob reads from the file
+strata serve: expert tiers: GPU 6339 hits this request; since the start RAM 2353 blobs, files 580 blobs 23552.3 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=6048 entries=206200 tx=243561120 rx=240989952 roundtrip_ms=23969.226
+strata network local: entries=2915 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1920 ms (3.6 tok/s), 113 generated in 6937 ms (16.3 tok/s), drafts accepted 82 of 90, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.9% (6327 hits / 57919 lookups)
+strata serve: route tail skip: 55364 missed experts skipped (747 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 725 blob reads from the file
+strata serve: expert tiers: GPU 6327 hits this request; since the start RAM 2891 blobs, files 725 blobs 25950.9 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=7536 entries=257068 tx=303704976 rx=300499584 roundtrip_ms=29961.572
+strata network local: entries=3639 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1923 ms (3.6 tok/s), 113 generated in 7013 ms (16.1 tok/s), drafts accepted 81 of 93, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.8% (6451 hits / 59840 lookups)
+strata serve: route tail skip: 66680 missed experts skipped (907 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 870 blob reads from the file
+strata serve: expert tiers: GPU 6451 hits this request; since the start RAM 3417 blobs, files 870 blobs 28355.8 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=9072 entries=309733 tx=365838396 rx=361976448 roundtrip_ms=36002.864
+strata network local: entries=4363 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1900 ms (3.7 tok/s), 113 generated in 6668 ms (16.9 tok/s), drafts accepted 81 of 93, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.8% (6441 hits / 59843 lookups)
+strata serve: route tail skip: 78024 missed experts skipped (1064 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 1015 blob reads from the file
+strata serve: expert tiers: GPU 6441 hits this request; since the start RAM 3947 blobs, files 1015 blobs 30752.9 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=10608 entries=362409 tx=427971948 rx=423453312 roundtrip_ms=41705.137
+strata network local: entries=5089 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1936 ms (3.6 tok/s), 113 generated in 7894 ms (14.3 tok/s), drafts accepted 82 of 90, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.9% (6290 hits / 57920 lookups)
+strata serve: route tail skip: 89017 missed experts skipped (1224 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 1160 blob reads from the file
+strata serve: expert tiers: GPU 6290 hits this request; since the start RAM 4489 blobs, files 1160 blobs 33156.5 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=12096 entries=413314 tx=488116248 rx=482962944 roundtrip_ms=48667.064
+strata network local: entries=5814 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1919 ms (3.6 tok/s), 113 generated in 7894 ms (14.3 tok/s), drafts accepted 82 of 90, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.9% (6317 hits / 57925 lookups)
+strata serve: route tail skip: 100017 missed experts skipped (1379 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 1305 blob reads from the file
+strata serve: expert tiers: GPU 6317 hits this request; since the start RAM 5028 blobs, files 1305 blobs 35558.6 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=13584 entries=464200 tx=548260320 rx=542472576 roundtrip_ms=55632.224
+strata network local: entries=6536 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1948 ms (3.6 tok/s), 113 generated in 7324 ms (15.4 tok/s), drafts accepted 81 of 93, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.8% (6445 hits / 59837 lookups)
+strata serve: route tail skip: 111357 missed experts skipped (1542 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 1450 blob reads from the file
+strata serve: expert tiers: GPU 6445 hits this request; since the start RAM 5551 blobs, files 1450 blobs 37985.1 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=15120 entries=516872 tx=610393824 rx=603949440 roundtrip_ms=61979.362
+strata network local: entries=7256 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1931 ms (3.6 tok/s), 113 generated in 7037 ms (16.1 tok/s), drafts accepted 81 of 93, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.9% (6504 hits / 59839 lookups)
+strata serve: route tail skip: 122653 missed experts skipped (1703 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 1595 blob reads from the file
+strata serve: expert tiers: GPU 6504 hits this request; since the start RAM 6076 blobs, files 1595 blobs 40378.6 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=16656 entries=569487 tx=672526644 rx=665426304 roundtrip_ms=68028.109
+strata network local: entries=7976 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1940 ms (3.6 tok/s), 113 generated in 7752 ms (14.6 tok/s), drafts accepted 81 of 92, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.8% (6405 hits / 59363 lookups)
+strata serve: route tail skip: 133947 missed experts skipped (1860 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 1740 blob reads from the file
+strata serve: expert tiers: GPU 6405 hits this request; since the start RAM 6603 blobs, files 1740 blobs 42786.7 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=18192 entries=621722 tx=734163384 rx=726411648 roundtrip_ms=74803.823
+strata network local: entries=8699 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1928 ms (3.6 tok/s), 113 generated in 8149 ms (13.9 tok/s), drafts accepted 82 of 90, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.9% (6330 hits / 57930 lookups)
+strata serve: route tail skip: 144935 missed experts skipped (2010 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 1885 blob reads from the file
+strata serve: expert tiers: GPU 6330 hits this request; since the start RAM 7144 blobs, files 1885 blobs 45194.7 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=19680 entries=672595 tx=794307300 rx=785921280 roundtrip_ms=81992.244
+strata network local: entries=9426 RAM budget=1024 MiB
+strata serve: prompt 36 tokens = 29 reused + 7 read in 1921 ms (3.6 tok/s), 113 generated in 6945 ms (16.3 tok/s), drafts accepted 81 of 91, 1 checkpoints
+strata serve: decode expert cache hit rate: 10.7% (6304 hits / 58891 lookups)
+strata serve: route tail skip: 156169 missed experts skipped (2159 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 2030 blob reads from the file
+strata serve: expert tiers: GPU 6304 hits this request; since the start RAM 7676 blobs, files 2030 blobs 47593.3 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=21216 entries=724459 tx=855448068 rx=846415104 roundtrip_ms=87964.900
+strata network local: entries=10149 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 0 reused + 2029 read in 41274 ms (49.2 tok/s), 6 generated in 533 ms (11.3 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 22.0% (944 hits / 4300 lookups)
+strata serve: route tail skip: 156948 missed experts skipped (2179 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 2224 blob reads from the file
+strata serve: expert tiers: GPU 944 hits this request; since the start RAM 8632 blobs, files 2224 blobs 119819.6 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=21360 entries=727691 tx=859916292 rx=850842240 roundtrip_ms=88362.063
+strata network local: entries=10273 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1744 ms (4.0 tok/s), 6 generated in 463 ms (13.0 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 22.0% (946 hits / 4297 lookups)
+strata serve: route tail skip: 157724 missed experts skipped (2202 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 2369 blob reads from the file
+strata serve: expert tiers: GPU 946 hits this request; since the start RAM 8776 blobs, files 2369 blobs 121917.8 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=21504 entries=730921 tx=864384492 rx=855269376 roundtrip_ms=88743.173
+strata network local: entries=10394 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1757 ms (4.0 tok/s), 6 generated in 462 ms (13.0 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 21.8% (938 hits / 4297 lookups)
+strata serve: route tail skip: 158515 missed experts skipped (2225 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 2514 blob reads from the file
+strata serve: expert tiers: GPU 938 hits this request; since the start RAM 8921 blobs, files 2514 blobs 124035.4 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=21648 entries=734156 tx=868852752 rx=859696512 roundtrip_ms=89124.786
+strata network local: entries=10518 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1722 ms (4.1 tok/s), 6 generated in 497 ms (12.1 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 21.7% (933 hits / 4295 lookups)
+strata serve: route tail skip: 159310 missed experts skipped (2250 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 2659 blob reads from the file
+strata serve: expert tiers: GPU 933 hits this request; since the start RAM 9065 blobs, files 2659 blobs 126132.9 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=21792 entries=737398 tx=873321096 rx=864123648 roundtrip_ms=89542.696
+strata network local: entries=10638 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1752 ms (4.0 tok/s), 6 generated in 484 ms (12.4 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 22.0% (947 hits / 4299 lookups)
+strata serve: route tail skip: 160084 missed experts skipped (2271 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 2804 blob reads from the file
+strata serve: expert tiers: GPU 947 hits this request; since the start RAM 9210 blobs, files 2804 blobs 128236.0 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=21936 entries=740629 tx=877789308 rx=868550784 roundtrip_ms=89946.811
+strata network local: entries=10759 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1731 ms (4.0 tok/s), 6 generated in 470 ms (12.8 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 22.0% (946 hits / 4296 lookups)
+strata serve: route tail skip: 160861 missed experts skipped (2295 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 2949 blob reads from the file
+strata serve: expert tiers: GPU 946 hits this request; since the start RAM 9354 blobs, files 2949 blobs 130337.0 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=22080 entries=743858 tx=882257496 rx=872977920 roundtrip_ms=90334.637
+strata network local: entries=10880 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1744 ms (4.0 tok/s), 6 generated in 844 ms (7.1 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 21.8% (938 hits / 4299 lookups)
+strata serve: route tail skip: 161654 missed experts skipped (2316 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 3094 blob reads from the file
+strata serve: expert tiers: GPU 938 hits this request; since the start RAM 9500 blobs, files 3094 blobs 132444.2 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=22224 entries=747095 tx=886725780 rx=877405056 roundtrip_ms=91097.743
+strata network local: entries=11004 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1738 ms (4.0 tok/s), 6 generated in 467 ms (12.8 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 21.9% (939 hits / 4296 lookups)
+strata serve: route tail skip: 162444 missed experts skipped (2340 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 3239 blob reads from the file
+strata serve: expert tiers: GPU 939 hits this request; since the start RAM 9645 blobs, files 3239 blobs 134556.3 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=22368 entries=750330 tx=891194040 rx=881832192 roundtrip_ms=91483.792
+strata network local: entries=11126 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1777 ms (3.9 tok/s), 6 generated in 475 ms (12.6 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 22.0% (944 hits / 4299 lookups)
+strata serve: route tail skip: 163238 missed experts skipped (2361 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 3384 blob reads from the file
+strata serve: expert tiers: GPU 944 hits this request; since the start RAM 9789 blobs, files 3384 blobs 136658.1 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=22512 entries=753564 tx=895662288 rx=886259328 roundtrip_ms=91874.941
+strata network local: entries=11247 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1793 ms (3.9 tok/s), 6 generated in 475 ms (12.6 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 21.9% (940 hits / 4298 lookups)
+strata serve: route tail skip: 164025 missed experts skipped (2383 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 3529 blob reads from the file
+strata serve: expert tiers: GPU 940 hits this request; since the start RAM 9934 blobs, files 3529 blobs 138764.3 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=22656 entries=756801 tx=900130572 rx=890686464 roundtrip_ms=92271.534
+strata network local: entries=11368 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1716 ms (4.1 tok/s), 6 generated in 723 ms (8.3 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 21.8% (939 hits / 4299 lookups)
+strata serve: route tail skip: 164810 missed experts skipped (2404 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 3674 blob reads from the file
+strata serve: expert tiers: GPU 939 hits this request; since the start RAM 10079 blobs, files 3674 blobs 140869.9 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=22800 entries=760039 tx=904598868 rx=895113600 roundtrip_ms=92914.716
+strata network local: entries=11490 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1766 ms (4.0 tok/s), 6 generated in 457 ms (13.1 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 21.8% (938 hits / 4298 lookups)
+strata serve: route tail skip: 165589 missed experts skipped (2426 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 3819 blob reads from the file
+strata serve: expert tiers: GPU 938 hits this request; since the start RAM 10225 blobs, files 3819 blobs 142980.5 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=22944 entries=763274 tx=909067128 rx=899540736 roundtrip_ms=93292.838
+strata network local: entries=11615 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1741 ms (4.0 tok/s), 6 generated in 467 ms (12.8 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 22.0% (944 hits / 4300 lookups)
+strata serve: route tail skip: 166373 missed experts skipped (2446 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 3964 blob reads from the file
+strata serve: expert tiers: GPU 944 hits this request; since the start RAM 10370 blobs, files 3964 blobs 145081.3 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=23088 entries=766507 tx=913535364 rx=903967872 roundtrip_ms=93679.367
+strata network local: entries=11738 RAM budget=1024 MiB
+strata serve: prompt 2029 tokens = 2022 reused + 7 read in 1732 ms (4.0 tok/s), 6 generated in 488 ms (12.3 tok/s), drafts accepted 6 of 6, 1 checkpoints
+strata serve: decode expert cache hit rate: 21.7% (932 hits / 4294 lookups)
+strata serve: route tail skip: 167164 missed experts skipped (2472 entries) since the start
+strata serve: resident RAM: 1.00 GiB of experts in RAM, 0 exchanged with the VRAM tier, 4109 blob reads from the file
+strata serve: expert tiers: GPU 932 hits this request; since the start RAM 10514 blobs, files 4109 blobs 147183.1 MB read (the GGUF in place)
+strata network: 192.168.233.126:18506 requests=23232 entries=769750 tx=918003720 rx=908395008 roundtrip_ms=94085.600
+strata network local: entries=11857 RAM budget=1024 MiB
