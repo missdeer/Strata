@@ -22,7 +22,7 @@
 - 原生运行入口合并为 `strata-host cluster/worker/serve/vision`，角色之间重新启动当前宿主，保留进程隔离及退出清理。
 - 保留 `strata.exe` 推理引擎和 `strata_network_backend.dll` 专家后端；原生完整包最多两个 exe、一个项目 DLL。辅助节点仅一个 exe。
 - 图片编码静态链接 llama/mtmd，复用 CPU ggml；省略 `vision.exe` 时使用宿主的 `vision` 子命令。外部编码器设置保持兼容；内置编码器不声称支持 GPU。
-- `tools/build_cluster.py --native` 和 HIP 的 `native-network` 模式收集原生程序、Web、模板、示例配置和许可证，排除 Python、测试及诊断程序，并检查目标数量。
+- Windows 正式打包入口为 `tools/build_cluster.bat --native` / `tools/build_cluster_native.bat`，调用 C++ `strata-cluster-build`；HIP 的 `native-network` 模式也转入该工具。收集原生程序、Web、模板、示例配置和许可证，排除 Python、测试及诊断程序，并检查目标数量。`build_cluster.py` 保留为旧路径及行为对照。
 - 旧 Python 安装器及默认打包路径保留；不切换正在运行的服务。下文阶段记录中的旧 exe 名称为迁移历史，当前命令见 `docs/MULTI_HOST.md`。
 
 ## 实施顺序
@@ -64,10 +64,11 @@
 
 - [x] 增加显式原生打包模式和正式二进制数量检查；运行包无 Python 文件。
 
-- [ ] 迁移 `build_cluster.py` 的计划、构建、依赖收集、清单、原子替换及失败处理；批处理/ shell 可作为轻量入口。
-- [ ] Windows/Linux 包包含原生程序、必要 DLL/共享库、静态资源及许可证；不包含或依赖 Python。
-- [ ] 三节点独立编译参数和 CPU ISA 下限不变，host11 不继承 host16 的 `/QxHost`。
-- [ ] 清洁环境验证包启动；部署切换前保留可恢复的旧包，不自动停止现有服务。
+- [x] Windows：迁移 `build_cluster.py` 的计划、构建、依赖收集、清单、原子替换及失败处理；批处理作为轻量入口，C++ 构建器不进入运行包。
+- [x] Windows 包包含原生程序、必要 DLL、静态资源及许可证；不包含或依赖 Python。
+- [ ] Linux 构建/打包和共享库收集：本轮按用户要求暂不实施和验证。
+- [x] Windows 三节点独立编译参数和 CPU ISA 下限不变，host11 不继承 host16 的 `/QxHost`。
+- [x] Windows 精简 PATH（无 Python 入口）验证打包、包启动、CPU worker 任务及 API 原生夹具请求；发布保留可恢复旧包，失败回滚，不自动停止现有服务。未在全新 Windows VM 上测试；真实模型/LAN 迁移切换仍属第 6 步。
 
 ### 6. 验收和性能
 
@@ -82,7 +83,7 @@
 
 ## 当前记录
 
-以下按实施顺序保留历史记录；第 4 步最初的“核心路径”限制已由末尾的完整实现记录取代。第 5/6 步和 Linux 实机验证仍未完成。
+以下按实施顺序保留历史记录；第 4 步最初的“核心路径”限制已由末尾的完整实现记录取代。第 5 步 Windows 实现和包验证已完成；Linux、第 6 步及实际服务切换仍未完成。
 
 - 2026-10-09：已完成范围和兼容要求梳理，开始第 1 步。已有原生 coordinator、CPU/GPU 后端、有限数校验和远端汇总可以复用。
 - 当前实测对照保存在 `tmp/network-opt-worker-timing-analysis.json` 和 `docs/MULTI_HOST.md`；新运行时尚无速度测量。
@@ -128,3 +129,13 @@
 ### 正式目标收敛验证
 
 Windows CPU/CUDA/HIP/SYCL host 构建通过；统一入口 4 项、worker 15 项、launcher 17 项（POSIX ACL 跳过 1 项）、API 52 项、文本 15 组和打包 13 项检查通过。三个原生包的 exe 数为 host16=2、host11=1、host17=2，项目 DLL 各 1 个，无 Python 文件；子命令在精简 PATH 下通过。CUDA/HIP 包的 launcher→serve 链路在无 Python PATH 下完成测试引擎请求。CUDA 引擎文件 SHA256 保持相同；HIP 当前构建原生开关 ON/OFF 字节相同。本轮没有实际图片编码模型、真实 GPU/LAN 推理、Linux 或性能验收，不切换现有运行服务。
+
+### 第 5 步 Windows 实现和验证（2026-10-11）
+
+- 按本轮要求只处理 Windows。新增独立 C++ 开发工具 `strata-cluster-build`，迁移计划/参数校验、隔离构建环境、构建日志、PE 普通/延迟导入依赖收集、HIP 设备数据和许可证、全部文件 SHA256 清单、暂存发布、旧包备份、失败回滚和逐节点摘要。构建进程使用 Windows job；取消后不发布当前节点、不继续后续节点。
+- 原生入口 `.bat --native` 和 HIP `native-network` 不再调用 Python/pip/rocm-sdk；使用已安装 oneAPI/CUDA/Visual Studio 和已解包 ROCm SDK，支持离线依赖源码目录。默认 Python 打包/安装器保留。开发工具及测试程序不进入运行包。原生 HIP 直接发布节点目录，旧 ZIP 安装器模式保留给非原生入口。
+- 本机 Windows、i9-12900HK/RTX 4060 Ti，host16 oneAPI `/O3 /QxHost`、CUDA sm_89；host11 oneAPI `/O3`、便携 AVX2；host17 ROCm Clang/MSVC ABI、便携 AVX2、gfx1102/gfx1103，三套完整原生目标构建和打包通过。没有运行 HIP GPU 或 SYCL 网络后端；没有更改引擎计算源码、模板、共享配置、默认引擎参数或现有服务。
+- C++ 构建器 28 项测试通过，无跳过，覆盖参数/ISA 拒绝、PE/ELF 文件边界、普通/延迟依赖、递归依赖/缺失依赖、资源和清单、原子发布/回滚、并发锁、取消、Unicode/空格批处理路径、子进程日志、Python 和项目二进制数量限制。旧 Python 打包 13 项回归通过。
+- 在打包进程 PATH 仅含 System32 时，通过 `.bat --native --package-only` 将三个最终包发布至 `dist/cluster-native`，没有创建/调用 Python。精简 PATH（包目录、rocm/bin、System32）下通过全部宿主子命令帮助、cluster/worker 配置校验和两个 GPU 引擎帮助。host16/host11/host17 分别验证 45/32/559 个文件 SHA256，exe 为 2/1/2，项目 DLL 均为 1，无 Python 文件。报告 `tmp/stage5-package-verification.json`。
+- CUDA/HIP 包各通过 3 项 API/Web/内置 vision 入口检查，其中 launcher→serve→原生测试引擎请求使用 System32-only PATH；报告 `tmp/stage5-cuda-package-api.json`、`tmp/stage5-hip-package-api.json`。CPU 包的 worker 配置/协议检查 14 项通过，测试专用故障 DLL 因运行包不含诊断程序而跳过 1 项；包含认证、普通/汇总任务、缓存、预加载、Unicode 和无 Python PATH 下的真实原生 CPU 内核任务。缺失 SDK 的 HIP 原生入口失败检查也通过，未创建 SDK 或发布包。
+- 这些是本机精简 PATH 和原生协议夹具验证，测试驱动可使用 Python；不是全新 Windows VM、真实模型生成、GPU 执行或 LAN 性能验收。新包已可部署，现有运行服务与启动配置未切换；Linux 和第 6 步仍待完成。
