@@ -1,0 +1,3 @@
+worker session ended: connection failed
+worker session ended: connection failed
+worker session ended: connection failed

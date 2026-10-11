@@ -1,0 +1,5732 @@
+{
+  "measured_at_utc": "2026-10-11T06:57:06.433331+00:00",
+  "label": "native",
+  "python_is_test_driver_only": true,
+  "notes": [
+    "RSS sums the process tree and can count shared pages more than once.",
+    "GPU/VRAM and system RAM include other programs; samples are not exact peaks.",
+    "Resource collection is a separate test process, excluded from the measured tree."
+  ],
+  "samples": [
+    {
+      "at_utc": "2026-10-11T06:57:06.463446+00:00",
+      "tree_cpu_percent": 0.0,
+      "tree_rss_bytes": 27926528,
+      "system_cpu_percent": 0.0,
+      "system_ram_used_bytes": 11212206080,
+      "nvidia": {
+        "vram_used_bytes": 1536999424,
+        "gpu_percent": 2
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:06.972687+00:00",
+      "tree_cpu_percent": 98.2,
+      "tree_rss_bytes": 30662656,
+      "system_cpu_percent": 9.6,
+      "system_ram_used_bytes": 11223408640,
+      "nvidia": {
+        "vram_used_bytes": 1536999424,
+        "gpu_percent": 2
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:07.480988+00:00",
+      "tree_cpu_percent": 98.4,
+      "tree_rss_bytes": 31662080,
+      "system_cpu_percent": 7.4,
+      "system_ram_used_bytes": 11217887232,
+      "nvidia": {
+        "vram_used_bytes": 1536999424,
+        "gpu_percent": 4
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:07.988376+00:00",
+      "tree_cpu_percent": 95.5,
+      "tree_rss_bytes": 32534528,
+      "system_cpu_percent": 9.0,
+      "system_ram_used_bytes": 11212218368,
+      "nvidia": {
+        "vram_used_bytes": 1537130496,
+        "gpu_percent": 5
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:08.496841+00:00",
+      "tree_cpu_percent": 95.3,
+      "tree_rss_bytes": 33411072,
+      "system_cpu_percent": 7.4,
+      "system_ram_used_bytes": 11214966784,
+      "nvidia": {
+        "vram_used_bytes": 1537130496,
+        "gpu_percent": 6
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:09.004733+00:00",
+      "tree_cpu_percent": 101.5,
+      "tree_rss_bytes": 34078720,
+      "system_cpu_percent": 9.3,
+      "system_ram_used_bytes": 11209277440,
+      "nvidia": {
+        "vram_used_bytes": 1536868352,
+        "gpu_percent": 7
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:09.513251+00:00",
+      "tree_cpu_percent": 95.3,
+      "tree_rss_bytes": 34762752,
+      "system_cpu_percent": 6.5,
+      "system_ram_used_bytes": 11204976640,
+      "nvidia": {
+        "vram_used_bytes": 1536868352,
+        "gpu_percent": 15
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:10.021966+00:00",
+      "tree_cpu_percent": 101.4,
+      "tree_rss_bytes": 35409920,
+      "system_cpu_percent": 8.6,
+      "system_ram_used_bytes": 11214946304,
+      "nvidia": {
+        "vram_used_bytes": 1536999424,
+        "gpu_percent": 11
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:10.530405+00:00",
+      "tree_cpu_percent": 98.3,
+      "tree_rss_bytes": 35921920,
+      "system_cpu_percent": 6.2,
+      "system_ram_used_bytes": 11212427264,
+      "nvidia": {
+        "vram_used_bytes": 1536999424,
+        "gpu_percent": 14
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:11.038425+00:00",
+      "tree_cpu_percent": 101.5,
+      "tree_rss_bytes": 36524032,
+      "system_cpu_percent": 15.0,
+      "system_ram_used_bytes": 11217727488,
+      "nvidia": {
+        "vram_used_bytes": 1537130496,
+        "gpu_percent": 23
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:11.546303+00:00",
+      "tree_cpu_percent": 98.5,
+      "tree_rss_bytes": 36990976,
+      "system_cpu_percent": 7.0,
+      "system_ram_used_bytes": 11214077952,
+      "nvidia": {
+        "vram_used_bytes": 1537130496,
+        "gpu_percent": 21
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:12.054328+00:00",
+      "tree_cpu_percent": 101.5,
+      "tree_rss_bytes": 37457920,
+      "system_cpu_percent": 9.8,
+      "system_ram_used_bytes": 11208429568,
+      "nvidia": {
+        "vram_used_bytes": 1536999424,
+        "gpu_percent": 22
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:12.564802+00:00",
+      "tree_cpu_percent": 94.9,
+      "tree_rss_bytes": 37859328,
+      "system_cpu_percent": 9.7,
+      "system_ram_used_bytes": 11216371712,
+      "nvidia": {
+        "vram_used_bytes": 1536999424,
+        "gpu_percent": 27
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:13.073695+00:00",
+      "tree_cpu_percent": 101.3,
+      "tree_rss_bytes": 38285312,
+      "system_cpu_percent": 18.4,
+      "system_ram_used_bytes": 11265323008,
+      "nvidia": {
+        "vram_used_bytes": 1537130496,
+        "gpu_percent": 34
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:13.583372+00:00",
+      "tree_cpu_percent": 98.1,
+      "tree_rss_bytes": 38752256,
+      "system_cpu_percent": 14.4,
+      "system_ram_used_bytes": 11275808768,
+      "nvidia": {
+        "vram_used_bytes": 1537130496,
+        "gpu_percent": 40
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:14.092312+00:00",
+      "tree_cpu_percent": 98.2,
+      "tree_rss_bytes": 39153664,
+      "system_cpu_percent": 14.1,
+      "system_ram_used_bytes": 11285708800,
+      "nvidia": {
+        "vram_used_bytes": 1536999424,
+        "gpu_percent": 25
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:14.600737+00:00",
+      "tree_cpu_percent": 98.3,
+      "tree_rss_bytes": 39612416,
+      "system_cpu_percent": 13.2,
+      "system_ram_used_bytes": 11286552576,
+      "nvidia": {
+        "vram_used_bytes": 1536999424,
+        "gpu_percent": 22
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:15.108834+00:00",
+      "tree_cpu_percent": 95.3,
+      "tree_rss_bytes": 39878656,
+      "system_cpu_percent": 16.1,
+      "system_ram_used_bytes": 11303481344,
+      "nvidia": {
+        "vram_used_bytes": 1536999424,
+        "gpu_percent": 24
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:15.617366+00:00",
+      "tree_cpu_percent": 101.4,
+      "tree_rss_bytes": 40255488,
+      "system_cpu_percent": 17.9,
+      "system_ram_used_bytes": 11289686016,
+      "nvidia": {
+        "vram_used_bytes": 1536999424,
+        "gpu_percent": 24
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:16.126192+00:00",
+      "tree_cpu_percent": 95.2,
+      "tree_rss_bytes": 40681472,
+      "system_cpu_percent": 15.9,
+      "system_ram_used_bytes": 11282325504,
+      "nvidia": {
+        "vram_used_bytes": 1536999424,
+        "gpu_percent": 28
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:16.634254+00:00",
+      "tree_cpu_percent": 101.5,
+      "tree_rss_bytes": 41279488,
+      "system_cpu_percent": 12.7,
+      "system_ram_used_bytes": 11267067904,
+      "nvidia": {
+        "vram_used_bytes": 1537327104,
+        "gpu_percent": 34
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:17.142030+00:00",
+      "tree_cpu_percent": 98.5,
+      "tree_rss_bytes": 41811968,
+      "system_cpu_percent": 11.4,
+      "system_ram_used_bytes": 11261296640,
+      "nvidia": {
+        "vram_used_bytes": 1537720320,
+        "gpu_percent": 29
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:17.649847+00:00",
+      "tree_cpu_percent": 92.3,
+      "tree_rss_bytes": 42352640,
+      "system_cpu_percent": 10.5,
+      "system_ram_used_bytes": 11256090624,
+      "nvidia": {
+        "vram_used_bytes": 1538048000,
+        "gpu_percent": 30
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:18.157765+00:00",
+      "tree_cpu_percent": 98.4,
+      "tree_rss_bytes": 42958848,
+      "system_cpu_percent": 9.1,
+      "system_ram_used_bytes": 11253796864,
+      "nvidia": {
+        "vram_used_bytes": 1537720320,
+        "gpu_percent": 20
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:18.666222+00:00",
+      "tree_cpu_percent": 101.4,
+      "tree_rss_bytes": 43446272,
+      "system_cpu_percent": 11.5,
+      "system_ram_used_bytes": 11251167232,
+      "nvidia": {
+        "vram_used_bytes": 1537589248,
+        "gpu_percent": 25
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:19.173957+00:00",
+      "tree_cpu_percent": 98.5,
+      "tree_rss_bytes": 43986944,
+      "system_cpu_percent": 10.2,
+      "system_ram_used_bytes": 11256578048,
+      "nvidia": {
+        "vram_used_bytes": 1537589248,
+        "gpu_percent": 21
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:19.681869+00:00",
+      "tree_cpu_percent": 101.5,
+      "tree_rss_bytes": 44531712,
+      "system_cpu_percent": 7.8,
+      "system_ram_used_bytes": 11253780480,
+      "nvidia": {
+        "vram_used_bytes": 1537589248,
+        "gpu_percent": 24
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:20.191576+00:00",
+      "tree_cpu_percent": 101.2,
+      "tree_rss_bytes": 44867584,
+      "system_cpu_percent": 11.6,
+      "system_ram_used_bytes": 11261882368,
+      "nvidia": {
+        "vram_used_bytes": 1537130496,
+        "gpu_percent": 24
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:20.700705+00:00",
+      "tree_cpu_percent": 95.1,
+      "tree_rss_bytes": 45408256,
+      "system_cpu_percent": 6.7,
+      "system_ram_used_bytes": 11258896384,
+      "nvidia": {
+        "vram_used_bytes": 1537130496,
+        "gpu_percent": 25
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:21.208707+00:00",
+      "tree_cpu_percent": 98.4,
+      "tree_rss_bytes": 45813760,
+      "system_cpu_percent": 9.8,
+      "system_ram_used_bytes": 11254902784,
+      "nvidia": {
+        "vram_used_bytes": 1537261568,
+        "gpu_percent": 19
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:21.716319+00:00",
+      "tree_cpu_percent": 98.5,
+      "tree_rss_bytes": 46219264,
+      "system_cpu_percent": 6.2,
+      "system_ram_used_bytes": 11251961856,
+      "nvidia": {
+        "vram_used_bytes": 1537261568,
+        "gpu_percent": 21
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:22.224013+00:00",
+      "tree_cpu_percent": 101.6,
+      "tree_rss_bytes": 47353856,
+      "system_cpu_percent": 10.8,
+      "system_ram_used_bytes": 11258048512,
+      "nvidia": {
+        "vram_used_bytes": 1537130496,
+        "gpu_percent": 19
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:22.732582+00:00",
+      "tree_cpu_percent": 98.3,
+      "tree_rss_bytes": 47620096,
+      "system_cpu_percent": 6.3,
+      "system_ram_used_bytes": 11263160320,
+      "nvidia": {
+        "vram_used_bytes": 1537130496,
+        "gpu_percent": 25
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:23.240905+00:00",
+      "tree_cpu_percent": 101.4,
+      "tree_rss_bytes": 48021504,
+      "system_cpu_percent": 9.0,
+      "system_ram_used_bytes": 11255832576,
+      "nvidia": {
+        "vram_used_bytes": 1537130496,
+        "gpu_percent": 24
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:23.748547+00:00",
+      "tree_cpu_percent": 95.4,
+      "tree_rss_bytes": 48222208,
+      "system_cpu_percent": 9.3,
+      "system_ram_used_bytes": 11252977664,
+      "nvidia": {
+        "vram_used_bytes": 1537130496,
+        "gpu_percent": 22
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:24.257393+00:00",
+      "tree_cpu_percent": 101.3,
+      "tree_rss_bytes": 48488448,
+      "system_cpu_percent": 12.9,
+      "system_ram_used_bytes": 11262025728,
+      "nvidia": {
+        "vram_used_bytes": 1537130496,
+        "gpu_percent": 32
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:24.766011+00:00",
+      "tree_cpu_percent": 98.3,
+      "tree_rss_bytes": 48889856,
+      "system_cpu_percent": 9.6,
+      "system_ram_used_bytes": 11259666432,
+      "nvidia": {
+        "vram_used_bytes": 1537130496,
+        "gpu_percent": 25
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:25.274413+00:00",
+      "tree_cpu_percent": 101.5,
+      "tree_rss_bytes": 49090560,
+      "system_cpu_percent": 8.9,
+      "system_ram_used_bytes": 11258720256,
+      "nvidia": {
+        "vram_used_bytes": 1537130496,
+        "gpu_percent": 25
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:25.783018+00:00",
+      "tree_cpu_percent": 101.4,
+      "tree_rss_bytes": 49356800,
+      "system_cpu_percent": 7.4,
+      "system_ram_used_bytes": 11258142720,
+      "nvidia": {
+        "vram_used_bytes": 1537130496,
+        "gpu_percent": 30
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:26.291459+00:00",
+      "tree_cpu_percent": 98.3,
+      "tree_rss_bytes": 49692672,
+      "system_cpu_percent": 8.6,
+      "system_ram_used_bytes": 11262033920,
+      "nvidia": {
+        "vram_used_bytes": 1537261568,
+        "gpu_percent": 21
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:26.801120+00:00",
+      "tree_cpu_percent": 98.1,
+      "tree_rss_bytes": 49967104,
+      "system_cpu_percent": 11.1,
+      "system_ram_used_bytes": 11257450496,
+      "nvidia": {
+        "vram_used_bytes": 1537261568,
+        "gpu_percent": 29
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:27.308856+00:00",
+      "tree_cpu_percent": 98.5,
+      "tree_rss_bytes": 50335744,
+      "system_cpu_percent": 11.0,
+      "system_ram_used_bytes": 11237969920,
+      "nvidia": {
+        "vram_used_bytes": 1537261568,
+        "gpu_percent": 29
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:27.817198+00:00",
+      "tree_cpu_percent": 92.2,
+      "tree_rss_bytes": 50741248,
+      "system_cpu_percent": 11.4,
+      "system_ram_used_bytes": 11241848832,
+      "nvidia": {
+        "vram_used_bytes": 1537261568,
+        "gpu_percent": 28
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:28.325628+00:00",
+      "tree_cpu_percent": 98.3,
+      "tree_rss_bytes": 51077120,
+      "system_cpu_percent": 11.2,
+      "system_ram_used_bytes": 11243331584,
+      "nvidia": {
+        "vram_used_bytes": 1537130496,
+        "gpu_percent": 25
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:28.834018+00:00",
+      "tree_cpu_percent": 101.4,
+      "tree_rss_bytes": 51277824,
+      "system_cpu_percent": 13.8,
+      "system_ram_used_bytes": 11248791552,
+      "nvidia": {
+        "vram_used_bytes": 1537130496,
+        "gpu_percent": 25
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:29.343028+00:00",
+      "tree_cpu_percent": 98.2,
+      "tree_rss_bytes": 51613696,
+      "system_cpu_percent": 7.4,
+      "system_ram_used_bytes": 11249246208,
+      "nvidia": {
+        "vram_used_bytes": 1537130496,
+        "gpu_percent": 28
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:29.851125+00:00",
+      "tree_cpu_percent": 101.5,
+      "tree_rss_bytes": 51916800,
+      "system_cpu_percent": 8.7,
+      "system_ram_used_bytes": 11243503616,
+      "nvidia": {
+        "vram_used_bytes": 1536999424,
+        "gpu_percent": 29
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:30.360028+00:00",
+      "tree_cpu_percent": 95.2,
+      "tree_rss_bytes": 52318208,
+      "system_cpu_percent": 7.6,
+      "system_ram_used_bytes": 11241603072,
+      "nvidia": {
+        "vram_used_bytes": 1536999424,
+        "gpu_percent": 29
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:30.868534+00:00",
+      "tree_cpu_percent": 101.4,
+      "tree_rss_bytes": 52588544,
+      "system_cpu_percent": 11.8,
+      "system_ram_used_bytes": 11248254976,
+      "nvidia": {
+        "vram_used_bytes": 1537196032,
+        "gpu_percent": 29
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:31.376667+00:00",
+      "tree_cpu_percent": 95.3,
+      "tree_rss_bytes": 52957184,
+      "system_cpu_percent": 10.8,
+      "system_ram_used_bytes": 11250528256,
+      "nvidia": {
+        "vram_used_bytes": 1537064960,
+        "gpu_percent": 21
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:31.885239+00:00",
+      "tree_cpu_percent": 101.4,
+      "tree_rss_bytes": 53149696,
+      "system_cpu_percent": 7.6,
+      "system_ram_used_bytes": 11243225088,
+      "nvidia": {
+        "vram_used_bytes": 1537458176,
+        "gpu_percent": 24
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:32.393634+00:00",
+      "tree_cpu_percent": 98.3,
+      "tree_rss_bytes": 53694464,
+      "system_cpu_percent": 9.1,
+      "system_ram_used_bytes": 11245916160,
+      "nvidia": {
+        "vram_used_bytes": 1537327104,
+        "gpu_percent": 20
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:32.901858+00:00",
+      "tree_cpu_percent": 98.4,
+      "tree_rss_bytes": 53964800,
+      "system_cpu_percent": 10.0,
+      "system_ram_used_bytes": 11244986368,
+      "nvidia": {
+        "vram_used_bytes": 1537458176,
+        "gpu_percent": 28
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:33.410057+00:00",
+      "tree_cpu_percent": 92.2,
+      "tree_rss_bytes": 54231040,
+      "system_cpu_percent": 13.2,
+      "system_ram_used_bytes": 11252310016,
+      "nvidia": {
+        "vram_used_bytes": 1537261568,
+        "gpu_percent": 22
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:33.917852+00:00",
+      "tree_cpu_percent": 98.5,
+      "tree_rss_bytes": 54501376,
+      "system_cpu_percent": 8.7,
+      "system_ram_used_bytes": 11246120960,
+      "nvidia": {
+        "vram_used_bytes": 1537261568,
+        "gpu_percent": 24
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:34.426077+00:00",
+      "tree_cpu_percent": 101.5,
+      "tree_rss_bytes": 54837248,
+      "system_cpu_percent": 7.0,
+      "system_ram_used_bytes": 11251007488,
+      "nvidia": {
+        "vram_used_bytes": 1537261568,
+        "gpu_percent": 29
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:34.936913+00:00",
+      "tree_cpu_percent": 97.9,
+      "tree_rss_bytes": 55173120,
+      "system_cpu_percent": 8.5,
+      "system_ram_used_bytes": 11244748800,
+      "nvidia": {
+        "vram_used_bytes": 1537261568,
+        "gpu_percent": 29
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:35.445084+00:00",
+      "tree_cpu_percent": 98.4,
+      "tree_rss_bytes": 55508992,
+      "system_cpu_percent": 11.8,
+      "system_ram_used_bytes": 11242745856,
+      "nvidia": {
+        "vram_used_bytes": 1537261568,
+        "gpu_percent": 27
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:35.953553+00:00",
+      "tree_cpu_percent": 95.3,
+      "tree_rss_bytes": 55775232,
+      "system_cpu_percent": 7.6,
+      "system_ram_used_bytes": 11244498944,
+      "nvidia": {
+        "vram_used_bytes": 1537261568,
+        "gpu_percent": 26
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:36.462692+00:00",
+      "tree_cpu_percent": 101.3,
+      "tree_rss_bytes": 56012800,
+      "system_cpu_percent": 7.4,
+      "system_ram_used_bytes": 11249979392,
+      "nvidia": {
+        "vram_used_bytes": 1537130496,
+        "gpu_percent": 33
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:36.971495+00:00",
+      "tree_cpu_percent": 101.3,
+      "tree_rss_bytes": 56283136,
+      "system_cpu_percent": 9.2,
+      "system_ram_used_bytes": 11245494272,
+      "nvidia": {
+        "vram_used_bytes": 1537392640,
+        "gpu_percent": 26
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:37.480051+00:00",
+      "tree_cpu_percent": 98.3,
+      "tree_rss_bytes": 56549376,
+      "system_cpu_percent": 10.1,
+      "system_ram_used_bytes": 11237289984,
+      "nvidia": {
+        "vram_used_bytes": 1537392640,
+        "gpu_percent": 26
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:37.987830+00:00",
+      "tree_cpu_percent": 101.5,
+      "tree_rss_bytes": 56885248,
+      "system_cpu_percent": 11.6,
+      "system_ram_used_bytes": 11238113280,
+      "nvidia": {
+        "vram_used_bytes": 1537392640,
+        "gpu_percent": 28
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:38.495900+00:00",
+      "tree_cpu_percent": 98.4,
+      "tree_rss_bytes": 57085952,
+      "system_cpu_percent": 10.0,
+      "system_ram_used_bytes": 11235893248,
+      "nvidia": {
+        "vram_used_bytes": 1537392640,
+        "gpu_percent": 34
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:39.003962+00:00",
+      "tree_cpu_percent": 98.4,
+      "tree_rss_bytes": 57356288,
+      "system_cpu_percent": 11.1,
+      "system_ram_used_bytes": 11233226752,
+      "nvidia": {
+        "vram_used_bytes": 1537589248,
+        "gpu_percent": 24
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:39.512556+00:00",
+      "tree_cpu_percent": 95.2,
+      "tree_rss_bytes": 59633664,
+      "system_cpu_percent": 7.3,
+      "system_ram_used_bytes": 11236958208,
+      "nvidia": {
+        "vram_used_bytes": 1537589248,
+        "gpu_percent": 26
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:40.021066+00:00",
+      "tree_cpu_percent": 101.4,
+      "tree_rss_bytes": 59699200,
+      "system_cpu_percent": 12.8,
+      "system_ram_used_bytes": 11234136064,
+      "nvidia": {
+        "vram_used_bytes": 1537458176,
+        "gpu_percent": 25
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:40.529169+00:00",
+      "tree_cpu_percent": 98.4,
+      "tree_rss_bytes": 59764736,
+      "system_cpu_percent": 6.9,
+      "system_ram_used_bytes": 11230527488,
+      "nvidia": {
+        "vram_used_bytes": 1537458176,
+        "gpu_percent": 26
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:41.037382+00:00",
+      "tree_cpu_percent": 101.5,
+      "tree_rss_bytes": 59834368,
+      "system_cpu_percent": 6.7,
+      "system_ram_used_bytes": 11238998016,
+      "nvidia": {
+        "vram_used_bytes": 1537458176,
+        "gpu_percent": 30
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:41.545771+00:00",
+      "tree_cpu_percent": 92.2,
+      "tree_rss_bytes": 59904000,
+      "system_cpu_percent": 7.8,
+      "system_ram_used_bytes": 11237130240,
+      "nvidia": {
+        "vram_used_bytes": 1537458176,
+        "gpu_percent": 25
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:42.053737+00:00",
+      "tree_cpu_percent": 98.4,
+      "tree_rss_bytes": 60039168,
+      "system_cpu_percent": 9.7,
+      "system_ram_used_bytes": 11240759296,
+      "nvidia": {
+        "vram_used_bytes": 1537130496,
+        "gpu_percent": 28
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:42.563233+00:00",
+      "tree_cpu_percent": 98.1,
+      "tree_rss_bytes": 60239872,
+      "system_cpu_percent": 9.4,
+      "system_ram_used_bytes": 11237761024,
+      "nvidia": {
+        "vram_used_bytes": 1537130496,
+        "gpu_percent": 28
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:43.071135+00:00",
+      "tree_cpu_percent": 101.5,
+      "tree_rss_bytes": 60440576,
+      "system_cpu_percent": 10.8,
+      "system_ram_used_bytes": 11235598336,
+      "nvidia": {
+        "vram_used_bytes": 1537130496,
+        "gpu_percent": 24
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:43.579014+00:00",
+      "tree_cpu_percent": 95.4,
+      "tree_rss_bytes": 60641280,
+      "system_cpu_percent": 6.1,
+      "system_ram_used_bytes": 11237306368,
+      "nvidia": {
+        "vram_used_bytes": 1537130496,
+        "gpu_percent": 23
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:44.087218+00:00",
+      "tree_cpu_percent": 98.4,
+      "tree_rss_bytes": 60841984,
+      "system_cpu_percent": 8.8,
+      "system_ram_used_bytes": 11239432192,
+      "nvidia": {
+        "vram_used_bytes": 1537589248,
+        "gpu_percent": 25
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:44.595727+00:00",
+      "tree_cpu_percent": 98.3,
+      "tree_rss_bytes": 61108224,
+      "system_cpu_percent": 11.0,
+      "system_ram_used_bytes": 11238248448,
+      "nvidia": {
+        "vram_used_bytes": 1537392640,
+        "gpu_percent": 28
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:45.103758+00:00",
+      "tree_cpu_percent": 98.4,
+      "tree_rss_bytes": 61308928,
+      "system_cpu_percent": 8.8,
+      "system_ram_used_bytes": 11245981696,
+      "nvidia": {
+        "vram_used_bytes": 1537458176,
+        "gpu_percent": 27
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:45.611496+00:00",
+      "tree_cpu_percent": 92.3,
+      "tree_rss_bytes": 61509632,
+      "system_cpu_percent": 9.1,
+      "system_ram_used_bytes": 11242315776,
+      "nvidia": {
+        "vram_used_bytes": 1537458176,
+        "gpu_percent": 29
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:46.119812+00:00",
+      "tree_cpu_percent": 101.4,
+      "tree_rss_bytes": 61710336,
+      "system_cpu_percent": 9.0,
+      "system_ram_used_bytes": 11238002688,
+      "nvidia": {
+        "vram_used_bytes": 1537327104,
+        "gpu_percent": 31
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:46.628033+00:00",
+      "tree_cpu_percent": 101.5,
+      "tree_rss_bytes": 61911040,
+      "system_cpu_percent": 15.8,
+      "system_ram_used_bytes": 11249664000,
+      "nvidia": {
+        "vram_used_bytes": 1537327104,
+        "gpu_percent": 28
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:47.136436+00:00",
+      "tree_cpu_percent": 95.3,
+      "tree_rss_bytes": 62111744,
+      "system_cpu_percent": 11.2,
+      "system_ram_used_bytes": 11243986944,
+      "nvidia": {
+        "vram_used_bytes": 1537523712,
+        "gpu_percent": 24
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:47.645066+00:00",
+      "tree_cpu_percent": 101.4,
+      "tree_rss_bytes": 62312448,
+      "system_cpu_percent": 9.0,
+      "system_ram_used_bytes": 11240583168,
+      "nvidia": {
+        "vram_used_bytes": 1537130496,
+        "gpu_percent": 28
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:48.153184+00:00",
+      "tree_cpu_percent": 98.4,
+      "tree_rss_bytes": 62578688,
+      "system_cpu_percent": 8.4,
+      "system_ram_used_bytes": 11240067072,
+      "nvidia": {
+        "vram_used_bytes": 1537130496,
+        "gpu_percent": 42
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:48.662086+00:00",
+      "tree_cpu_percent": 92.1,
+      "tree_rss_bytes": 62726144,
+      "system_cpu_percent": 9.5,
+      "system_ram_used_bytes": 11238256640,
+      "nvidia": {
+        "vram_used_bytes": 1537130496,
+        "gpu_percent": 26
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:49.170809+00:00",
+      "tree_cpu_percent": 98.3,
+      "tree_rss_bytes": 62980096,
+      "system_cpu_percent": 13.6,
+      "system_ram_used_bytes": 11242995712,
+      "nvidia": {
+        "vram_used_bytes": 1537392640,
+        "gpu_percent": 35
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:49.678965+00:00",
+      "tree_cpu_percent": 95.3,
+      "tree_rss_bytes": 63045632,
+      "system_cpu_percent": 7.1,
+      "system_ram_used_bytes": 11240108032,
+      "nvidia": {
+        "vram_used_bytes": 1537392640,
+        "gpu_percent": 23
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:50.187720+00:00",
+      "tree_cpu_percent": 98.3,
+      "tree_rss_bytes": 63246336,
+      "system_cpu_percent": 11.5,
+      "system_ram_used_bytes": 11242954752,
+      "nvidia": {
+        "vram_used_bytes": 1537392640,
+        "gpu_percent": 34
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:50.696372+00:00",
+      "tree_cpu_percent": 98.3,
+      "tree_rss_bytes": 63447040,
+      "system_cpu_percent": 7.3,
+      "system_ram_used_bytes": 11238354944,
+      "nvidia": {
+        "vram_used_bytes": 1537392640,
+        "gpu_percent": 26
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:51.204173+00:00",
+      "tree_cpu_percent": 98.5,
+      "tree_rss_bytes": 63647744,
+      "system_cpu_percent": 10.7,
+      "system_ram_used_bytes": 11237289984,
+      "nvidia": {
+        "vram_used_bytes": 1537654784,
+        "gpu_percent": 26
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:51.712415+00:00",
+      "tree_cpu_percent": 101.5,
+      "tree_rss_bytes": 63983616,
+      "system_cpu_percent": 8.8,
+      "system_ram_used_bytes": 11235848192,
+      "nvidia": {
+        "vram_used_bytes": 1537654784,
+        "gpu_percent": 26
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:52.220598+00:00",
+      "tree_cpu_percent": 101.5,
+      "tree_rss_bytes": 64184320,
+      "system_cpu_percent": 10.0,
+      "system_ram_used_bytes": 11246477312,
+      "nvidia": {
+        "vram_used_bytes": 1537654784,
+        "gpu_percent": 28
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:52.729021+00:00",
+      "tree_cpu_percent": 98.3,
+      "tree_rss_bytes": 64249856,
+      "system_cpu_percent": 8.5,
+      "system_ram_used_bytes": 11243687936,
+      "nvidia": {
+        "vram_used_bytes": 1537654784,
+        "gpu_percent": 27
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:53.238743+00:00",
+      "tree_cpu_percent": 98.1,
+      "tree_rss_bytes": 86216704,
+      "system_cpu_percent": 11.5,
+      "system_ram_used_bytes": 11262808064,
+      "nvidia": {
+        "vram_used_bytes": 1538572288,
+        "gpu_percent": 25
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:53.747345+00:00",
+      "tree_cpu_percent": 24.6,
+      "tree_rss_bytes": 622522368,
+      "system_cpu_percent": 10.6,
+      "system_ram_used_bytes": 11801272320,
+      "nvidia": {
+        "vram_used_bytes": 1690304512,
+        "gpu_percent": 21
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:54.255080+00:00",
+      "tree_cpu_percent": 98.5,
+      "tree_rss_bytes": 984403968,
+      "system_cpu_percent": 8.9,
+      "system_ram_used_bytes": 12162994176,
+      "nvidia": {
+        "vram_used_bytes": 3233742848,
+        "gpu_percent": 47
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:54.763711+00:00",
+      "tree_cpu_percent": 98.3,
+      "tree_rss_bytes": 1909952512,
+      "system_cpu_percent": 6.4,
+      "system_ram_used_bytes": 13115117568,
+      "nvidia": {
+        "vram_used_bytes": 4284416000,
+        "gpu_percent": 31
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:55.272254+00:00",
+      "tree_cpu_percent": 95.2,
+      "tree_rss_bytes": 2372288512,
+      "system_cpu_percent": 10.8,
+      "system_ram_used_bytes": 13584306176,
+      "nvidia": {
+        "vram_used_bytes": 5579145216,
+        "gpu_percent": 32
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:55.782903+00:00",
+      "tree_cpu_percent": 88.7,
+      "tree_rss_bytes": 1129951232,
+      "system_cpu_percent": 11.3,
+      "system_ram_used_bytes": 12351873024,
+      "nvidia": {
+        "vram_used_bytes": 6652887040,
+        "gpu_percent": 39
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:56.291138+00:00",
+      "tree_cpu_percent": 104.5,
+      "tree_rss_bytes": 1378906112,
+      "system_cpu_percent": 16.9,
+      "system_ram_used_bytes": 12595036160,
+      "nvidia": {
+        "vram_used_bytes": 13584105472,
+        "gpu_percent": 84
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:56.800278+00:00",
+      "tree_cpu_percent": 86.0,
+      "tree_rss_bytes": 1809530880,
+      "system_cpu_percent": 15.7,
+      "system_ram_used_bytes": 13013352448,
+      "nvidia": {
+        "vram_used_bytes": 13584105472,
+        "gpu_percent": 13
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:57.309114+00:00",
+      "tree_cpu_percent": 52.2,
+      "tree_rss_bytes": 1825210368,
+      "system_cpu_percent": 13.5,
+      "system_ram_used_bytes": 13027430400,
+      "nvidia": {
+        "vram_used_bytes": 13583777792,
+        "gpu_percent": 5
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:57.817829+00:00",
+      "tree_cpu_percent": 46.1,
+      "tree_rss_bytes": 1843490816,
+      "system_cpu_percent": 18.2,
+      "system_ram_used_bytes": 13044375552,
+      "nvidia": {
+        "vram_used_bytes": 13583908864,
+        "gpu_percent": 13
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:58.327887+00:00",
+      "tree_cpu_percent": 61.3,
+      "tree_rss_bytes": 1801396224,
+      "system_cpu_percent": 13.6,
+      "system_ram_used_bytes": 13008027648,
+      "nvidia": {
+        "vram_used_bytes": 13584105472,
+        "gpu_percent": 11
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:58.836848+00:00",
+      "tree_cpu_percent": 67.5,
+      "tree_rss_bytes": 1853759488,
+      "system_cpu_percent": 11.5,
+      "system_ram_used_bytes": 13058015232,
+      "nvidia": {
+        "vram_used_bytes": 13584236544,
+        "gpu_percent": 14
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:59.345232+00:00",
+      "tree_cpu_percent": 55.3,
+      "tree_rss_bytes": 1855172608,
+      "system_cpu_percent": 9.8,
+      "system_ram_used_bytes": 13048586240,
+      "nvidia": {
+        "vram_used_bytes": 13584433152,
+        "gpu_percent": 12
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:57:59.853845+00:00",
+      "tree_cpu_percent": 61.4,
+      "tree_rss_bytes": 1860354048,
+      "system_cpu_percent": 7.4,
+      "system_ram_used_bytes": 13062213632,
+      "nvidia": {
+        "vram_used_bytes": 13584433152,
+        "gpu_percent": 14
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:00.362555+00:00",
+      "tree_cpu_percent": 58.4,
+      "tree_rss_bytes": 1810116608,
+      "system_cpu_percent": 10.5,
+      "system_ram_used_bytes": 13018288128,
+      "nvidia": {
+        "vram_used_bytes": 13584433152,
+        "gpu_percent": 16
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:00.870870+00:00",
+      "tree_cpu_percent": 52.3,
+      "tree_rss_bytes": 1731444736,
+      "system_cpu_percent": 10.9,
+      "system_ram_used_bytes": 12971425792,
+      "nvidia": {
+        "vram_used_bytes": 13584564224,
+        "gpu_percent": 63
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:01.379089+00:00",
+      "tree_cpu_percent": 52.300000000000004,
+      "tree_rss_bytes": 893792256,
+      "system_cpu_percent": 8.8,
+      "system_ram_used_bytes": 13458092032,
+      "nvidia": {
+        "vram_used_bytes": 13584564224,
+        "gpu_percent": 11
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:01.887820+00:00",
+      "tree_cpu_percent": 52.2,
+      "tree_rss_bytes": 1893441536,
+      "system_cpu_percent": 17.7,
+      "system_ram_used_bytes": 14394400768,
+      "nvidia": {
+        "vram_used_bytes": 13599244288,
+        "gpu_percent": 14
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:02.397616+00:00",
+      "tree_cpu_percent": 101.1,
+      "tree_rss_bytes": 2416943104,
+      "system_cpu_percent": 21.2,
+      "system_ram_used_bytes": 14898601984,
+      "nvidia": {
+        "vram_used_bytes": 13689028608,
+        "gpu_percent": 21
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:02.905768+00:00",
+      "tree_cpu_percent": 92.2,
+      "tree_rss_bytes": 3039891456,
+      "system_cpu_percent": 15.2,
+      "system_ram_used_bytes": 15519490048,
+      "nvidia": {
+        "vram_used_bytes": 13798211584,
+        "gpu_percent": 22
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:03.415025+00:00",
+      "tree_cpu_percent": 89.0,
+      "tree_rss_bytes": 3620888576,
+      "system_cpu_percent": 18.2,
+      "system_ram_used_bytes": 16107466752,
+      "nvidia": {
+        "vram_used_bytes": 14161018880,
+        "gpu_percent": 24
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:03.925584+00:00",
+      "tree_cpu_percent": 156.1,
+      "tree_rss_bytes": 3783524352,
+      "system_cpu_percent": 21.8,
+      "system_ram_used_bytes": 16270888960,
+      "nvidia": {
+        "vram_used_bytes": 14161018880,
+        "gpu_percent": 74
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:04.434166+00:00",
+      "tree_cpu_percent": 147.5,
+      "tree_rss_bytes": 3862937600,
+      "system_cpu_percent": 20.8,
+      "system_ram_used_bytes": 16331374592,
+      "nvidia": {
+        "vram_used_bytes": 14161018880,
+        "gpu_percent": 51
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:04.942647+00:00",
+      "tree_cpu_percent": 110.7,
+      "tree_rss_bytes": 3911102464,
+      "system_cpu_percent": 15.2,
+      "system_ram_used_bytes": 16379711488,
+      "nvidia": {
+        "vram_used_bytes": 14161149952,
+        "gpu_percent": 69
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:05.451502+00:00",
+      "tree_cpu_percent": 113.6,
+      "tree_rss_bytes": 3953840128,
+      "system_cpu_percent": 9.2,
+      "system_ram_used_bytes": 16422756352,
+      "nvidia": {
+        "vram_used_bytes": 14161149952,
+        "gpu_percent": 19
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:05.960402+00:00",
+      "tree_cpu_percent": 104.4,
+      "tree_rss_bytes": 3980976128,
+      "system_cpu_percent": 8.6,
+      "system_ram_used_bytes": 16456437760,
+      "nvidia": {
+        "vram_used_bytes": 14161674240,
+        "gpu_percent": 9
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:06.468324+00:00",
+      "tree_cpu_percent": 129.2,
+      "tree_rss_bytes": 4010512384,
+      "system_cpu_percent": 12.5,
+      "system_ram_used_bytes": 16490893312,
+      "nvidia": {
+        "vram_used_bytes": 14161215488,
+        "gpu_percent": 19
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:06.976981+00:00",
+      "tree_cpu_percent": 113.7,
+      "tree_rss_bytes": 4014956544,
+      "system_cpu_percent": 17.4,
+      "system_ram_used_bytes": 16504479744,
+      "nvidia": {
+        "vram_used_bytes": 14161215488,
+        "gpu_percent": 18
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:07.485516+00:00",
+      "tree_cpu_percent": 126.0,
+      "tree_rss_bytes": 4022263808,
+      "system_cpu_percent": 11.6,
+      "system_ram_used_bytes": 16514686976,
+      "nvidia": {
+        "vram_used_bytes": 14161215488,
+        "gpu_percent": 26
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:07.994864+00:00",
+      "tree_cpu_percent": 107.4,
+      "tree_rss_bytes": 4022398976,
+      "system_cpu_percent": 11.4,
+      "system_ram_used_bytes": 16507449344,
+      "nvidia": {
+        "vram_used_bytes": 14161215488,
+        "gpu_percent": 27
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:08.503683+00:00",
+      "tree_cpu_percent": 98.3,
+      "tree_rss_bytes": 4025454592,
+      "system_cpu_percent": 9.8,
+      "system_ram_used_bytes": 16509890560,
+      "nvidia": {
+        "vram_used_bytes": 14161215488,
+        "gpu_percent": 27
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:09.012334+00:00",
+      "tree_cpu_percent": 101.4,
+      "tree_rss_bytes": 4156063744,
+      "system_cpu_percent": 13.0,
+      "system_ram_used_bytes": 16642256896,
+      "nvidia": {
+        "vram_used_bytes": 14161215488,
+        "gpu_percent": 34
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:09.521158+00:00",
+      "tree_cpu_percent": 122.8,
+      "tree_rss_bytes": 4156276736,
+      "system_cpu_percent": 10.6,
+      "system_ram_used_bytes": 16640446464,
+      "nvidia": {
+        "vram_used_bytes": 14161215488,
+        "gpu_percent": 39
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:10.029909+00:00",
+      "tree_cpu_percent": 119.8,
+      "tree_rss_bytes": 4157894656,
+      "system_cpu_percent": 11.0,
+      "system_ram_used_bytes": 16634015744,
+      "nvidia": {
+        "vram_used_bytes": 14161215488,
+        "gpu_percent": 34
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:10.538091+00:00",
+      "tree_cpu_percent": 110.7,
+      "tree_rss_bytes": 4157923328,
+      "system_cpu_percent": 8.7,
+      "system_ram_used_bytes": 16633520128,
+      "nvidia": {
+        "vram_used_bytes": 14161215488,
+        "gpu_percent": 32
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:11.047326+00:00",
+      "tree_cpu_percent": 113.5,
+      "tree_rss_bytes": 4162093056,
+      "system_cpu_percent": 9.5,
+      "system_ram_used_bytes": 16648888320,
+      "nvidia": {
+        "vram_used_bytes": 14161215488,
+        "gpu_percent": 37
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:11.555858+00:00",
+      "tree_cpu_percent": 79.9,
+      "tree_rss_bytes": 4497440768,
+      "system_cpu_percent": 11.3,
+      "system_ram_used_bytes": 16693092352,
+      "nvidia": {
+        "vram_used_bytes": 14194769920,
+        "gpu_percent": 36
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:12.064751+00:00",
+      "tree_cpu_percent": 46.1,
+      "tree_rss_bytes": 4498968576,
+      "system_cpu_percent": 9.4,
+      "system_ram_used_bytes": 16689917952,
+      "nvidia": {
+        "vram_used_bytes": 14197981184,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:12.572747+00:00",
+      "tree_cpu_percent": 36.9,
+      "tree_rss_bytes": 4499877888,
+      "system_cpu_percent": 5.6,
+      "system_ram_used_bytes": 16685273088,
+      "nvidia": {
+        "vram_used_bytes": 14197981184,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:13.080713+00:00",
+      "tree_cpu_percent": 18.5,
+      "tree_rss_bytes": 4500758528,
+      "system_cpu_percent": 5.5,
+      "system_ram_used_bytes": 16684871680,
+      "nvidia": {
+        "vram_used_bytes": 14197981184,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:13.588920+00:00",
+      "tree_cpu_percent": 33.8,
+      "tree_rss_bytes": 4501504000,
+      "system_cpu_percent": 9.0,
+      "system_ram_used_bytes": 16685858816,
+      "nvidia": {
+        "vram_used_bytes": 14197981184,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:14.096597+00:00",
+      "tree_cpu_percent": 18.5,
+      "tree_rss_bytes": 4502343680,
+      "system_cpu_percent": 10.1,
+      "system_ram_used_bytes": 16685686784,
+      "nvidia": {
+        "vram_used_bytes": 14198243328,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:14.604912+00:00",
+      "tree_cpu_percent": 24.6,
+      "tree_rss_bytes": 4518260736,
+      "system_cpu_percent": 7.1,
+      "system_ram_used_bytes": 16697061376,
+      "nvidia": {
+        "vram_used_bytes": 14215020544,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:15.112584+00:00",
+      "tree_cpu_percent": 12.3,
+      "tree_rss_bytes": 4518854656,
+      "system_cpu_percent": 5.7,
+      "system_ram_used_bytes": 16698679296,
+      "nvidia": {
+        "vram_used_bytes": 14215151616,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:15.620555+00:00",
+      "tree_cpu_percent": 18.5,
+      "tree_rss_bytes": 4519600128,
+      "system_cpu_percent": 5.5,
+      "system_ram_used_bytes": 16699895808,
+      "nvidia": {
+        "vram_used_bytes": 14215151616,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:16.128762+00:00",
+      "tree_cpu_percent": 27.7,
+      "tree_rss_bytes": 4520026112,
+      "system_cpu_percent": 7.3,
+      "system_ram_used_bytes": 16699740160,
+      "nvidia": {
+        "vram_used_bytes": 14215151616,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:16.636368+00:00",
+      "tree_cpu_percent": 18.5,
+      "tree_rss_bytes": 4520398848,
+      "system_cpu_percent": 5.1,
+      "system_ram_used_bytes": 16703193088,
+      "nvidia": {
+        "vram_used_bytes": 14215151616,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:17.144447+00:00",
+      "tree_cpu_percent": 21.5,
+      "tree_rss_bytes": 4520960000,
+      "system_cpu_percent": 4.0,
+      "system_ram_used_bytes": 16702574592,
+      "nvidia": {
+        "vram_used_bytes": 14215151616,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:17.652326+00:00",
+      "tree_cpu_percent": 24.6,
+      "tree_rss_bytes": 4521205760,
+      "system_cpu_percent": 3.1,
+      "system_ram_used_bytes": 16704065536,
+      "nvidia": {
+        "vram_used_bytes": 14215151616,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:18.161612+00:00",
+      "tree_cpu_percent": 76.7,
+      "tree_rss_bytes": 4521525248,
+      "system_cpu_percent": 13.3,
+      "system_ram_used_bytes": 16702996480,
+      "nvidia": {
+        "vram_used_bytes": 14215151616,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:18.669732+00:00",
+      "tree_cpu_percent": 110.7,
+      "tree_rss_bytes": 4521545728,
+      "system_cpu_percent": 10.9,
+      "system_ram_used_bytes": 16706760704,
+      "nvidia": {
+        "vram_used_bytes": 14215151616,
+        "gpu_percent": 22
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:19.177930+00:00",
+      "tree_cpu_percent": 129.1,
+      "tree_rss_bytes": 4521549824,
+      "system_cpu_percent": 11.4,
+      "system_ram_used_bytes": 16704376832,
+      "nvidia": {
+        "vram_used_bytes": 14214889472,
+        "gpu_percent": 21
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:19.686055+00:00",
+      "tree_cpu_percent": 159.9,
+      "tree_rss_bytes": 4524367872,
+      "system_cpu_percent": 12.0,
+      "system_ram_used_bytes": 16709369856,
+      "nvidia": {
+        "vram_used_bytes": 14214889472,
+        "gpu_percent": 20
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:20.194219+00:00",
+      "tree_cpu_percent": 36.9,
+      "tree_rss_bytes": 4524384256,
+      "system_cpu_percent": 6.9,
+      "system_ram_used_bytes": 16708018176,
+      "nvidia": {
+        "vram_used_bytes": 14214889472,
+        "gpu_percent": 22
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:20.702100+00:00",
+      "tree_cpu_percent": 24.6,
+      "tree_rss_bytes": 4524396544,
+      "system_cpu_percent": 4.5,
+      "system_ram_used_bytes": 16707506176,
+      "nvidia": {
+        "vram_used_bytes": 14214889472,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:21.209494+00:00",
+      "tree_cpu_percent": 27.7,
+      "tree_rss_bytes": 4524400640,
+      "system_cpu_percent": 8.7,
+      "system_ram_used_bytes": 16707584000,
+      "nvidia": {
+        "vram_used_bytes": 14215020544,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:21.717613+00:00",
+      "tree_cpu_percent": 30.8,
+      "tree_rss_bytes": 4524486656,
+      "system_cpu_percent": 6.2,
+      "system_ram_used_bytes": 16709963776,
+      "nvidia": {
+        "vram_used_bytes": 14215020544,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:22.225282+00:00",
+      "tree_cpu_percent": 24.6,
+      "tree_rss_bytes": 4524621824,
+      "system_cpu_percent": 5.3,
+      "system_ram_used_bytes": 16706670592,
+      "nvidia": {
+        "vram_used_bytes": 14215151616,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:22.733253+00:00",
+      "tree_cpu_percent": 58.4,
+      "tree_rss_bytes": 4524666880,
+      "system_cpu_percent": 11.2,
+      "system_ram_used_bytes": 16706052096,
+      "nvidia": {
+        "vram_used_bytes": 14215151616,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:23.241387+00:00",
+      "tree_cpu_percent": 24.6,
+      "tree_rss_bytes": 4524720128,
+      "system_cpu_percent": 5.1,
+      "system_ram_used_bytes": 16707293184,
+      "nvidia": {
+        "vram_used_bytes": 14215151616,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:23.749991+00:00",
+      "tree_cpu_percent": 15.4,
+      "tree_rss_bytes": 4524859392,
+      "system_cpu_percent": 2.8,
+      "system_ram_used_bytes": 16707362816,
+      "nvidia": {
+        "vram_used_bytes": 14215151616,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:24.258212+00:00",
+      "tree_cpu_percent": 21.5,
+      "tree_rss_bytes": 4524871680,
+      "system_cpu_percent": 5.9,
+      "system_ram_used_bytes": 16707194880,
+      "nvidia": {
+        "vram_used_bytes": 14215282688,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:24.766779+00:00",
+      "tree_cpu_percent": 30.7,
+      "tree_rss_bytes": 4524875776,
+      "system_cpu_percent": 7.9,
+      "system_ram_used_bytes": 16709509120,
+      "nvidia": {
+        "vram_used_bytes": 14215151616,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:25.274639+00:00",
+      "tree_cpu_percent": 15.4,
+      "tree_rss_bytes": 4524883968,
+      "system_cpu_percent": 3.6,
+      "system_ram_used_bytes": 16708452352,
+      "nvidia": {
+        "vram_used_bytes": 14215282688,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:25.782158+00:00",
+      "tree_cpu_percent": 21.5,
+      "tree_rss_bytes": 4524892160,
+      "system_cpu_percent": 3.6,
+      "system_ram_used_bytes": 16707649536,
+      "nvidia": {
+        "vram_used_bytes": 14215282688,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:26.290276+00:00",
+      "tree_cpu_percent": 30.8,
+      "tree_rss_bytes": 4524941312,
+      "system_cpu_percent": 3.9,
+      "system_ram_used_bytes": 16708440064,
+      "nvidia": {
+        "vram_used_bytes": 14215544832,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:26.798660+00:00",
+      "tree_cpu_percent": 76.8,
+      "tree_rss_bytes": 4525031424,
+      "system_cpu_percent": 7.7,
+      "system_ram_used_bytes": 16708231168,
+      "nvidia": {
+        "vram_used_bytes": 14215282688,
+        "gpu_percent": 25
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:27.307984+00:00",
+      "tree_cpu_percent": 104.3,
+      "tree_rss_bytes": 4525031424,
+      "system_cpu_percent": 11.5,
+      "system_ram_used_bytes": 16708706304,
+      "nvidia": {
+        "vram_used_bytes": 14215282688,
+        "gpu_percent": 25
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:27.817878+00:00",
+      "tree_cpu_percent": 113.4,
+      "tree_rss_bytes": 4525031424,
+      "system_cpu_percent": 11.8,
+      "system_ram_used_bytes": 16720781312,
+      "nvidia": {
+        "vram_used_bytes": 14215282688,
+        "gpu_percent": 26
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:28.326975+00:00",
+      "tree_cpu_percent": 98.2,
+      "tree_rss_bytes": 4525031424,
+      "system_cpu_percent": 9.5,
+      "system_ram_used_bytes": 16716460032,
+      "nvidia": {
+        "vram_used_bytes": 14215282688,
+        "gpu_percent": 18
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:28.835167+00:00",
+      "tree_cpu_percent": 55.4,
+      "tree_rss_bytes": 4525109248,
+      "system_cpu_percent": 6.0,
+      "system_ram_used_bytes": 16712667136,
+      "nvidia": {
+        "vram_used_bytes": 14215282688,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:29.343444+00:00",
+      "tree_cpu_percent": 33.8,
+      "tree_rss_bytes": 4525113344,
+      "system_cpu_percent": 9.3,
+      "system_ram_used_bytes": 16716115968,
+      "nvidia": {
+        "vram_used_bytes": 14215020544,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:29.851180+00:00",
+      "tree_cpu_percent": 33.8,
+      "tree_rss_bytes": 4525121536,
+      "system_cpu_percent": 8.7,
+      "system_ram_used_bytes": 16712962048,
+      "nvidia": {
+        "vram_used_bytes": 14215020544,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:30.359352+00:00",
+      "tree_cpu_percent": 27.700000000000003,
+      "tree_rss_bytes": 4525129728,
+      "system_cpu_percent": 4.5,
+      "system_ram_used_bytes": 16714616832,
+      "nvidia": {
+        "vram_used_bytes": 14215020544,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:30.867467+00:00",
+      "tree_cpu_percent": 3.1,
+      "tree_rss_bytes": 4525142016,
+      "system_cpu_percent": 3.9,
+      "system_ram_used_bytes": 16711106560,
+      "nvidia": {
+        "vram_used_bytes": 14215020544,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:31.375001+00:00",
+      "tree_cpu_percent": 40.0,
+      "tree_rss_bytes": 4525146112,
+      "system_cpu_percent": 6.7,
+      "system_ram_used_bytes": 16710094848,
+      "nvidia": {
+        "vram_used_bytes": 14215020544,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:31.883548+00:00",
+      "tree_cpu_percent": 15.4,
+      "tree_rss_bytes": 4525154304,
+      "system_cpu_percent": 7.4,
+      "system_ram_used_bytes": 16708710400,
+      "nvidia": {
+        "vram_used_bytes": 14215020544,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:32.391659+00:00",
+      "tree_cpu_percent": 24.6,
+      "tree_rss_bytes": 4525158400,
+      "system_cpu_percent": 4.5,
+      "system_ram_used_bytes": 16708558848,
+      "nvidia": {
+        "vram_used_bytes": 14215348224,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:32.899157+00:00",
+      "tree_cpu_percent": 6.2,
+      "tree_rss_bytes": 4525170688,
+      "system_cpu_percent": 1.7,
+      "system_ram_used_bytes": 16707997696,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:33.407387+00:00",
+      "tree_cpu_percent": 33.8,
+      "tree_rss_bytes": 4525174784,
+      "system_cpu_percent": 7.4,
+      "system_ram_used_bytes": 16707866624,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:33.915410+00:00",
+      "tree_cpu_percent": 18.5,
+      "tree_rss_bytes": 4525178880,
+      "system_cpu_percent": 6.2,
+      "system_ram_used_bytes": 16708034560,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:34.423160+00:00",
+      "tree_cpu_percent": 12.3,
+      "tree_rss_bytes": 4525187072,
+      "system_cpu_percent": 3.1,
+      "system_ram_used_bytes": 16708329472,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:34.931042+00:00",
+      "tree_cpu_percent": 21.5,
+      "tree_rss_bytes": 4525195264,
+      "system_cpu_percent": 3.8,
+      "system_ram_used_bytes": 16707715072,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:35.439228+00:00",
+      "tree_cpu_percent": 46.1,
+      "tree_rss_bytes": 4525281280,
+      "system_cpu_percent": 4.3,
+      "system_ram_used_bytes": 16712282112,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:35.947484+00:00",
+      "tree_cpu_percent": 107.6,
+      "tree_rss_bytes": 4525346816,
+      "system_cpu_percent": 12.1,
+      "system_ram_used_bytes": 16710369280,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 21
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:36.457127+00:00",
+      "tree_cpu_percent": 119.6,
+      "tree_rss_bytes": 4525314048,
+      "system_cpu_percent": 12.6,
+      "system_ram_used_bytes": 16709656576,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 25
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:36.965858+00:00",
+      "tree_cpu_percent": 98.3,
+      "tree_rss_bytes": 4526100480,
+      "system_cpu_percent": 10.2,
+      "system_ram_used_bytes": 16719286272,
+      "nvidia": {
+        "vram_used_bytes": 14214889472,
+        "gpu_percent": 18
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:37.473541+00:00",
+      "tree_cpu_percent": 67.7,
+      "tree_rss_bytes": 4526239744,
+      "system_cpu_percent": 6.0,
+      "system_ram_used_bytes": 16716431360,
+      "nvidia": {
+        "vram_used_bytes": 14214889472,
+        "gpu_percent": 75
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:37.982386+00:00",
+      "tree_cpu_percent": 9.2,
+      "tree_rss_bytes": 4526239744,
+      "system_cpu_percent": 5.9,
+      "system_ram_used_bytes": 16713539584,
+      "nvidia": {
+        "vram_used_bytes": 14214955008,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:38.491111+00:00",
+      "tree_cpu_percent": 0.0,
+      "tree_rss_bytes": 4526243840,
+      "system_cpu_percent": 5.3,
+      "system_ram_used_bytes": 16715292672,
+      "nvidia": {
+        "vram_used_bytes": 14214955008,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:38.999424+00:00",
+      "tree_cpu_percent": 21.5,
+      "tree_rss_bytes": 4526247936,
+      "system_cpu_percent": 5.1,
+      "system_ram_used_bytes": 16715128832,
+      "nvidia": {
+        "vram_used_bytes": 14214955008,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:39.509296+00:00",
+      "tree_cpu_percent": 9.2,
+      "tree_rss_bytes": 4526256128,
+      "system_cpu_percent": 3.3,
+      "system_ram_used_bytes": 16713314304,
+      "nvidia": {
+        "vram_used_bytes": 14214955008,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:40.018690+00:00",
+      "tree_cpu_percent": 36.8,
+      "tree_rss_bytes": 4526264320,
+      "system_cpu_percent": 5.2,
+      "system_ram_used_bytes": 16711426048,
+      "nvidia": {
+        "vram_used_bytes": 14214955008,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:40.526788+00:00",
+      "tree_cpu_percent": 24.7,
+      "tree_rss_bytes": 4526268416,
+      "system_cpu_percent": 5.9,
+      "system_ram_used_bytes": 16713248768,
+      "nvidia": {
+        "vram_used_bytes": 14214955008,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:41.034940+00:00",
+      "tree_cpu_percent": 49.2,
+      "tree_rss_bytes": 4526276608,
+      "system_cpu_percent": 6.3,
+      "system_ram_used_bytes": 16711503872,
+      "nvidia": {
+        "vram_used_bytes": 14214823936,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:41.542611+00:00",
+      "tree_cpu_percent": 15.4,
+      "tree_rss_bytes": 4526280704,
+      "system_cpu_percent": 4.1,
+      "system_ram_used_bytes": 16709283840,
+      "nvidia": {
+        "vram_used_bytes": 14214823936,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:42.050519+00:00",
+      "tree_cpu_percent": 27.7,
+      "tree_rss_bytes": 4526350336,
+      "system_cpu_percent": 6.8,
+      "system_ram_used_bytes": 16709005312,
+      "nvidia": {
+        "vram_used_bytes": 14215610368,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:42.559036+00:00",
+      "tree_cpu_percent": 6.1,
+      "tree_rss_bytes": 4526358528,
+      "system_cpu_percent": 3.2,
+      "system_ram_used_bytes": 16709173248,
+      "nvidia": {
+        "vram_used_bytes": 14216790016,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:43.066786+00:00",
+      "tree_cpu_percent": 12.3,
+      "tree_rss_bytes": 4526538752,
+      "system_cpu_percent": 5.2,
+      "system_ram_used_bytes": 16709148672,
+      "nvidia": {
+        "vram_used_bytes": 14216855552,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:43.575091+00:00",
+      "tree_cpu_percent": 12.3,
+      "tree_rss_bytes": 4526538752,
+      "system_cpu_percent": 4.5,
+      "system_ram_used_bytes": 16709120000,
+      "nvidia": {
+        "vram_used_bytes": 14216069120,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:44.082840+00:00",
+      "tree_cpu_percent": 15.4,
+      "tree_rss_bytes": 4526538752,
+      "system_cpu_percent": 5.4,
+      "system_ram_used_bytes": 16708943872,
+      "nvidia": {
+        "vram_used_bytes": 14215741440,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:44.590740+00:00",
+      "tree_cpu_percent": 12.299999999999999,
+      "tree_rss_bytes": 4526538752,
+      "system_cpu_percent": 5.0,
+      "system_ram_used_bytes": 16710877184,
+      "nvidia": {
+        "vram_used_bytes": 14214955008,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:45.099609+00:00",
+      "tree_cpu_percent": 27.6,
+      "tree_rss_bytes": 4526628864,
+      "system_cpu_percent": 12.6,
+      "system_ram_used_bytes": 16710094848,
+      "nvidia": {
+        "vram_used_bytes": 14215020544,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:45.609174+00:00",
+      "tree_cpu_percent": 116.5,
+      "tree_rss_bytes": 4526628864,
+      "system_cpu_percent": 16.2,
+      "system_ram_used_bytes": 16731963392,
+      "nvidia": {
+        "vram_used_bytes": 14215020544,
+        "gpu_percent": 24
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:46.117949+00:00",
+      "tree_cpu_percent": 110.6,
+      "tree_rss_bytes": 4526628864,
+      "system_cpu_percent": 19.6,
+      "system_ram_used_bytes": 16748376064,
+      "nvidia": {
+        "vram_used_bytes": 14215020544,
+        "gpu_percent": 25
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:46.627946+00:00",
+      "tree_cpu_percent": 174.7,
+      "tree_rss_bytes": 4526628864,
+      "system_cpu_percent": 22.1,
+      "system_ram_used_bytes": 16799432704,
+      "nvidia": {
+        "vram_used_bytes": 14215020544,
+        "gpu_percent": 22
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:47.136987+00:00",
+      "tree_cpu_percent": 64.5,
+      "tree_rss_bytes": 4528594944,
+      "system_cpu_percent": 17.5,
+      "system_ram_used_bytes": 16735535104,
+      "nvidia": {
+        "vram_used_bytes": 14215020544,
+        "gpu_percent": 20
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:47.645196+00:00",
+      "tree_cpu_percent": 15.4,
+      "tree_rss_bytes": 4528594944,
+      "system_cpu_percent": 11.0,
+      "system_ram_used_bytes": 16733683712,
+      "nvidia": {
+        "vram_used_bytes": 14215020544,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:48.154151+00:00",
+      "tree_cpu_percent": 18.4,
+      "tree_rss_bytes": 4528594944,
+      "system_cpu_percent": 10.2,
+      "system_ram_used_bytes": 16732573696,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:48.662130+00:00",
+      "tree_cpu_percent": 33.8,
+      "tree_rss_bytes": 4528594944,
+      "system_cpu_percent": 11.5,
+      "system_ram_used_bytes": 16729178112,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:49.171050+00:00",
+      "tree_cpu_percent": 21.5,
+      "tree_rss_bytes": 4528594944,
+      "system_cpu_percent": 10.7,
+      "system_ram_used_bytes": 16741531648,
+      "nvidia": {
+        "vram_used_bytes": 14215413760,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:49.679871+00:00",
+      "tree_cpu_percent": 15.4,
+      "tree_rss_bytes": 4528594944,
+      "system_cpu_percent": 10.6,
+      "system_ram_used_bytes": 16726269952,
+      "nvidia": {
+        "vram_used_bytes": 14215413760,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:50.188102+00:00",
+      "tree_cpu_percent": 12.3,
+      "tree_rss_bytes": 4528594944,
+      "system_cpu_percent": 4.5,
+      "system_ram_used_bytes": 16729735168,
+      "nvidia": {
+        "vram_used_bytes": 14215217152,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:50.695875+00:00",
+      "tree_cpu_percent": 18.5,
+      "tree_rss_bytes": 4528594944,
+      "system_cpu_percent": 4.4,
+      "system_ram_used_bytes": 16730062848,
+      "nvidia": {
+        "vram_used_bytes": 14215217152,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:51.204362+00:00",
+      "tree_cpu_percent": 12.3,
+      "tree_rss_bytes": 4528594944,
+      "system_cpu_percent": 4.8,
+      "system_ram_used_bytes": 16722071552,
+      "nvidia": {
+        "vram_used_bytes": 14216593408,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:51.712324+00:00",
+      "tree_cpu_percent": 12.3,
+      "tree_rss_bytes": 4528594944,
+      "system_cpu_percent": 6.6,
+      "system_ram_used_bytes": 16724013056,
+      "nvidia": {
+        "vram_used_bytes": 14216593408,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:52.221418+00:00",
+      "tree_cpu_percent": 36.9,
+      "tree_rss_bytes": 4528594944,
+      "system_cpu_percent": 10.0,
+      "system_ram_used_bytes": 16728350720,
+      "nvidia": {
+        "vram_used_bytes": 14216593408,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:52.729923+00:00",
+      "tree_cpu_percent": 24.6,
+      "tree_rss_bytes": 4528594944,
+      "system_cpu_percent": 4.4,
+      "system_ram_used_bytes": 16725729280,
+      "nvidia": {
+        "vram_used_bytes": 14216593408,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:53.237318+00:00",
+      "tree_cpu_percent": 18.5,
+      "tree_rss_bytes": 4528594944,
+      "system_cpu_percent": 4.3,
+      "system_ram_used_bytes": 16725942272,
+      "nvidia": {
+        "vram_used_bytes": 14215675904,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:53.745811+00:00",
+      "tree_cpu_percent": 6.1,
+      "tree_rss_bytes": 4528607232,
+      "system_cpu_percent": 3.2,
+      "system_ram_used_bytes": 16725643264,
+      "nvidia": {
+        "vram_used_bytes": 14215675904,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:54.254617+00:00",
+      "tree_cpu_percent": 89.1,
+      "tree_rss_bytes": 4528689152,
+      "system_cpu_percent": 11.1,
+      "system_ram_used_bytes": 16727941120,
+      "nvidia": {
+        "vram_used_bytes": 14215217152,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:54.763044+00:00",
+      "tree_cpu_percent": 107.6,
+      "tree_rss_bytes": 4528689152,
+      "system_cpu_percent": 7.6,
+      "system_ram_used_bytes": 16724529152,
+      "nvidia": {
+        "vram_used_bytes": 14215217152,
+        "gpu_percent": 25
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:55.271313+00:00",
+      "tree_cpu_percent": 107.6,
+      "tree_rss_bytes": 4528754688,
+      "system_cpu_percent": 8.8,
+      "system_ram_used_bytes": 16720031744,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 16
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:55.780501+00:00",
+      "tree_cpu_percent": 104.3,
+      "tree_rss_bytes": 4528754688,
+      "system_cpu_percent": 8.2,
+      "system_ram_used_bytes": 16718602240,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 21
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:56.290071+00:00",
+      "tree_cpu_percent": 39.9,
+      "tree_rss_bytes": 4528754688,
+      "system_cpu_percent": 13.6,
+      "system_ram_used_bytes": 16722395136,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:56.798481+00:00",
+      "tree_cpu_percent": 33.8,
+      "tree_rss_bytes": 4528754688,
+      "system_cpu_percent": 11.4,
+      "system_ram_used_bytes": 16725110784,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:57.307077+00:00",
+      "tree_cpu_percent": 24.6,
+      "tree_rss_bytes": 4528754688,
+      "system_cpu_percent": 8.1,
+      "system_ram_used_bytes": 16719994880,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:57.815676+00:00",
+      "tree_cpu_percent": 18.4,
+      "tree_rss_bytes": 4528754688,
+      "system_cpu_percent": 9.8,
+      "system_ram_used_bytes": 16719532032,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:58.324560+00:00",
+      "tree_cpu_percent": 6.1,
+      "tree_rss_bytes": 4528754688,
+      "system_cpu_percent": 9.3,
+      "system_ram_used_bytes": 16719982592,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:58.833064+00:00",
+      "tree_cpu_percent": 18.4,
+      "tree_rss_bytes": 4528754688,
+      "system_cpu_percent": 10.3,
+      "system_ram_used_bytes": 16719486976,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:59.341767+00:00",
+      "tree_cpu_percent": 18.4,
+      "tree_rss_bytes": 4528754688,
+      "system_cpu_percent": 3.8,
+      "system_ram_used_bytes": 16719028224,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:58:59.850705+00:00",
+      "tree_cpu_percent": 21.5,
+      "tree_rss_bytes": 4528754688,
+      "system_cpu_percent": 5.4,
+      "system_ram_used_bytes": 16718921728,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:00.359745+00:00",
+      "tree_cpu_percent": 24.6,
+      "tree_rss_bytes": 4528754688,
+      "system_cpu_percent": 5.0,
+      "system_ram_used_bytes": 16722026496,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:00.867895+00:00",
+      "tree_cpu_percent": 18.4,
+      "tree_rss_bytes": 4528754688,
+      "system_cpu_percent": 7.9,
+      "system_ram_used_bytes": 16723156992,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:01.376147+00:00",
+      "tree_cpu_percent": 12.3,
+      "tree_rss_bytes": 4528754688,
+      "system_cpu_percent": 3.6,
+      "system_ram_used_bytes": 16721350656,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:01.884128+00:00",
+      "tree_cpu_percent": 18.5,
+      "tree_rss_bytes": 4528754688,
+      "system_cpu_percent": 5.1,
+      "system_ram_used_bytes": 16721166336,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:02.392980+00:00",
+      "tree_cpu_percent": 36.8,
+      "tree_rss_bytes": 4528754688,
+      "system_cpu_percent": 5.3,
+      "system_ram_used_bytes": 16721727488,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:02.902289+00:00",
+      "tree_cpu_percent": 21.5,
+      "tree_rss_bytes": 4528795648,
+      "system_cpu_percent": 5.6,
+      "system_ram_used_bytes": 16721260544,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:03.411837+00:00",
+      "tree_cpu_percent": 110.3,
+      "tree_rss_bytes": 4528828416,
+      "system_cpu_percent": 10.9,
+      "system_ram_used_bytes": 16721559552,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 24
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:03.919797+00:00",
+      "tree_cpu_percent": 113.8,
+      "tree_rss_bytes": 4528828416,
+      "system_cpu_percent": 10.2,
+      "system_ram_used_bytes": 16720322560,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 19
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:04.429003+00:00",
+      "tree_cpu_percent": 125.8,
+      "tree_rss_bytes": 4528828416,
+      "system_cpu_percent": 7.4,
+      "system_ram_used_bytes": 16720916480,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 20
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:04.937072+00:00",
+      "tree_cpu_percent": 86.1,
+      "tree_rss_bytes": 4530991104,
+      "system_cpu_percent": 9.4,
+      "system_ram_used_bytes": 16739311616,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 32
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:05.445387+00:00",
+      "tree_cpu_percent": 21.5,
+      "tree_rss_bytes": 4530991104,
+      "system_cpu_percent": 7.8,
+      "system_ram_used_bytes": 16736808960,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:05.953553+00:00",
+      "tree_cpu_percent": 52.3,
+      "tree_rss_bytes": 4530991104,
+      "system_cpu_percent": 6.4,
+      "system_ram_used_bytes": 16730783744,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:06.461502+00:00",
+      "tree_cpu_percent": 21.5,
+      "tree_rss_bytes": 4530991104,
+      "system_cpu_percent": 3.9,
+      "system_ram_used_bytes": 16730230784,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:06.970118+00:00",
+      "tree_cpu_percent": 33.8,
+      "tree_rss_bytes": 4530991104,
+      "system_cpu_percent": 5.9,
+      "system_ram_used_bytes": 16728473600,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:07.478109+00:00",
+      "tree_cpu_percent": 21.5,
+      "tree_rss_bytes": 4530991104,
+      "system_cpu_percent": 7.1,
+      "system_ram_used_bytes": 16730886144,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:07.986215+00:00",
+      "tree_cpu_percent": 24.6,
+      "tree_rss_bytes": 4530991104,
+      "system_cpu_percent": 4.3,
+      "system_ram_used_bytes": 16728813568,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:08.494368+00:00",
+      "tree_cpu_percent": 21.5,
+      "tree_rss_bytes": 4530991104,
+      "system_cpu_percent": 3.8,
+      "system_ram_used_bytes": 16725983232,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:09.002890+00:00",
+      "tree_cpu_percent": 27.7,
+      "tree_rss_bytes": 4530991104,
+      "system_cpu_percent": 3.6,
+      "system_ram_used_bytes": 16727584768,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:09.511208+00:00",
+      "tree_cpu_percent": 18.4,
+      "tree_rss_bytes": 4530991104,
+      "system_cpu_percent": 3.9,
+      "system_ram_used_bytes": 16729886720,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:10.019283+00:00",
+      "tree_cpu_percent": 24.6,
+      "tree_rss_bytes": 4530991104,
+      "system_cpu_percent": 8.6,
+      "system_ram_used_bytes": 16727351296,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:10.527772+00:00",
+      "tree_cpu_percent": 36.9,
+      "tree_rss_bytes": 4530991104,
+      "system_cpu_percent": 4.6,
+      "system_ram_used_bytes": 16724996096,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:11.035932+00:00",
+      "tree_cpu_percent": 24.6,
+      "tree_rss_bytes": 4530991104,
+      "system_cpu_percent": 5.9,
+      "system_ram_used_bytes": 16724574208,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:11.544225+00:00",
+      "tree_cpu_percent": 33.8,
+      "tree_rss_bytes": 4531060736,
+      "system_cpu_percent": 4.3,
+      "system_ram_used_bytes": 16723894272,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:12.052633+00:00",
+      "tree_cpu_percent": 129.1,
+      "tree_rss_bytes": 4531060736,
+      "system_cpu_percent": 13.0,
+      "system_ram_used_bytes": 16724676608,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 23
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:12.561474+00:00",
+      "tree_cpu_percent": 125.9,
+      "tree_rss_bytes": 4531060736,
+      "system_cpu_percent": 9.8,
+      "system_ram_used_bytes": 16724963328,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 27
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:13.070056+00:00",
+      "tree_cpu_percent": 110.6,
+      "tree_rss_bytes": 4531060736,
+      "system_cpu_percent": 10.4,
+      "system_ram_used_bytes": 16721887232,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 17
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:13.579203+00:00",
+      "tree_cpu_percent": 128.9,
+      "tree_rss_bytes": 4531060736,
+      "system_cpu_percent": 10.2,
+      "system_ram_used_bytes": 16722214912,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 19
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:14.087216+00:00",
+      "tree_cpu_percent": 27.7,
+      "tree_rss_bytes": 4531060736,
+      "system_cpu_percent": 8.1,
+      "system_ram_used_bytes": 16719523840,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:14.595327+00:00",
+      "tree_cpu_percent": 46.1,
+      "tree_rss_bytes": 4531060736,
+      "system_cpu_percent": 5.6,
+      "system_ram_used_bytes": 16718282752,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:15.103694+00:00",
+      "tree_cpu_percent": 40.0,
+      "tree_rss_bytes": 4531060736,
+      "system_cpu_percent": 8.1,
+      "system_ram_used_bytes": 16718200832,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:15.611640+00:00",
+      "tree_cpu_percent": 21.5,
+      "tree_rss_bytes": 4531060736,
+      "system_cpu_percent": 5.6,
+      "system_ram_used_bytes": 16717844480,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:16.119436+00:00",
+      "tree_cpu_percent": 15.4,
+      "tree_rss_bytes": 4531060736,
+      "system_cpu_percent": 3.6,
+      "system_ram_used_bytes": 16717762560,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:16.628568+00:00",
+      "tree_cpu_percent": 24.6,
+      "tree_rss_bytes": 4531060736,
+      "system_cpu_percent": 7.1,
+      "system_ram_used_bytes": 16734404608,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:17.137234+00:00",
+      "tree_cpu_percent": 6.2,
+      "tree_rss_bytes": 4531060736,
+      "system_cpu_percent": 6.8,
+      "system_ram_used_bytes": 16728924160,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:17.645815+00:00",
+      "tree_cpu_percent": 0.0,
+      "tree_rss_bytes": 4531060736,
+      "system_cpu_percent": 3.2,
+      "system_ram_used_bytes": 16729440256,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:18.154377+00:00",
+      "tree_cpu_percent": 3.1,
+      "tree_rss_bytes": 4531060736,
+      "system_cpu_percent": 3.8,
+      "system_ram_used_bytes": 16724492288,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:18.662302+00:00",
+      "tree_cpu_percent": 30.8,
+      "tree_rss_bytes": 4531060736,
+      "system_cpu_percent": 6.0,
+      "system_ram_used_bytes": 16728518656,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:19.170580+00:00",
+      "tree_cpu_percent": 43.0,
+      "tree_rss_bytes": 4531060736,
+      "system_cpu_percent": 7.9,
+      "system_ram_used_bytes": 16726831104,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:19.678491+00:00",
+      "tree_cpu_percent": 58.5,
+      "tree_rss_bytes": 4531060736,
+      "system_cpu_percent": 5.6,
+      "system_ram_used_bytes": 16727830528,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:20.187129+00:00",
+      "tree_cpu_percent": 15.4,
+      "tree_rss_bytes": 4531060736,
+      "system_cpu_percent": 4.7,
+      "system_ram_used_bytes": 16725946368,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:20.696088+00:00",
+      "tree_cpu_percent": 12.3,
+      "tree_rss_bytes": 4531032064,
+      "system_cpu_percent": 4.1,
+      "system_ram_used_bytes": 16728449024,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:21.204505+00:00",
+      "tree_cpu_percent": 33.8,
+      "tree_rss_bytes": 4531032064,
+      "system_cpu_percent": 9.4,
+      "system_ram_used_bytes": 16723021824,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:21.713554+00:00",
+      "tree_cpu_percent": 64.5,
+      "tree_rss_bytes": 4531073024,
+      "system_cpu_percent": 9.9,
+      "system_ram_used_bytes": 16721870848,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:22.222606+00:00",
+      "tree_cpu_percent": 119.7,
+      "tree_rss_bytes": 4531073024,
+      "system_cpu_percent": 9.2,
+      "system_ram_used_bytes": 16721707008,
+      "nvidia": {
+        "vram_used_bytes": 14215413760,
+        "gpu_percent": 22
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:22.733858+00:00",
+      "tree_cpu_percent": 177.29999999999998,
+      "tree_rss_bytes": 4531073024,
+      "system_cpu_percent": 13.4,
+      "system_ram_used_bytes": 16722866176,
+      "nvidia": {
+        "vram_used_bytes": 14215413760,
+        "gpu_percent": 25
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:23.245546+00:00",
+      "tree_cpu_percent": 122.1,
+      "tree_rss_bytes": 4533039104,
+      "system_cpu_percent": 12.8,
+      "system_ram_used_bytes": 16723755008,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 19
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:23.754100+00:00",
+      "tree_cpu_percent": 46.1,
+      "tree_rss_bytes": 4533039104,
+      "system_cpu_percent": 4.5,
+      "system_ram_used_bytes": 16722464768,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 22
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:24.263030+00:00",
+      "tree_cpu_percent": 12.3,
+      "tree_rss_bytes": 4533039104,
+      "system_cpu_percent": 5.3,
+      "system_ram_used_bytes": 16720039936,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:24.770850+00:00",
+      "tree_cpu_percent": 3.1,
+      "tree_rss_bytes": 4533039104,
+      "system_cpu_percent": 4.5,
+      "system_ram_used_bytes": 16721907712,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:25.279335+00:00",
+      "tree_cpu_percent": 3.1,
+      "tree_rss_bytes": 4533039104,
+      "system_cpu_percent": 7.6,
+      "system_ram_used_bytes": 16719187968,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:25.787330+00:00",
+      "tree_cpu_percent": 0.0,
+      "tree_rss_bytes": 4533039104,
+      "system_cpu_percent": 9.2,
+      "system_ram_used_bytes": 16735191040,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:26.295998+00:00",
+      "tree_cpu_percent": 6.1,
+      "tree_rss_bytes": 4533039104,
+      "system_cpu_percent": 5.0,
+      "system_ram_used_bytes": 16727977984,
+      "nvidia": {
+        "vram_used_bytes": 14215413760,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:26.804407+00:00",
+      "tree_cpu_percent": 21.5,
+      "tree_rss_bytes": 4533039104,
+      "system_cpu_percent": 4.1,
+      "system_ram_used_bytes": 16725721088,
+      "nvidia": {
+        "vram_used_bytes": 14215413760,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:27.312913+00:00",
+      "tree_cpu_percent": 24.6,
+      "tree_rss_bytes": 4533039104,
+      "system_cpu_percent": 5.7,
+      "system_ram_used_bytes": 16724422656,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:27.822580+00:00",
+      "tree_cpu_percent": 30.700000000000003,
+      "tree_rss_bytes": 4533039104,
+      "system_cpu_percent": 8.1,
+      "system_ram_used_bytes": 16730611712,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:28.331575+00:00",
+      "tree_cpu_percent": 18.4,
+      "tree_rss_bytes": 4533039104,
+      "system_cpu_percent": 4.9,
+      "system_ram_used_bytes": 16729366528,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:28.841113+00:00",
+      "tree_cpu_percent": 24.5,
+      "tree_rss_bytes": 4533039104,
+      "system_cpu_percent": 5.0,
+      "system_ram_used_bytes": 16724434944,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:29.349939+00:00",
+      "tree_cpu_percent": 21.5,
+      "tree_rss_bytes": 4533039104,
+      "system_cpu_percent": 4.7,
+      "system_ram_used_bytes": 16722198528,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:29.858116+00:00",
+      "tree_cpu_percent": 46.1,
+      "tree_rss_bytes": 4533039104,
+      "system_cpu_percent": 9.1,
+      "system_ram_used_bytes": 16732909568,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:30.366245+00:00",
+      "tree_cpu_percent": 18.4,
+      "tree_rss_bytes": 4533039104,
+      "system_cpu_percent": 5.2,
+      "system_ram_used_bytes": 16730669056,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:30.874220+00:00",
+      "tree_cpu_percent": 9.2,
+      "tree_rss_bytes": 4533039104,
+      "system_cpu_percent": 4.8,
+      "system_ram_used_bytes": 16724484096,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:31.385124+00:00",
+      "tree_cpu_percent": 48.9,
+      "tree_rss_bytes": 4533071872,
+      "system_cpu_percent": 5.3,
+      "system_ram_used_bytes": 16723648512,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 57
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:31.894170+00:00",
+      "tree_cpu_percent": 116.6,
+      "tree_rss_bytes": 4533080064,
+      "system_cpu_percent": 8.9,
+      "system_ram_used_bytes": 16727965696,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 22
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:32.402651+00:00",
+      "tree_cpu_percent": 110.6,
+      "tree_rss_bytes": 4533166080,
+      "system_cpu_percent": 10.9,
+      "system_ram_used_bytes": 16729591808,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 21
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:32.911275+00:00",
+      "tree_cpu_percent": 135.2,
+      "tree_rss_bytes": 4533186560,
+      "system_cpu_percent": 12.7,
+      "system_ram_used_bytes": 16735592448,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 25
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:33.419825+00:00",
+      "tree_cpu_percent": 95.3,
+      "tree_rss_bytes": 4533198848,
+      "system_cpu_percent": 9.8,
+      "system_ram_used_bytes": 16733315072,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 97
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:33.928309+00:00",
+      "tree_cpu_percent": 18.4,
+      "tree_rss_bytes": 4533198848,
+      "system_cpu_percent": 4.7,
+      "system_ram_used_bytes": 16729395200,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:34.436727+00:00",
+      "tree_cpu_percent": 40.0,
+      "tree_rss_bytes": 4533198848,
+      "system_cpu_percent": 7.6,
+      "system_ram_used_bytes": 16726622208,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:34.946227+00:00",
+      "tree_cpu_percent": 27.6,
+      "tree_rss_bytes": 4533198848,
+      "system_cpu_percent": 6.0,
+      "system_ram_used_bytes": 16730935296,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:35.454594+00:00",
+      "tree_cpu_percent": 15.4,
+      "tree_rss_bytes": 4533198848,
+      "system_cpu_percent": 3.9,
+      "system_ram_used_bytes": 16729161728,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:35.962725+00:00",
+      "tree_cpu_percent": 3.1,
+      "tree_rss_bytes": 4533198848,
+      "system_cpu_percent": 2.9,
+      "system_ram_used_bytes": 16724656128,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:36.470754+00:00",
+      "tree_cpu_percent": 15.4,
+      "tree_rss_bytes": 4533198848,
+      "system_cpu_percent": 6.4,
+      "system_ram_used_bytes": 16726966272,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:36.979196+00:00",
+      "tree_cpu_percent": 9.2,
+      "tree_rss_bytes": 4533198848,
+      "system_cpu_percent": 9.4,
+      "system_ram_used_bytes": 16729239552,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:37.487080+00:00",
+      "tree_cpu_percent": 3.1,
+      "tree_rss_bytes": 4533198848,
+      "system_cpu_percent": 4.8,
+      "system_ram_used_bytes": 16729055232,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:37.995604+00:00",
+      "tree_cpu_percent": 33.8,
+      "tree_rss_bytes": 4533198848,
+      "system_cpu_percent": 6.5,
+      "system_ram_used_bytes": 16728567808,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:38.503728+00:00",
+      "tree_cpu_percent": 30.8,
+      "tree_rss_bytes": 4533198848,
+      "system_cpu_percent": 4.1,
+      "system_ram_used_bytes": 16727330816,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:39.011185+00:00",
+      "tree_cpu_percent": 33.9,
+      "tree_rss_bytes": 4533198848,
+      "system_cpu_percent": 8.1,
+      "system_ram_used_bytes": 16732811264,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:39.519157+00:00",
+      "tree_cpu_percent": 21.5,
+      "tree_rss_bytes": 4533198848,
+      "system_cpu_percent": 3.3,
+      "system_ram_used_bytes": 16729993216,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:40.027034+00:00",
+      "tree_cpu_percent": 15.4,
+      "tree_rss_bytes": 4533198848,
+      "system_cpu_percent": 3.6,
+      "system_ram_used_bytes": 16726007808,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:40.534747+00:00",
+      "tree_cpu_percent": 15.4,
+      "tree_rss_bytes": 4533198848,
+      "system_cpu_percent": 3.1,
+      "system_ram_used_bytes": 16723767296,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:41.042694+00:00",
+      "tree_cpu_percent": 104.6,
+      "tree_rss_bytes": 4533235712,
+      "system_cpu_percent": 12.2,
+      "system_ram_used_bytes": 16735301632,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 21
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:41.551675+00:00",
+      "tree_cpu_percent": 113.6,
+      "tree_rss_bytes": 4533235712,
+      "system_cpu_percent": 8.8,
+      "system_ram_used_bytes": 16732192768,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 25
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:42.060929+00:00",
+      "tree_cpu_percent": 107.4,
+      "tree_rss_bytes": 4533235712,
+      "system_cpu_percent": 8.4,
+      "system_ram_used_bytes": 16731238400,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 23
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:42.568959+00:00",
+      "tree_cpu_percent": 107.6,
+      "tree_rss_bytes": 4535398400,
+      "system_cpu_percent": 8.6,
+      "system_ram_used_bytes": 16732069888,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 19
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:43.077047+00:00",
+      "tree_cpu_percent": 24.6,
+      "tree_rss_bytes": 4535398400,
+      "system_cpu_percent": 4.8,
+      "system_ram_used_bytes": 16734011392,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:43.585202+00:00",
+      "tree_cpu_percent": 15.4,
+      "tree_rss_bytes": 4535398400,
+      "system_cpu_percent": 5.1,
+      "system_ram_used_bytes": 16737796096,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:44.094058+00:00",
+      "tree_cpu_percent": 15.4,
+      "tree_rss_bytes": 4535398400,
+      "system_cpu_percent": 4.5,
+      "system_ram_used_bytes": 16743145472,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:44.603142+00:00",
+      "tree_cpu_percent": 36.9,
+      "tree_rss_bytes": 4535398400,
+      "system_cpu_percent": 29.3,
+      "system_ram_used_bytes": 16843239424,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:45.112110+00:00",
+      "tree_cpu_percent": 21.5,
+      "tree_rss_bytes": 4535398400,
+      "system_cpu_percent": 35.8,
+      "system_ram_used_bytes": 16967180288,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:45.627408+00:00",
+      "tree_cpu_percent": 12.1,
+      "tree_rss_bytes": 4535398400,
+      "system_cpu_percent": 33.3,
+      "system_ram_used_bytes": 17073827840,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:46.143452+00:00",
+      "tree_cpu_percent": 18.2,
+      "tree_rss_bytes": 4535398400,
+      "system_cpu_percent": 55.4,
+      "system_ram_used_bytes": 16875315200,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:46.653671+00:00",
+      "tree_cpu_percent": 15.3,
+      "tree_rss_bytes": 4535398400,
+      "system_cpu_percent": 18.8,
+      "system_ram_used_bytes": 17132838912,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:47.162866+00:00",
+      "tree_cpu_percent": 21.5,
+      "tree_rss_bytes": 4535398400,
+      "system_cpu_percent": 16.6,
+      "system_ram_used_bytes": 16841748480,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:47.672298+00:00",
+      "tree_cpu_percent": 15.3,
+      "tree_rss_bytes": 4535398400,
+      "system_cpu_percent": 12.5,
+      "system_ram_used_bytes": 16840622080,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:48.181297+00:00",
+      "tree_cpu_percent": 27.6,
+      "tree_rss_bytes": 4535398400,
+      "system_cpu_percent": 13.0,
+      "system_ram_used_bytes": 16845938688,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:48.690079+00:00",
+      "tree_cpu_percent": 15.4,
+      "tree_rss_bytes": 4535398400,
+      "system_cpu_percent": 9.5,
+      "system_ram_used_bytes": 16847462400,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:49.199009+00:00",
+      "tree_cpu_percent": 12.3,
+      "tree_rss_bytes": 4535398400,
+      "system_cpu_percent": 9.3,
+      "system_ram_used_bytes": 16853213184,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:49.708102+00:00",
+      "tree_cpu_percent": 43.0,
+      "tree_rss_bytes": 4535443456,
+      "system_cpu_percent": 10.7,
+      "system_ram_used_bytes": 16849469440,
+      "nvidia": {
+        "vram_used_bytes": 14214823936,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:50.216886+00:00",
+      "tree_cpu_percent": 129.0,
+      "tree_rss_bytes": 4535508992,
+      "system_cpu_percent": 20.0,
+      "system_ram_used_bytes": 16854913024,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 23
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:50.727419+00:00",
+      "tree_cpu_percent": 101.0,
+      "tree_rss_bytes": 4535508992,
+      "system_cpu_percent": 14.9,
+      "system_ram_used_bytes": 16850644992,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 21
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:51.236984+00:00",
+      "tree_cpu_percent": 119.6,
+      "tree_rss_bytes": 4535640064,
+      "system_cpu_percent": 14.3,
+      "system_ram_used_bytes": 16851918848,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 21
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:51.746258+00:00",
+      "tree_cpu_percent": 70.6,
+      "tree_rss_bytes": 4535640064,
+      "system_cpu_percent": 11.8,
+      "system_ram_used_bytes": 16851623936,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 20
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:52.255227+00:00",
+      "tree_cpu_percent": 76.7,
+      "tree_rss_bytes": 4535717888,
+      "system_cpu_percent": 16.4,
+      "system_ram_used_bytes": 16850546688,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:52.764599+00:00",
+      "tree_cpu_percent": 27.6,
+      "tree_rss_bytes": 4535717888,
+      "system_cpu_percent": 11.1,
+      "system_ram_used_bytes": 16806498304,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:53.272826+00:00",
+      "tree_cpu_percent": 21.5,
+      "tree_rss_bytes": 4535717888,
+      "system_cpu_percent": 7.5,
+      "system_ram_used_bytes": 16744185856,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:53.780990+00:00",
+      "tree_cpu_percent": 27.7,
+      "tree_rss_bytes": 4535717888,
+      "system_cpu_percent": 5.4,
+      "system_ram_used_bytes": 16738213888,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:54.289714+00:00",
+      "tree_cpu_percent": 18.4,
+      "tree_rss_bytes": 4535717888,
+      "system_cpu_percent": 4.7,
+      "system_ram_used_bytes": 16739225600,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:54.798980+00:00",
+      "tree_cpu_percent": 12.299999999999999,
+      "tree_rss_bytes": 4535717888,
+      "system_cpu_percent": 11.4,
+      "system_ram_used_bytes": 16737193984,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:55.307662+00:00",
+      "tree_cpu_percent": 15.4,
+      "tree_rss_bytes": 4535717888,
+      "system_cpu_percent": 9.4,
+      "system_ram_used_bytes": 16734568448,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:55.816640+00:00",
+      "tree_cpu_percent": 21.5,
+      "tree_rss_bytes": 4535717888,
+      "system_cpu_percent": 5.7,
+      "system_ram_used_bytes": 16731705344,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:56.325623+00:00",
+      "tree_cpu_percent": 0.0,
+      "tree_rss_bytes": 4535717888,
+      "system_cpu_percent": 8.7,
+      "system_ram_used_bytes": 16742727680,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:56.833763+00:00",
+      "tree_cpu_percent": 9.2,
+      "tree_rss_bytes": 4535717888,
+      "system_cpu_percent": 16.0,
+      "system_ram_used_bytes": 16739172352,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:57.342304+00:00",
+      "tree_cpu_percent": 27.7,
+      "tree_rss_bytes": 4535717888,
+      "system_cpu_percent": 9.8,
+      "system_ram_used_bytes": 16735744000,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:57.850459+00:00",
+      "tree_cpu_percent": 33.8,
+      "tree_rss_bytes": 4535717888,
+      "system_cpu_percent": 11.2,
+      "system_ram_used_bytes": 16732979200,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:58.359892+00:00",
+      "tree_cpu_percent": 9.2,
+      "tree_rss_bytes": 4535717888,
+      "system_cpu_percent": 10.2,
+      "system_ram_used_bytes": 16744443904,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:58.868115+00:00",
+      "tree_cpu_percent": 30.7,
+      "tree_rss_bytes": 4535717888,
+      "system_cpu_percent": 7.7,
+      "system_ram_used_bytes": 16737824768,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:59.376583+00:00",
+      "tree_cpu_percent": 36.9,
+      "tree_rss_bytes": 4535750656,
+      "system_cpu_percent": 9.9,
+      "system_ram_used_bytes": 16737083392,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 81
+      }
+    },
+    {
+      "at_utc": "2026-10-11T06:59:59.885818+00:00",
+      "tree_cpu_percent": 122.7,
+      "tree_rss_bytes": 4535750656,
+      "system_cpu_percent": 11.9,
+      "system_ram_used_bytes": 16736354304,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 24
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:00.394237+00:00",
+      "tree_cpu_percent": 135.2,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 11.9,
+      "system_ram_used_bytes": 16743260160,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 22
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:00.903358+00:00",
+      "tree_cpu_percent": 98.2,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 9.5,
+      "system_ram_used_bytes": 16734433280,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 27
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:01.413202+00:00",
+      "tree_cpu_percent": 76.6,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 22.3,
+      "system_ram_used_bytes": 16779669504,
+      "nvidia": {
+        "vram_used_bytes": 14218756096,
+        "gpu_percent": 82
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:01.921964+00:00",
+      "tree_cpu_percent": 67.6,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 19.1,
+      "system_ram_used_bytes": 16749871104,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:02.431561+00:00",
+      "tree_cpu_percent": 15.3,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 12.2,
+      "system_ram_used_bytes": 16748638208,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:02.939806+00:00",
+      "tree_cpu_percent": 21.5,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 12.8,
+      "system_ram_used_bytes": 16751767552,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:03.448343+00:00",
+      "tree_cpu_percent": 18.4,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 9.7,
+      "system_ram_used_bytes": 16746086400,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:03.957568+00:00",
+      "tree_cpu_percent": 3.1,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 7.2,
+      "system_ram_used_bytes": 16737714176,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:04.465810+00:00",
+      "tree_cpu_percent": 3.1,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 6.8,
+      "system_ram_used_bytes": 16740741120,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:04.974346+00:00",
+      "tree_cpu_percent": 6.1,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 6.2,
+      "system_ram_used_bytes": 16747622400,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:05.482137+00:00",
+      "tree_cpu_percent": 21.5,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 5.2,
+      "system_ram_used_bytes": 16746291200,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:05.990645+00:00",
+      "tree_cpu_percent": 21.5,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 8.8,
+      "system_ram_used_bytes": 16742170624,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:06.499425+00:00",
+      "tree_cpu_percent": 24.6,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 4.7,
+      "system_ram_used_bytes": 16739868672,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:07.007647+00:00",
+      "tree_cpu_percent": 27.7,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 5.6,
+      "system_ram_used_bytes": 16742465536,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:07.516354+00:00",
+      "tree_cpu_percent": 18.4,
+      "tree_rss_bytes": 4536500224,
+      "system_cpu_percent": 5.0,
+      "system_ram_used_bytes": 16739667968,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:08.024803+00:00",
+      "tree_cpu_percent": 39.9,
+      "tree_rss_bytes": 4536500224,
+      "system_cpu_percent": 9.4,
+      "system_ram_used_bytes": 16741298176,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:08.532576+00:00",
+      "tree_cpu_percent": 12.3,
+      "tree_rss_bytes": 4536500224,
+      "system_cpu_percent": 4.9,
+      "system_ram_used_bytes": 16740442112,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:09.041064+00:00",
+      "tree_cpu_percent": 15.4,
+      "tree_rss_bytes": 4536500224,
+      "system_cpu_percent": 4.9,
+      "system_ram_used_bytes": 16745381888,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:09.550268+00:00",
+      "tree_cpu_percent": 46.0,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 6.9,
+      "system_ram_used_bytes": 16744230912,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:10.059735+00:00",
+      "tree_cpu_percent": 107.3,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 9.8,
+      "system_ram_used_bytes": 16744329216,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 23
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:10.567810+00:00",
+      "tree_cpu_percent": 104.6,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 16.9,
+      "system_ram_used_bytes": 16741208064,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 19
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:11.076307+00:00",
+      "tree_cpu_percent": 110.6,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 10.2,
+      "system_ram_used_bytes": 16734310400,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 21
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:11.585402+00:00",
+      "tree_cpu_percent": 95.1,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 7.5,
+      "system_ram_used_bytes": 16734633984,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 26
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:12.093625+00:00",
+      "tree_cpu_percent": 46.1,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 5.8,
+      "system_ram_used_bytes": 16742195200,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:12.602564+00:00",
+      "tree_cpu_percent": 27.6,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 7.2,
+      "system_ram_used_bytes": 16741928960,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:13.111272+00:00",
+      "tree_cpu_percent": 30.7,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 6.8,
+      "system_ram_used_bytes": 16737411072,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:13.619140+00:00",
+      "tree_cpu_percent": 24.6,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 4.8,
+      "system_ram_used_bytes": 16737320960,
+      "nvidia": {
+        "vram_used_bytes": 14215086080,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:14.127260+00:00",
+      "tree_cpu_percent": 40.0,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 6.2,
+      "system_ram_used_bytes": 16739975168,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:14.636089+00:00",
+      "tree_cpu_percent": 9.2,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 4.4,
+      "system_ram_used_bytes": 16738439168,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:15.144845+00:00",
+      "tree_cpu_percent": 21.5,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 6.8,
+      "system_ram_used_bytes": 16731369472,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:15.652582+00:00",
+      "tree_cpu_percent": 15.4,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 5.1,
+      "system_ram_used_bytes": 16728285184,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:16.161576+00:00",
+      "tree_cpu_percent": 3.1,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 5.3,
+      "system_ram_used_bytes": 16735625216,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:16.670371+00:00",
+      "tree_cpu_percent": 61.4,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 7.1,
+      "system_ram_used_bytes": 16736387072,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:17.179408+00:00",
+      "tree_cpu_percent": 39.9,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 12.2,
+      "system_ram_used_bytes": 16729960448,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:17.687718+00:00",
+      "tree_cpu_percent": 12.3,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 4.2,
+      "system_ram_used_bytes": 16730951680,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:18.196836+00:00",
+      "tree_cpu_percent": 15.3,
+      "tree_rss_bytes": 4536537088,
+      "system_cpu_percent": 4.5,
+      "system_ram_used_bytes": 16732663808,
+      "nvidia": {
+        "vram_used_bytes": 14214758400,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:18.706117+00:00",
+      "tree_cpu_percent": 98.2,
+      "tree_rss_bytes": 4465717248,
+      "system_cpu_percent": 9.4,
+      "system_ram_used_bytes": 16668209152,
+      "nvidia": {
+        "vram_used_bytes": 14216855552,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:19.214549+00:00",
+      "tree_cpu_percent": 156.7,
+      "tree_rss_bytes": 4480704512,
+      "system_cpu_percent": 16.6,
+      "system_ram_used_bytes": 16684298240,
+      "nvidia": {
+        "vram_used_bytes": 14216855552,
+        "gpu_percent": 6
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:19.725047+00:00",
+      "tree_cpu_percent": 247.9,
+      "tree_rss_bytes": 4485083136,
+      "system_cpu_percent": 16.9,
+      "system_ram_used_bytes": 16682909696,
+      "nvidia": {
+        "vram_used_bytes": 14216855552,
+        "gpu_percent": 29
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:20.234889+00:00",
+      "tree_cpu_percent": 419.9,
+      "tree_rss_bytes": 4490231808,
+      "system_cpu_percent": 30.7,
+      "system_ram_used_bytes": 16691408896,
+      "nvidia": {
+        "vram_used_bytes": 14216855552,
+        "gpu_percent": 7
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:20.747258+00:00",
+      "tree_cpu_percent": 628.1,
+      "tree_rss_bytes": 4506898432,
+      "system_cpu_percent": 36.7,
+      "system_ram_used_bytes": 16706453504,
+      "nvidia": {
+        "vram_used_bytes": 14216855552,
+        "gpu_percent": 4
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:21.261267+00:00",
+      "tree_cpu_percent": 857.4,
+      "tree_rss_bytes": 4516995072,
+      "system_cpu_percent": 52.3,
+      "system_ram_used_bytes": 16715321344,
+      "nvidia": {
+        "vram_used_bytes": 14216855552,
+        "gpu_percent": 18
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:21.772205+00:00",
+      "tree_cpu_percent": 831.6,
+      "tree_rss_bytes": 4518191104,
+      "system_cpu_percent": 47.6,
+      "system_ram_used_bytes": 16715173888,
+      "nvidia": {
+        "vram_used_bytes": 14216855552,
+        "gpu_percent": 9
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:22.282455+00:00",
+      "tree_cpu_percent": 744.2,
+      "tree_rss_bytes": 4518215680,
+      "system_cpu_percent": 49.4,
+      "system_ram_used_bytes": 16716316672,
+      "nvidia": {
+        "vram_used_bytes": 14216855552,
+        "gpu_percent": 26
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:22.797787+00:00",
+      "tree_cpu_percent": 888.5,
+      "tree_rss_bytes": 4520198144,
+      "system_cpu_percent": 50.1,
+      "system_ram_used_bytes": 16716840960,
+      "nvidia": {
+        "vram_used_bytes": 14216855552,
+        "gpu_percent": 28
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:23.310769+00:00",
+      "tree_cpu_percent": 883.2,
+      "tree_rss_bytes": 4529963008,
+      "system_cpu_percent": 48.1,
+      "system_ram_used_bytes": 16728522752,
+      "nvidia": {
+        "vram_used_bytes": 14216855552,
+        "gpu_percent": 26
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:23.824359+00:00",
+      "tree_cpu_percent": 928.1,
+      "tree_rss_bytes": 4535767040,
+      "system_cpu_percent": 55.1,
+      "system_ram_used_bytes": 16729477120,
+      "nvidia": {
+        "vram_used_bytes": 14221049856,
+        "gpu_percent": 31
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:24.338271+00:00",
+      "tree_cpu_percent": 942.4,
+      "tree_rss_bytes": 4561932288,
+      "system_cpu_percent": 56.3,
+      "system_ram_used_bytes": 16759119872,
+      "nvidia": {
+        "vram_used_bytes": 14221049856,
+        "gpu_percent": 38
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:24.852756+00:00",
+      "tree_cpu_percent": 865.5,
+      "tree_rss_bytes": 4562161664,
+      "system_cpu_percent": 50.6,
+      "system_ram_used_bytes": 16755453952,
+      "nvidia": {
+        "vram_used_bytes": 14221049856,
+        "gpu_percent": 31
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:25.364254+00:00",
+      "tree_cpu_percent": 797.2,
+      "tree_rss_bytes": 4562214912,
+      "system_cpu_percent": 47.0,
+      "system_ram_used_bytes": 16759742464,
+      "nvidia": {
+        "vram_used_bytes": 14221049856,
+        "gpu_percent": 35
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:25.873732+00:00",
+      "tree_cpu_percent": 846.4,
+      "tree_rss_bytes": 4568625152,
+      "system_cpu_percent": 47.0,
+      "system_ram_used_bytes": 16763400192,
+      "nvidia": {
+        "vram_used_bytes": 14221377536,
+        "gpu_percent": 37
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:26.383297+00:00",
+      "tree_cpu_percent": 870.9,
+      "tree_rss_bytes": 4568670208,
+      "system_cpu_percent": 48.9,
+      "system_ram_used_bytes": 16765624320,
+      "nvidia": {
+        "vram_used_bytes": 14221377536,
+        "gpu_percent": 32
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:26.892700+00:00",
+      "tree_cpu_percent": 825.1,
+      "tree_rss_bytes": 4570177536,
+      "system_cpu_percent": 46.6,
+      "system_ram_used_bytes": 16761982976,
+      "nvidia": {
+        "vram_used_bytes": 14221377536,
+        "gpu_percent": 27
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:27.401886+00:00",
+      "tree_cpu_percent": 917.6,
+      "tree_rss_bytes": 4570546176,
+      "system_cpu_percent": 49.5,
+      "system_ram_used_bytes": 16767270912,
+      "nvidia": {
+        "vram_used_bytes": 14221377536,
+        "gpu_percent": 39
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:27.912229+00:00",
+      "tree_cpu_percent": 744.0,
+      "tree_rss_bytes": 4572409856,
+      "system_cpu_percent": 48.9,
+      "system_ram_used_bytes": 16765227008,
+      "nvidia": {
+        "vram_used_bytes": 14221377536,
+        "gpu_percent": 40
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:28.421445+00:00",
+      "tree_cpu_percent": 484.8,
+      "tree_rss_bytes": 4574556160,
+      "system_cpu_percent": 35.9,
+      "system_ram_used_bytes": 16771788800,
+      "nvidia": {
+        "vram_used_bytes": 14221377536,
+        "gpu_percent": 49
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:28.930785+00:00",
+      "tree_cpu_percent": 156.5,
+      "tree_rss_bytes": 4578910208,
+      "system_cpu_percent": 11.9,
+      "system_ram_used_bytes": 16772280320,
+      "nvidia": {
+        "vram_used_bytes": 14221377536,
+        "gpu_percent": 26
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:29.439445+00:00",
+      "tree_cpu_percent": 129.0,
+      "tree_rss_bytes": 4578942976,
+      "system_cpu_percent": 13.4,
+      "system_ram_used_bytes": 16777519104,
+      "nvidia": {
+        "vram_used_bytes": 14221049856,
+        "gpu_percent": 40
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:29.947737+00:00",
+      "tree_cpu_percent": 113.7,
+      "tree_rss_bytes": 4578975744,
+      "system_cpu_percent": 9.3,
+      "system_ram_used_bytes": 16772022272,
+      "nvidia": {
+        "vram_used_bytes": 14221377536,
+        "gpu_percent": 38
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:30.458440+00:00",
+      "tree_cpu_percent": 174.4,
+      "tree_rss_bytes": 4579020800,
+      "system_cpu_percent": 13.8,
+      "system_ram_used_bytes": 16775733248,
+      "nvidia": {
+        "vram_used_bytes": 14221377536,
+        "gpu_percent": 45
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:30.969655+00:00",
+      "tree_cpu_percent": 434.0,
+      "tree_rss_bytes": 4580302848,
+      "system_cpu_percent": 28.1,
+      "system_ram_used_bytes": 16779423744,
+      "nvidia": {
+        "vram_used_bytes": 14221705216,
+        "gpu_percent": 53
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:31.483770+00:00",
+      "tree_cpu_percent": 516.7,
+      "tree_rss_bytes": 4580335616,
+      "system_cpu_percent": 27.7,
+      "system_ram_used_bytes": 16778530816,
+      "nvidia": {
+        "vram_used_bytes": 14221705216,
+        "gpu_percent": 31
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:31.995659+00:00",
+      "tree_cpu_percent": 467.0,
+      "tree_rss_bytes": 4580392960,
+      "system_cpu_percent": 27.8,
+      "system_ram_used_bytes": 16773062656,
+      "nvidia": {
+        "vram_used_bytes": 14221377536,
+        "gpu_percent": 31
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:32.506072+00:00",
+      "tree_cpu_percent": 557.2,
+      "tree_rss_bytes": 4580806656,
+      "system_cpu_percent": 32.4,
+      "system_ram_used_bytes": 16779382784,
+      "nvidia": {
+        "vram_used_bytes": 14221377536,
+        "gpu_percent": 17
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:33.016346+00:00",
+      "tree_cpu_percent": 673.6,
+      "tree_rss_bytes": 4582965248,
+      "system_cpu_percent": 43.3,
+      "system_ram_used_bytes": 16782376960,
+      "nvidia": {
+        "vram_used_bytes": 14221049856,
+        "gpu_percent": 32
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:33.526262+00:00",
+      "tree_cpu_percent": 787.5,
+      "tree_rss_bytes": 4582981632,
+      "system_cpu_percent": 43.5,
+      "system_ram_used_bytes": 16781045760,
+      "nvidia": {
+        "vram_used_bytes": 14221049856,
+        "gpu_percent": 40
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:34.035779+00:00",
+      "tree_cpu_percent": 794.3000000000001,
+      "tree_rss_bytes": 4585353216,
+      "system_cpu_percent": 51.3,
+      "system_ram_used_bytes": 16776351744,
+      "nvidia": {
+        "vram_used_bytes": 14221049856,
+        "gpu_percent": 38
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:34.548404+00:00",
+      "tree_cpu_percent": 719.4,
+      "tree_rss_bytes": 4585725952,
+      "system_cpu_percent": 42.5,
+      "system_ram_used_bytes": 16781529088,
+      "nvidia": {
+        "vram_used_bytes": 14221049856,
+        "gpu_percent": 41
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:35.062820+00:00",
+      "tree_cpu_percent": 814.0,
+      "tree_rss_bytes": 4585725952,
+      "system_cpu_percent": 50.1,
+      "system_ram_used_bytes": 16775901184,
+      "nvidia": {
+        "vram_used_bytes": 14221377536,
+        "gpu_percent": 43
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:35.578119+00:00",
+      "tree_cpu_percent": 846.2,
+      "tree_rss_bytes": 4588072960,
+      "system_cpu_percent": 48.9,
+      "system_ram_used_bytes": 16783761408,
+      "nvidia": {
+        "vram_used_bytes": 14221377536,
+        "gpu_percent": 42
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:36.091909+00:00",
+      "tree_cpu_percent": 678.0,
+      "tree_rss_bytes": 4588072960,
+      "system_cpu_percent": 41.2,
+      "system_ram_used_bytes": 16776089600,
+      "nvidia": {
+        "vram_used_bytes": 14221377536,
+        "gpu_percent": 43
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:36.603054+00:00",
+      "tree_cpu_percent": 859.0,
+      "tree_rss_bytes": 4593123328,
+      "system_cpu_percent": 48.6,
+      "system_ram_used_bytes": 16789733376,
+      "nvidia": {
+        "vram_used_bytes": 14221377536,
+        "gpu_percent": 37
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:37.113784+00:00",
+      "tree_cpu_percent": 838.3,
+      "tree_rss_bytes": 4593451008,
+      "system_cpu_percent": 52.5,
+      "system_ram_used_bytes": 16788963328,
+      "nvidia": {
+        "vram_used_bytes": 14221049856,
+        "gpu_percent": 36
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:37.623364+00:00",
+      "tree_cpu_percent": 414.0,
+      "tree_rss_bytes": 4598071296,
+      "system_cpu_percent": 31.2,
+      "system_ram_used_bytes": 16799858688,
+      "nvidia": {
+        "vram_used_bytes": 14221049856,
+        "gpu_percent": 34
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:38.132537+00:00",
+      "tree_cpu_percent": 113.5,
+      "tree_rss_bytes": 4599087104,
+      "system_cpu_percent": 12.6,
+      "system_ram_used_bytes": 16793714688,
+      "nvidia": {
+        "vram_used_bytes": 14221049856,
+        "gpu_percent": 26
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:38.643964+00:00",
+      "tree_cpu_percent": 106.9,
+      "tree_rss_bytes": 4599099392,
+      "system_cpu_percent": 8.6,
+      "system_ram_used_bytes": 16792170496,
+      "nvidia": {
+        "vram_used_bytes": 14221115392,
+        "gpu_percent": 33
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:39.152234+00:00",
+      "tree_cpu_percent": 104.5,
+      "tree_rss_bytes": 4599111680,
+      "system_cpu_percent": 9.4,
+      "system_ram_used_bytes": 16792485888,
+      "nvidia": {
+        "vram_used_bytes": 14221115392,
+        "gpu_percent": 23
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:39.661763+00:00",
+      "tree_cpu_percent": 104.3,
+      "tree_rss_bytes": 4599111680,
+      "system_cpu_percent": 12.7,
+      "system_ram_used_bytes": 16797327360,
+      "nvidia": {
+        "vram_used_bytes": 14221115392,
+        "gpu_percent": 25
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:40.174971+00:00",
+      "tree_cpu_percent": 426.2,
+      "tree_rss_bytes": 4599177216,
+      "system_cpu_percent": 26.0,
+      "system_ram_used_bytes": 16794079232,
+      "nvidia": {
+        "vram_used_bytes": 14221115392,
+        "gpu_percent": 37
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:40.684647+00:00",
+      "tree_cpu_percent": 407.7,
+      "tree_rss_bytes": 4599177216,
+      "system_cpu_percent": 23.8,
+      "system_ram_used_bytes": 16799379456,
+      "nvidia": {
+        "vram_used_bytes": 14221115392,
+        "gpu_percent": 28
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:41.194390+00:00",
+      "tree_cpu_percent": 475.1,
+      "tree_rss_bytes": 4599193600,
+      "system_cpu_percent": 28.7,
+      "system_ram_used_bytes": 16793477120,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 49
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:41.704137+00:00",
+      "tree_cpu_percent": 355.6,
+      "tree_rss_bytes": 4599271424,
+      "system_cpu_percent": 23.7,
+      "system_ram_used_bytes": 16799821824,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 26
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:42.214992+00:00",
+      "tree_cpu_percent": 593.4,
+      "tree_rss_bytes": 4602880000,
+      "system_cpu_percent": 38.3,
+      "system_ram_used_bytes": 16801497088,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 24
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:42.726538+00:00",
+      "tree_cpu_percent": 693.4,
+      "tree_rss_bytes": 4604911616,
+      "system_cpu_percent": 38.6,
+      "system_ram_used_bytes": 16805015552,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 24
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:43.237349+00:00",
+      "tree_cpu_percent": 816.7,
+      "tree_rss_bytes": 4607205376,
+      "system_cpu_percent": 52.0,
+      "system_ram_used_bytes": 16800923648,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 27
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:43.747121+00:00",
+      "tree_cpu_percent": 674.3,
+      "tree_rss_bytes": 4607217664,
+      "system_cpu_percent": 42.1,
+      "system_ram_used_bytes": 16807346176,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 37
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:44.258252+00:00",
+      "tree_cpu_percent": 730.7,
+      "tree_rss_bytes": 4607217664,
+      "system_cpu_percent": 47.2,
+      "system_ram_used_bytes": 16804552704,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 53
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:44.770825+00:00",
+      "tree_cpu_percent": 722.4,
+      "tree_rss_bytes": 4608790528,
+      "system_cpu_percent": 40.7,
+      "system_ram_used_bytes": 16808181760,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 49
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:45.283320+00:00",
+      "tree_cpu_percent": 600.6,
+      "tree_rss_bytes": 4610887680,
+      "system_cpu_percent": 35.0,
+      "system_ram_used_bytes": 16810233856,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 32
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:45.793043+00:00",
+      "tree_cpu_percent": 625.3,
+      "tree_rss_bytes": 4612657152,
+      "system_cpu_percent": 34.9,
+      "system_ram_used_bytes": 16811716608,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 1
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:46.302525+00:00",
+      "tree_cpu_percent": 527.5,
+      "tree_rss_bytes": 4614828032,
+      "system_cpu_percent": 34.7,
+      "system_ram_used_bytes": 16817295360,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 42
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:46.811330+00:00",
+      "tree_cpu_percent": 359.3,
+      "tree_rss_bytes": 4614828032,
+      "system_cpu_percent": 22.8,
+      "system_ram_used_bytes": 16816189440,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 56
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:47.320920+00:00",
+      "tree_cpu_percent": 187.0,
+      "tree_rss_bytes": 4614828032,
+      "system_cpu_percent": 16.4,
+      "system_ram_used_bytes": 16812072960,
+      "nvidia": {
+        "vram_used_bytes": 14221246464,
+        "gpu_percent": 62
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:47.831450+00:00",
+      "tree_cpu_percent": 104.1,
+      "tree_rss_bytes": 4614828032,
+      "system_cpu_percent": 14.7,
+      "system_ram_used_bytes": 16819449856,
+      "nvidia": {
+        "vram_used_bytes": 14221246464,
+        "gpu_percent": 36
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:48.340873+00:00",
+      "tree_cpu_percent": 165.6,
+      "tree_rss_bytes": 4614828032,
+      "system_cpu_percent": 23.5,
+      "system_ram_used_bytes": 16829812736,
+      "nvidia": {
+        "vram_used_bytes": 14221246464,
+        "gpu_percent": 41
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:48.849790+00:00",
+      "tree_cpu_percent": 125.9,
+      "tree_rss_bytes": 4614828032,
+      "system_cpu_percent": 23.3,
+      "system_ram_used_bytes": 16835313664,
+      "nvidia": {
+        "vram_used_bytes": 14221246464,
+        "gpu_percent": 32
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:49.359573+00:00",
+      "tree_cpu_percent": 196.1,
+      "tree_rss_bytes": 4614828032,
+      "system_cpu_percent": 35.5,
+      "system_ram_used_bytes": 16842600448,
+      "nvidia": {
+        "vram_used_bytes": 14221246464,
+        "gpu_percent": 36
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:49.872850+00:00",
+      "tree_cpu_percent": 523.6,
+      "tree_rss_bytes": 4614828032,
+      "system_cpu_percent": 40.9,
+      "system_ram_used_bytes": 16793419776,
+      "nvidia": {
+        "vram_used_bytes": 14221246464,
+        "gpu_percent": 18
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:50.385780+00:00",
+      "tree_cpu_percent": 572.6,
+      "tree_rss_bytes": 4617138176,
+      "system_cpu_percent": 41.3,
+      "system_ram_used_bytes": 16797786112,
+      "nvidia": {
+        "vram_used_bytes": 14221312000,
+        "gpu_percent": 49
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:50.895503+00:00",
+      "tree_cpu_percent": 603.9,
+      "tree_rss_bytes": 4617138176,
+      "system_cpu_percent": 48.8,
+      "system_ram_used_bytes": 16793395200,
+      "nvidia": {
+        "vram_used_bytes": 14221312000,
+        "gpu_percent": 41
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:51.407207+00:00",
+      "tree_cpu_percent": 623.0,
+      "tree_rss_bytes": 4617531392,
+      "system_cpu_percent": 48.7,
+      "system_ram_used_bytes": 16787705856,
+      "nvidia": {
+        "vram_used_bytes": 14221246464,
+        "gpu_percent": 1
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:51.921923+00:00",
+      "tree_cpu_percent": 704.3000000000001,
+      "tree_rss_bytes": 4617596928,
+      "system_cpu_percent": 51.2,
+      "system_ram_used_bytes": 16777789440,
+      "nvidia": {
+        "vram_used_bytes": 14221246464,
+        "gpu_percent": 11
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:52.438070+00:00",
+      "tree_cpu_percent": 844.7,
+      "tree_rss_bytes": 4617662464,
+      "system_cpu_percent": 47.8,
+      "system_ram_used_bytes": 16782385152,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 35
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:52.954848+00:00",
+      "tree_cpu_percent": 789.0,
+      "tree_rss_bytes": 4621266944,
+      "system_cpu_percent": 48.5,
+      "system_ram_used_bytes": 16790622208,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 26
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:53.470968+00:00",
+      "tree_cpu_percent": 872.0,
+      "tree_rss_bytes": 4621266944,
+      "system_cpu_percent": 48.2,
+      "system_ram_used_bytes": 16794828800,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 6
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:53.988334+00:00",
+      "tree_cpu_percent": 897.1,
+      "tree_rss_bytes": 4621266944,
+      "system_cpu_percent": 50.8,
+      "system_ram_used_bytes": 16791048192,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 14
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:54.508240+00:00",
+      "tree_cpu_percent": 880.4,
+      "tree_rss_bytes": 4623626240,
+      "system_cpu_percent": 50.4,
+      "system_ram_used_bytes": 16799076352,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 8
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:55.019146+00:00",
+      "tree_cpu_percent": 626.8,
+      "tree_rss_bytes": 4623671296,
+      "system_cpu_percent": 42.3,
+      "system_ram_used_bytes": 16795115520,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 20
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:55.529475+00:00",
+      "tree_cpu_percent": 646.0,
+      "tree_rss_bytes": 4623671296,
+      "system_cpu_percent": 37.1,
+      "system_ram_used_bytes": 16800051200,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 27
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:56.039584+00:00",
+      "tree_cpu_percent": 830.1,
+      "tree_rss_bytes": 4623671296,
+      "system_cpu_percent": 47.2,
+      "system_ram_used_bytes": 16795656192,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 34
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:56.548575+00:00",
+      "tree_cpu_percent": 770.5,
+      "tree_rss_bytes": 4623671296,
+      "system_cpu_percent": 48.8,
+      "system_ram_used_bytes": 16799711232,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 42
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:57.057608+00:00",
+      "tree_cpu_percent": 408.3,
+      "tree_rss_bytes": 4625502208,
+      "system_cpu_percent": 29.8,
+      "system_ram_used_bytes": 16798662656,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 30
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:57.566809+00:00",
+      "tree_cpu_percent": 119.7,
+      "tree_rss_bytes": 4743258112,
+      "system_cpu_percent": 16.8,
+      "system_ram_used_bytes": 16917696512,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 44
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:58.076077+00:00",
+      "tree_cpu_percent": 104.3,
+      "tree_rss_bytes": 4743258112,
+      "system_cpu_percent": 14.6,
+      "system_ram_used_bytes": 16915673088,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 34
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:58.585799+00:00",
+      "tree_cpu_percent": 98.1,
+      "tree_rss_bytes": 4743258112,
+      "system_cpu_percent": 11.7,
+      "system_ram_used_bytes": 16914055168,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 44
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:59.095308+00:00",
+      "tree_cpu_percent": 128.8,
+      "tree_rss_bytes": 4743258112,
+      "system_cpu_percent": 10.0,
+      "system_ram_used_bytes": 16911523840,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 39
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:00:59.604696+00:00",
+      "tree_cpu_percent": 89.0,
+      "tree_rss_bytes": 4845486080,
+      "system_cpu_percent": 10.3,
+      "system_ram_used_bytes": 16927367168,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 23
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:00.113306+00:00",
+      "tree_cpu_percent": 36.9,
+      "tree_rss_bytes": 4845760512,
+      "system_cpu_percent": 6.5,
+      "system_ram_used_bytes": 16923090944,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:00.621897+00:00",
+      "tree_cpu_percent": 89.1,
+      "tree_rss_bytes": 4845891584,
+      "system_cpu_percent": 6.8,
+      "system_ram_used_bytes": 16919728128,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 16
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:01.131255+00:00",
+      "tree_cpu_percent": 125.8,
+      "tree_rss_bytes": 4845891584,
+      "system_cpu_percent": 10.9,
+      "system_ram_used_bytes": 16915800064,
+      "nvidia": {
+        "vram_used_bytes": 14221246464,
+        "gpu_percent": 25
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:01.640727+00:00",
+      "tree_cpu_percent": 113.5,
+      "tree_rss_bytes": 4845899776,
+      "system_cpu_percent": 10.2,
+      "system_ram_used_bytes": 16915574784,
+      "nvidia": {
+        "vram_used_bytes": 14221246464,
+        "gpu_percent": 23
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:02.149763+00:00",
+      "tree_cpu_percent": 107.4,
+      "tree_rss_bytes": 4845899776,
+      "system_cpu_percent": 11.8,
+      "system_ram_used_bytes": 16915779584,
+      "nvidia": {
+        "vram_used_bytes": 14221246464,
+        "gpu_percent": 18
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:02.658952+00:00",
+      "tree_cpu_percent": 64.4,
+      "tree_rss_bytes": 4845981696,
+      "system_cpu_percent": 6.8,
+      "system_ram_used_bytes": 16913252352,
+      "nvidia": {
+        "vram_used_bytes": 14221246464,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:03.169085+00:00",
+      "tree_cpu_percent": 104.1,
+      "tree_rss_bytes": 4845981696,
+      "system_cpu_percent": 11.5,
+      "system_ram_used_bytes": 16912461824,
+      "nvidia": {
+        "vram_used_bytes": 14221705216,
+        "gpu_percent": 21
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:03.678619+00:00",
+      "tree_cpu_percent": 141.1,
+      "tree_rss_bytes": 4846006272,
+      "system_cpu_percent": 9.0,
+      "system_ram_used_bytes": 16911572992,
+      "nvidia": {
+        "vram_used_bytes": 14221705216,
+        "gpu_percent": 22
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:04.187886+00:00",
+      "tree_cpu_percent": 128.9,
+      "tree_rss_bytes": 4846006272,
+      "system_cpu_percent": 16.5,
+      "system_ram_used_bytes": 16911974400,
+      "nvidia": {
+        "vram_used_bytes": 14222229504,
+        "gpu_percent": 21
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:04.696422+00:00",
+      "tree_cpu_percent": 43.0,
+      "tree_rss_bytes": 4846043136,
+      "system_cpu_percent": 5.4,
+      "system_ram_used_bytes": 16911556608,
+      "nvidia": {
+        "vram_used_bytes": 14222229504,
+        "gpu_percent": 84
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:05.205813+00:00",
+      "tree_cpu_percent": 128.8,
+      "tree_rss_bytes": 4846043136,
+      "system_cpu_percent": 10.8,
+      "system_ram_used_bytes": 16911040512,
+      "nvidia": {
+        "vram_used_bytes": 14221770752,
+        "gpu_percent": 27
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:05.715332+00:00",
+      "tree_cpu_percent": 125.7,
+      "tree_rss_bytes": 4846067712,
+      "system_cpu_percent": 10.5,
+      "system_ram_used_bytes": 16910938112,
+      "nvidia": {
+        "vram_used_bytes": 14221770752,
+        "gpu_percent": 27
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:06.225552+00:00",
+      "tree_cpu_percent": 119.4,
+      "tree_rss_bytes": 4846067712,
+      "system_cpu_percent": 11.3,
+      "system_ram_used_bytes": 16911724544,
+      "nvidia": {
+        "vram_used_bytes": 14221770752,
+        "gpu_percent": 17
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:06.735350+00:00",
+      "tree_cpu_percent": 73.6,
+      "tree_rss_bytes": 4846067712,
+      "system_cpu_percent": 6.3,
+      "system_ram_used_bytes": 16911249408,
+      "nvidia": {
+        "vram_used_bytes": 14221770752,
+        "gpu_percent": 24
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:07.244514+00:00",
+      "tree_cpu_percent": 98.19999999999999,
+      "tree_rss_bytes": 4846104576,
+      "system_cpu_percent": 9.3,
+      "system_ram_used_bytes": 16911769600,
+      "nvidia": {
+        "vram_used_bytes": 14222229504,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:07.753478+00:00",
+      "tree_cpu_percent": 125.9,
+      "tree_rss_bytes": 4846104576,
+      "system_cpu_percent": 9.4,
+      "system_ram_used_bytes": 16912834560,
+      "nvidia": {
+        "vram_used_bytes": 14222229504,
+        "gpu_percent": 21
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:08.263782+00:00",
+      "tree_cpu_percent": 107.19999999999999,
+      "tree_rss_bytes": 4846104576,
+      "system_cpu_percent": 9.5,
+      "system_ram_used_bytes": 16912166912,
+      "nvidia": {
+        "vram_used_bytes": 14222295040,
+        "gpu_percent": 20
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:08.774585+00:00",
+      "tree_cpu_percent": 113.2,
+      "tree_rss_bytes": 4846104576,
+      "system_cpu_percent": 12.0,
+      "system_ram_used_bytes": 16911515648,
+      "nvidia": {
+        "vram_used_bytes": 14222295040,
+        "gpu_percent": 22
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:09.283272+00:00",
+      "tree_cpu_percent": 83.0,
+      "tree_rss_bytes": 4846141440,
+      "system_cpu_percent": 10.6,
+      "system_ram_used_bytes": 16911540224,
+      "nvidia": {
+        "vram_used_bytes": 14222884864,
+        "gpu_percent": 70
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:09.793233+00:00",
+      "tree_cpu_percent": 122.6,
+      "tree_rss_bytes": 4846141440,
+      "system_cpu_percent": 9.7,
+      "system_ram_used_bytes": 16909357056,
+      "nvidia": {
+        "vram_used_bytes": 14222884864,
+        "gpu_percent": 54
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:10.302554+00:00",
+      "tree_cpu_percent": 116.6,
+      "tree_rss_bytes": 4846141440,
+      "system_cpu_percent": 12.5,
+      "system_ram_used_bytes": 16909967360,
+      "nvidia": {
+        "vram_used_bytes": 14222884864,
+        "gpu_percent": 23
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:10.812183+00:00",
+      "tree_cpu_percent": 131.9,
+      "tree_rss_bytes": 4846141440,
+      "system_cpu_percent": 13.2,
+      "system_ram_used_bytes": 16909864960,
+      "nvidia": {
+        "vram_used_bytes": 14222884864,
+        "gpu_percent": 21
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:11.321254+00:00",
+      "tree_cpu_percent": 46.0,
+      "tree_rss_bytes": 4846141440,
+      "system_cpu_percent": 5.6,
+      "system_ram_used_bytes": 16910024704,
+      "nvidia": {
+        "vram_used_bytes": 14221705216,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:11.830695+00:00",
+      "tree_cpu_percent": 104.3,
+      "tree_rss_bytes": 4846186496,
+      "system_cpu_percent": 9.2,
+      "system_ram_used_bytes": 16911183872,
+      "nvidia": {
+        "vram_used_bytes": 14221705216,
+        "gpu_percent": 23
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:12.340551+00:00",
+      "tree_cpu_percent": 119.5,
+      "tree_rss_bytes": 4846186496,
+      "system_cpu_percent": 12.3,
+      "system_ram_used_bytes": 16910901248,
+      "nvidia": {
+        "vram_used_bytes": 14221705216,
+        "gpu_percent": 24
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:12.850926+00:00",
+      "tree_cpu_percent": 137.8,
+      "tree_rss_bytes": 4846186496,
+      "system_cpu_percent": 13.5,
+      "system_ram_used_bytes": 16911065088,
+      "nvidia": {
+        "vram_used_bytes": 14221705216,
+        "gpu_percent": 15
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:13.360981+00:00",
+      "tree_cpu_percent": 79.6,
+      "tree_rss_bytes": 4846186496,
+      "system_cpu_percent": 9.6,
+      "system_ram_used_bytes": 16911753216,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 49
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:13.870272+00:00",
+      "tree_cpu_percent": 18.4,
+      "tree_rss_bytes": 4846186496,
+      "system_cpu_percent": 5.3,
+      "system_ram_used_bytes": 16910876672,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:14.379088+00:00",
+      "tree_cpu_percent": 67.6,
+      "tree_rss_bytes": 4846219264,
+      "system_cpu_percent": 7.5,
+      "system_ram_used_bytes": 16911400960,
+      "nvidia": {
+        "vram_used_bytes": 14221574144,
+        "gpu_percent": 19
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:14.888106+00:00",
+      "tree_cpu_percent": 113.6,
+      "tree_rss_bytes": 4846219264,
+      "system_cpu_percent": 8.5,
+      "system_ram_used_bytes": 16910405632,
+      "nvidia": {
+        "vram_used_bytes": 14221574144,
+        "gpu_percent": 22
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:15.397419+00:00",
+      "tree_cpu_percent": 107.4,
+      "tree_rss_bytes": 4846219264,
+      "system_cpu_percent": 14.0,
+      "system_ram_used_bytes": 16913760256,
+      "nvidia": {
+        "vram_used_bytes": 14221508608,
+        "gpu_percent": 24
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:15.907111+00:00",
+      "tree_cpu_percent": 104.3,
+      "tree_rss_bytes": 4846219264,
+      "system_cpu_percent": 15.2,
+      "system_ram_used_bytes": 16927252480,
+      "nvidia": {
+        "vram_used_bytes": 14221508608,
+        "gpu_percent": 24
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:16.416850+00:00",
+      "tree_cpu_percent": 49.0,
+      "tree_rss_bytes": 4846256128,
+      "system_cpu_percent": 12.7,
+      "system_ram_used_bytes": 16922894336,
+      "nvidia": {
+        "vram_used_bytes": 14221115392,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:16.926630+00:00",
+      "tree_cpu_percent": 125.7,
+      "tree_rss_bytes": 4846256128,
+      "system_cpu_percent": 14.7,
+      "system_ram_used_bytes": 16926994432,
+      "nvidia": {
+        "vram_used_bytes": 14221115392,
+        "gpu_percent": 20
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:17.436633+00:00",
+      "tree_cpu_percent": 116.4,
+      "tree_rss_bytes": 4846256128,
+      "system_cpu_percent": 18.1,
+      "system_ram_used_bytes": 16932261888,
+      "nvidia": {
+        "vram_used_bytes": 14221180928,
+        "gpu_percent": 16
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:17.946937+00:00",
+      "tree_cpu_percent": 128.6,
+      "tree_rss_bytes": 4846256128,
+      "system_cpu_percent": 18.8,
+      "system_ram_used_bytes": 16926392320,
+      "nvidia": {
+        "vram_used_bytes": 14221377536,
+        "gpu_percent": 24
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:18.456262+00:00",
+      "tree_cpu_percent": 67.5,
+      "tree_rss_bytes": 4846256128,
+      "system_cpu_percent": 15.1,
+      "system_ram_used_bytes": 16922624000,
+      "nvidia": {
+        "vram_used_bytes": 14221377536,
+        "gpu_percent": 94
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:18.966268+00:00",
+      "tree_cpu_percent": 82.8,
+      "tree_rss_bytes": 4846264320,
+      "system_cpu_percent": 16.8,
+      "system_ram_used_bytes": 16952299520,
+      "nvidia": {
+        "vram_used_bytes": 14221443072,
+        "gpu_percent": 21
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:19.476681+00:00",
+      "tree_cpu_percent": 122.5,
+      "tree_rss_bytes": 4846264320,
+      "system_cpu_percent": 18.4,
+      "system_ram_used_bytes": 16986677248,
+      "nvidia": {
+        "vram_used_bytes": 14221312000,
+        "gpu_percent": 22
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:19.987078+00:00",
+      "tree_cpu_percent": 116.3,
+      "tree_rss_bytes": 4846264320,
+      "system_cpu_percent": 23.7,
+      "system_ram_used_bytes": 16932347904,
+      "nvidia": {
+        "vram_used_bytes": 14221377536,
+        "gpu_percent": 19
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:20.496638+00:00",
+      "tree_cpu_percent": 104.2,
+      "tree_rss_bytes": 4846264320,
+      "system_cpu_percent": 9.4,
+      "system_ram_used_bytes": 16931753984,
+      "nvidia": {
+        "vram_used_bytes": 14221377536,
+        "gpu_percent": 20
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:21.005680+00:00",
+      "tree_cpu_percent": 70.6,
+      "tree_rss_bytes": 4846264320,
+      "system_cpu_percent": 7.5,
+      "system_ram_used_bytes": 16919220224,
+      "nvidia": {
+        "vram_used_bytes": 14221377536,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:21.514473+00:00",
+      "tree_cpu_percent": 110.6,
+      "tree_rss_bytes": 4846264320,
+      "system_cpu_percent": 12.6,
+      "system_ram_used_bytes": 16918917120,
+      "nvidia": {
+        "vram_used_bytes": 14221312000,
+        "gpu_percent": 22
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:22.023694+00:00",
+      "tree_cpu_percent": 119.7,
+      "tree_rss_bytes": 4846264320,
+      "system_cpu_percent": 14.2,
+      "system_ram_used_bytes": 16931438592,
+      "nvidia": {
+        "vram_used_bytes": 14221312000,
+        "gpu_percent": 20
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:22.533750+00:00",
+      "tree_cpu_percent": 110.3,
+      "tree_rss_bytes": 4846264320,
+      "system_cpu_percent": 11.4,
+      "system_ram_used_bytes": 16928321536,
+      "nvidia": {
+        "vram_used_bytes": 14221312000,
+        "gpu_percent": 24
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:23.042730+00:00",
+      "tree_cpu_percent": 30.7,
+      "tree_rss_bytes": 4846264320,
+      "system_cpu_percent": 8.5,
+      "system_ram_used_bytes": 16927076352,
+      "nvidia": {
+        "vram_used_bytes": 14221312000,
+        "gpu_percent": 73
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:23.552052+00:00",
+      "tree_cpu_percent": 30.7,
+      "tree_rss_bytes": 4846264320,
+      "system_cpu_percent": 4.0,
+      "system_ram_used_bytes": 16925765632,
+      "nvidia": {
+        "vram_used_bytes": 14221312000,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:24.060822+00:00",
+      "tree_cpu_percent": 110.6,
+      "tree_rss_bytes": 4846264320,
+      "system_cpu_percent": 14.1,
+      "system_ram_used_bytes": 16929144832,
+      "nvidia": {
+        "vram_used_bytes": 14221312000,
+        "gpu_percent": 26
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:24.570674+00:00",
+      "tree_cpu_percent": 116.5,
+      "tree_rss_bytes": 4846264320,
+      "system_cpu_percent": 7.7,
+      "system_ram_used_bytes": 16928358400,
+      "nvidia": {
+        "vram_used_bytes": 14221312000,
+        "gpu_percent": 22
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:25.080212+00:00",
+      "tree_cpu_percent": 113.5,
+      "tree_rss_bytes": 4846264320,
+      "system_cpu_percent": 11.1,
+      "system_ram_used_bytes": 16922726400,
+      "nvidia": {
+        "vram_used_bytes": 14221312000,
+        "gpu_percent": 22
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:25.589156+00:00",
+      "tree_cpu_percent": 76.8,
+      "tree_rss_bytes": 4846264320,
+      "system_cpu_percent": 5.6,
+      "system_ram_used_bytes": 16926949376,
+      "nvidia": {
+        "vram_used_bytes": 14221312000,
+        "gpu_percent": 37
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:26.098486+00:00",
+      "tree_cpu_percent": 79.8,
+      "tree_rss_bytes": 4846264320,
+      "system_cpu_percent": 7.7,
+      "system_ram_used_bytes": 16923856896,
+      "nvidia": {
+        "vram_used_bytes": 14221312000,
+        "gpu_percent": 65
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:26.607394+00:00",
+      "tree_cpu_percent": 107.5,
+      "tree_rss_bytes": 4846264320,
+      "system_cpu_percent": 10.3,
+      "system_ram_used_bytes": 16922435584,
+      "nvidia": {
+        "vram_used_bytes": 14221312000,
+        "gpu_percent": 17
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:27.116540+00:00",
+      "tree_cpu_percent": 119.7,
+      "tree_rss_bytes": 4846264320,
+      "system_cpu_percent": 10.4,
+      "system_ram_used_bytes": 16922202112,
+      "nvidia": {
+        "vram_used_bytes": 14221312000,
+        "gpu_percent": 18
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:27.625809+00:00",
+      "tree_cpu_percent": 89.0,
+      "tree_rss_bytes": 4846264320,
+      "system_cpu_percent": 8.5,
+      "system_ram_used_bytes": 16920510464,
+      "nvidia": {
+        "vram_used_bytes": 14221312000,
+        "gpu_percent": 20
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:28.135117+00:00",
+      "tree_cpu_percent": 73.6,
+      "tree_rss_bytes": 4846264320,
+      "system_cpu_percent": 9.7,
+      "system_ram_used_bytes": 16918429696,
+      "nvidia": {
+        "vram_used_bytes": 14221115392,
+        "gpu_percent": 100
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:28.644331+00:00",
+      "tree_cpu_percent": 107.4,
+      "tree_rss_bytes": 4846264320,
+      "system_cpu_percent": 12.7,
+      "system_ram_used_bytes": 16919396352,
+      "nvidia": {
+        "vram_used_bytes": 14221115392,
+        "gpu_percent": 23
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:29.154021+00:00",
+      "tree_cpu_percent": 113.4,
+      "tree_rss_bytes": 4846264320,
+      "system_cpu_percent": 9.1,
+      "system_ram_used_bytes": 16918712320,
+      "nvidia": {
+        "vram_used_bytes": 14221115392,
+        "gpu_percent": 20
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:29.663419+00:00",
+      "tree_cpu_percent": 101.2,
+      "tree_rss_bytes": 4846264320,
+      "system_cpu_percent": 7.4,
+      "system_ram_used_bytes": 16918028288,
+      "nvidia": {
+        "vram_used_bytes": 14221115392,
+        "gpu_percent": 16
+      }
+    },
+    {
+      "at_utc": "2026-10-11T07:01:30.172715+00:00",
+      "tree_cpu_percent": 36.800000000000004,
+      "tree_rss_bytes": 4846264320,
+      "system_cpu_percent": 6.2,
+      "system_ram_used_bytes": 16918155264,
+      "nvidia": {
+        "vram_used_bytes": 14221115392,
+        "gpu_percent": 54
+      }
+    }
+  ],
+  "sample_interval_seconds": 0.5,
+  "cpu_percent_scale": "100% = one logical CPU",
+  "logical_cpus": 20,
+  "nvidia_sampling_error": null,
+  "process_names": [
+    "strata-host.exe",
+    "strata.exe",
+    "conhost.exe"
+  ],
+  "peak_tree_rss_bytes": 4846264320,
+  "native_tree_has_python": false
+}

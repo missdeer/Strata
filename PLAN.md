@@ -72,14 +72,25 @@
 
 ### 6. 验收和性能
 
-- [ ] 构建实际涉及的 CPU/CUDA/HIP/SYCL 后端；记录无法运行的硬件。
-- [ ] 协议和配置交叉兼容、逐专家输出字节、汇总数值误差、tokenizer 和 API golden 对照通过。
+- [x] Windows 实际涉及的 CPU/CUDA/HIP 和 SYCL 原生宿主构建；记录没有执行 HIP/SYCL GPU、未构建 Windows SYCL 引擎及暂缓 Linux 的边界。
+- [x] 协议和配置交叉兼容、逐专家输出字节、汇总数值误差、tokenizer 和 API golden 对照通过；重复代码输出的空行波动不计作已解决，见下方第 6 步记录。
 - [ ] 同日 Python/C++ 热缓存往返和完整生成对照，记录 p50/p95、decode tok/s、首字时间、通信字节、CPU/RAM/VRAM 和日志设置。
-- [ ] 新包在没有 Python 的环境启动并完成真实请求，更新 `docs/MULTI_HOST.md`。
+- [x] Windows 双机的新包在无 Python PATH 下启动并完成真实 LAN/IQ3_S 请求，进程树没有 Python；更新 `docs/MULTI_HOST.md`。未验证全新 Windows VM。
 
 ## 完成标准
 
 所有多机节点的部署和运行均不需要 Python；原有集群能力和客户端接口有对应的兼容验证；性能结论有可复现测量。仅完成原生 worker 不视为全部迁移完成。
+
+### 第 6 步 Windows 验收记录（2026-10-11）
+
+- 本机 CPU、CUDA sm_89、HIP gfx1102/gfx1103、SYCL 原生宿主最终构建通过。CUDA 实际执行 GPU 专家任务；没有 host17/Intel Arc GPU 可用，未执行 HIP/SYCL 推理。SYCL Windows 引擎仍受既有 oneMKL/平台实现边界限制，本轮没有新增专家网络后端；Linux 延续前轮暂缓范围。
+- host11 新装 Visual Studio 2022 和 oneAPI Base Kit 2026.1 后，将当前源码、固定离线依赖、CMake 3.31.2/Ninja 拷到 `D:/Strata/stage6-native-build-20261011`。在其 i7-10700 上以 `/O3 /DNDEBUG /QxHost /fp:precise`、`STRATA_PORTABLE=OFF` 完成专用 worker/宿主编译和回归；便携 host11 发布检查继续保留。没有测量 `/QxHost` 相对便携版本的速度。
+- 修复真实验收发现的两个问题：补齐 Python 已有的周期性思考尾部检测及 Unicode 大小写规则；Windows 每层专家预加载完成后释放原映射视图的工作集页，保留私有缓存和文件 section，避免已复制的模型页重复占用进程工作集。新增预加载 RSS 回归和流式缩进空行/原始 token 对照。旧 Python 入口和默认推理计算源码不变。
+- 最终 CPU worker 16 项通过、真实 IQ3_S 42 组 Python/native 逐字节相同，C++ coordinator 普通/汇总模式各 4 轮最大绝对误差为 0。CUDA GPU worker 的 42 组同后端对照逐字节相同；相对本地 CPU 的最大绝对误差为普通 `5.35622239e-5`、汇总 `2.67134164e-5`。launcher 17 项中 Windows 16 项通过、POSIX ACL 1 项跳过；文本 15 组全部通过（727 次 token ID、984 次 parser 对照）；API 53 项全部通过。
+- Windows host16（i9-12900HK、RTX 4060 Ti 16 GiB、约 32 GiB RAM）和 host11（i7-10700、约 64 GiB RAM）的真实有线 LAN 验收：IQ3_S、context 8192、prefill 512、同一 0.1.42 CUDA 引擎和同一便携 CPU 专家 DLL、7 worker 线程、48 GiB 完整预加载、远端汇总和 1 GiB 主机 RAM 缓存。56 组热缓存形状每组 2 次预热/20 次测量，Python/native 全部输出哈希相同。短/长提示词、多轮、工具、Responses、Anthropic 和断开后 fresh 请求的 8 项 API 对照全部通过。运行包没有 Python 文件，原生 coordinator/worker 只使用包目录及 System32 PATH，采样确认进程树没有 Python；Python 仅作独立测试驱动。
+- 完整生成测量每个提示词 2 次预热/12 次计入，逐任务日志和 profiling 两侧都关闭；记录 TTFT/HTTP p50/p95、decode tok/s、协议字节和 0.5 秒 CPU/RAM/VRAM 采样。代码提示词 Python/native 的 decode 中位数为 15.05/15.75 tok/s；这组请求的 native 14 次输出中 6 次含三个额外缩进空行，token 数/用量一致，严格字节对照判失败。后续一次原生重复测量全部字节一致，另一次仍有 1/14 次空行变化；两组原始 token 诊断中 SSE 与引擎输出一致，但尚未在诊断中复现空行变化，不能认定其来源。不得据此声明稳定加速或第 6 步全部完成。
+- 原始测量和限制保存在 `bench/results/2026-10-11-native-runtime/`，包含失败对照及重复记录。CUDA 引擎改动前后 SHA256 相同；HIP 当前原生开关 ON/OFF 引擎 SHA256 相同。现有服务、共享配置、启动脚本和正式部署目录均未切换。
+- 剩余：归因重复生成的空行波动并完成稳定的性能/输出对照；可用硬件上的 HIP/SYCL 推理、Linux 和全新 Windows 环境验收继续保留未完成。
 
 ## 当前记录
 

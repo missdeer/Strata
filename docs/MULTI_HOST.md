@@ -9,7 +9,8 @@
 完整迁移计划和进度见 [PLAN.md](../PLAN.md)。目前已增加原生专家 worker、共享配置校验、集群启动器、
 tokenizer/模板/输出层及原生主机 API，已完成第 4 步的可选功能。原生运行入口已合并到
 `strata-host`；`tools/build_cluster.py --native` 收集不依赖 Python 的运行包。安装器和不带
-`--native` 的旧打包路径继续使用 Python；完整真实 LAN 验收仍待第 6 步。
+`--native` 的旧打包路径继续使用 Python。第 6 步已通过 Windows 双机的真实 LAN 功能和无 Python
+运行检查；重复生成的空行波动尚未归因，性能验收仍未全部完成，见下方记录。
 
 构建时显式设置 `-DSTRATA_BUILD_NATIVE_CLUSTER=ON`，然后构建 `strata-host`。
 该选项默认为 OFF，需要现有原生专家和网络后端构建；CPU-only、CUDA 和 HIP 配置都支持该目标。
@@ -79,6 +80,12 @@ coordinator 继续监听 `127.0.0.1`，保留本地 server 设置中的 API 认�
 第 4 阶段已提供该服务；缺少它仍会明确失败。配置导出和测试子进程不能算作真实模型/LAN API 验收。
 原生服务的启动接口为 `--engine strata --config 临时配置 --port 端口`。
 
+原生 API 默认将引擎的 stderr 写入 server 配置的 `log` 文件。要在启动窗口同时看到
+模型加载、prefill、decode 的 tok/s 和 MTP 日志，在本地 server 配置中设置
+`"env": {"STRATA_ENGINE_CONSOLE": "1"}`，并保留非空的 `log` 路径。
+宿主每 100 ms 检查新增日志，启动前已有内容不会重放；引擎 stdout 仍用于内部协议。
+该选项默认关闭，不需要改两台机器共享的 cluster JSON；修改后重启 coordinator 生效。
+
 ### 两个 exe 的原生部署包
 
 `strata-host.exe` 提供 `cluster`、`worker`、`serve`、`vision` 四个子命令；另一个正式 exe
@@ -127,6 +134,46 @@ Windows 上的 host16 保留 oneAPI `/O3 /QxHost`、CUDA sm_89；host11 保留 o
 互相独立；C++ 工具在打包前检查缓存的后端、编译器、CPU 参数和 GPU 架构，拒绝 host11 的
 `/QxHost` 或 ggml AVX-512/AMX 设置。SYCL 没有集群网络后端，不在这些节点包的构建范围。
 
+#### 在 host11 本机使用 `/QxHost` 编译
+
+可以在目标 CPU 上使用 oneAPI `/QxHost` 编译专用版本。2026-10-11 已将当前源码和固定版本的
+离线依赖拷到 host11（i7-10700、64 GB RAM），使用该机新安装的 Visual Studio 2022 和
+oneAPI Base Kit 2026.1 编译。独立目录是 `D:/Strata/stage6-native-build-20261011`，目标位于
+`build-native/`。原有 worker、配置和启动脚本继续使用原目录。
+
+该目录使用 CMake 3.31.2 和 Ninja；host11 原有 CMake 3.16.2 低于项目要求的 3.24。
+现场编译的 Release 参数是 `/O3 /DNDEBUG /QxHost /fp:precise`（C 和 C++ 均设置），
+`STRATA_PORTABLE=OFF`、`STRATA_ENABLE_CUDA=OFF`、`STRATA_ENABLE_HIP=OFF`、
+`STRATA_BUILD_NATIVE_CLUSTER=ON`；ggml 按目标机器探测 CPU。这个版本仅适用于 host11 支持的
+CPU 指令集。常规 C++ 构建器对 host11 的便携 AVX2 检查继续保留。
+
+在 host11 上可运行该目录中的 `build-host11.cmd` 重复构建。其主要 CMake 参数如下；先进入
+oneAPI 2026.1 命令环境，将该目录中的 `dev/cmake/bin` 和 `dev` 加入 PATH：
+
+```bat
+set "STRATA_LOCAL_ROOT=D:/Strata/stage6-native-build-20261011"
+cmake -S "%STRATA_LOCAL_ROOT%/source" -B "%STRATA_LOCAL_ROOT%/build-native" -G Ninja ^
+  -DCMAKE_BUILD_TYPE=Release ^
+  "-DCMAKE_CXX_COMPILER=C:/Program Files (x86)/Intel/oneAPI/compiler/2026.1/bin/icx-cl.exe" ^
+  "-DCMAKE_C_COMPILER=C:/Program Files (x86)/Intel/oneAPI/compiler/2026.1/bin/icx-cl.exe" ^
+  "-DCMAKE_CXX_FLAGS_RELEASE=/O3 /DNDEBUG /QxHost /fp:precise" ^
+  "-DCMAKE_C_FLAGS_RELEASE=/O3 /DNDEBUG /QxHost /fp:precise" ^
+  -DSTRATA_PORTABLE=OFF -DSTRATA_ENABLE_CUDA=OFF -DSTRATA_ENABLE_HIP=OFF ^
+  -DSTRATA_BUILD_NATIVE_CLUSTER=ON ^
+  -DSTRATA_GGML_DIR=%STRATA_LOCAL_ROOT%/source/third_party/llama.cpp ^
+  -DSTRATA_JSONCONS_DIR=%STRATA_LOCAL_ROOT%/deps/jsoncons-1.7.0 ^
+  -DSTRATA_WEBP_DIR=%STRATA_LOCAL_ROOT%/deps/libwebp-1.6.0 ^
+  -DSTRATA_AVIF_DIR=%STRATA_LOCAL_ROOT%/deps/libavif-1.4.2 ^
+  -DSTRATA_AOM_DIR=%STRATA_LOCAL_ROOT%/deps/aom-3.14.1
+cmake --build "%STRATA_LOCAL_ROOT%/build-native" --target strata-host strata_network_backend --parallel 6
+```
+
+这个非便携构建需要 Intel/MSVC 动态运行库。已按 PE 普通/延迟导入表收集
+`libmmd.dll`、`svml_dispmd.dll`、`msvcp140.dll`、`vcruntime140.dll`、`vcruntime140_1.dll`
+到构建目录；System32-only PATH 下的 worker 检查也已通过。
+真实 IQ3_S 的 42 组 Python/native 专家输出逐字节相同，C++ coordinator 普通/汇总模式
+各 4 轮最大绝对误差为 0。此项证明现场构建可运行，不能单独证明 `/QxHost` 更快。
+
 构建前需安装 oneAPI、CUDA 和 Visual Studio，HIP 需提供已解包的 ROCm SDK。原生构建器不调用
 Python、pip 或 `rocm-sdk`，不安装 SDK。`--rocm-root` 指向含 `bin`、`share/doc`、`.kpack` 的 SDK，
 `--rocm-compiler-root` 指向含 `lib/llvm/bin/clang++.exe` 的编译器根目录。兼容已有 TheRock 解包目录；
@@ -174,6 +221,77 @@ CUDA/HIP 包各通过 3 项 API/Web/内置 vision 入口检查，launcher 链路
 CPU 包的 14 项配置/协议检查通过，1 项诊断 DLL 检查跳过。未在全新 Windows VM 上测试，
 未执行 HIP GPU、真实模型/LAN 推理或性能对照；现有服务继续使用原配置。
 报告保存在 `tmp/stage5-package-verification.json` 和 `tmp/stage5-{cuda,hip}-package-api.json`。
+
+### Windows 双机验收与测量（第 6 阶段，2026-10-11）
+
+本机 host16 为 i9-12900HK、RTX 4060 Ti 16 GiB、约 32 GiB RAM；host11 为 i7-10700、约
+64 GiB RAM，使用有线 LAN。两侧均使用 IQ3_S、同一个 0.1.42 CUDA 引擎及便携 CPU 专家 DLL，
+context 8192、prefill 512、temperature 0；host11 采用 7 个后台 worker、48 GiB RAM 预算并完整
+预加载全部 24576 个专家（50292326400 字节）。主机保留固定 expert-cache 2400（实际 3107
+slots）、MTP 参数、1200 MiB VRAM reserve、远端汇总及 1 GiB 本地 RAM 缓存。完整 argv 和
+引擎报告的实际设置保存在 [summary.json](../bench/results/2026-10-11-native-runtime/summary.json)。
+
+新包使用独立配置、18506 worker 端口和 loopback API 端口。worker 的认证/coordinator IP 限制
+保留；原生 coordinator 与 worker 的 PATH 仅含包内 runtime 和 System32，采样的进程树中没有
+Python。测试驱动在另一个进程中使用 Python。短/长提示词、多轮、工具调用、Responses、
+Anthropic 和 SSE 断开后 fresh 请求共 8 项 Python/native 对照通过；并未切换现有服务。
+
+专家测量覆盖模型的 7 种格式、4 个路由形状、普通/汇总模式，共 56 组，每组 2 次预热、
+20 次计入；两侧逐任务日志和 `STRATA_NETWORK_PROFILE` 都关闭。全部输出 SHA256 一致。
+例如 layer 0 的普通模式（往返包含计算、调度、校验和通信）：
+
+| 位置 / 专家共享 | Python p50 / p95 ms | C++ p50 / p95 ms | 每任务发送 / 返回字节 |
+| --- | ---: | ---: | ---: |
+| 1 / 共享 6 专家 | 1.638 / 1.772 | 1.358 / 1.557 | 10328 / 61464 |
+| 3 / 共享 6 专家 | 3.033 / 3.204 | 2.794 / 3.072 | 30904 / 184344 |
+| 8 / 独立 48 专家 | 10.963 / 12.129 | 10.411 / 10.925 | 82344 / 491544 |
+
+表中协议字节含 TCP v1 frame header，排除 TCP/IP 头；全部 56 组及汇总模式的长尾样本见
+原始报告，不能用这三行代表所有任务。C++ layer 0 的部分汇总任务出现 14.8/30.0 ms 的 p95。
+
+完整生成每个提示词 2 次预热、12 次计入。固定代码提示词输入 36 token，输出 113 token；长
+提示词输入 2029 token，输出 6 token。重复请求分别复用 29/2022 个输入 token，属于热会话
+缓存测量。TTFT 指第一段非空 content delta，包含预填充和传输；decode 速度来自引擎计时。
+
+| 请求 / 运行时 | HTTP p50 / p95 s | TTFT p50 / p95 s | decode 中位数 tok/s |
+| --- | ---: | ---: | ---: |
+| 代码 / Python | 9.481 / 10.387 | 2.052 / 3.116 | 15.05 |
+| 代码 / C++ | 9.144 / 10.106 | 2.041 / 2.142 | 15.75 |
+| 长提示词 / Python | 2.273 / 2.593 | 1.847 / 2.138 | 11.85 |
+| 长提示词 / C++ | 2.249 / 2.622 | 1.860 / 2.076 | 12.60 |
+
+这组 C++ 的 14 次代码输出中 6 次包含三个额外缩进空行，输出 token 数和用量一致，严格文本
+哈希对照仍判失败。随后一次 C++ 重复测量全部输出一致，另一次仍有 1/14 次变化。捕获完整文本后，差异对应 token 198
+（换行）与 6987（带缩进空行）；两组原始引擎 token 诊断中 SSE 和引擎输出相同，但诊断没有
+复现这次变化，所以尚不能将其归因到引擎或服务。保留失败报告和后续重复记录，以上数字不能
+作为稳定加速结论。诊断运行启用 `STRATA_NATIVE_TOKEN_TRACE`，不计入性能表。
+
+计入请求期间的 0.5 秒采样：Python/C++ 主机进程树 RSS 最大约 4.56/4.51 GiB，VRAM 最大
+13.23/13.25 GiB；host11 worker RSS 最大约 56.81/46.93 GiB，平均 CPU 占其 16 个逻辑 CPU
+总容量的 31.76%/31.10%。系统 RAM、GPU/VRAM 包含其他程序；采样可能漏掉峰值，RSS 也可能
+重复计算共享页。代码请求的通信中位数约发送 62.13/61.39 MB、返回 61.48/60.74 MB；路由/MTP
+任务会变化，不将通信量差异当作 C++ 协议压缩。12 个 API 样本的 nearest-rank p95 是最大值。
+
+验收发现 Windows C++ 预加载曾同时保留私有专家缓存和读取过的映射页。已在每层复制完成后
+重新映射相同文件 section，释放旧视图的工作集页，保留专家指针和预算检查；真实模型加载
+期间的 native 进程树 RSS 采样峰值约 48.07 GiB。另补齐 Python 的周期性思考尾部检测以及
+Unicode 大小写规则。最终 worker 16 项、API 53 项、文本 15 组通过；CUDA GPU 专家任务通过，
+HIP/SYCL GPU、Linux 和全新 Windows VM 尚未执行。host11 `/QxHost` 专用版本单独通过正确性
+验证，没有测量其相对便携版本的速度。
+
+重复验收需要 Python 作为测试驱动、SSH 密钥和已核对的 known_hosts；运行包仍不依赖 Python：
+
+```powershell
+python tools/validate_native_lan.py --cluster-config cluster.json --packages dist/cluster-native `
+  --ssh-user 用户名 --known-hosts 已核对的known_hosts --remote-python 11上的测试Python路径 `
+  --output tmp/新的验收目录 --repeats 12 --expert-repeats 20
+python tools/summarize_native_runtime.py --run tmp/验收目录 --output tmp/验收摘要.json
+```
+
+脚本在远端创建独立目录，使用同一共享计划和测试端口，完成后只结束本次启动的进程。Windows
+SSH job 需要维持运行会话；进程身份按 PID 和启动时间核对。网络密钥随机生成并通过标准输入/
+环境传递，不写入包或报告。所有原始样本、限制和失败记录见
+[第 6 步报告目录](../bench/results/2026-10-11-native-runtime/README.md)。
 
 ### 原生主机 API（第 4 阶段，2026-10-10）
 

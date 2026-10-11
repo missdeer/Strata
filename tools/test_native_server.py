@@ -157,6 +157,57 @@ class ServerTests(unittest.TestCase):
         self.assertEqual(text, "Hello, 世界!")
         self.assertEqual(chunks[-1]["choices"][0]["finish_reason"], "stop")
         self.assertIn("completion_tokens", chunks[-1]["usage"])
+    def test_engine_console_mirrors_only_new_stderr_and_preserves_log(self):
+        for enabled in ("0", "1"):
+            folder = self.folder / ("console-" + enabled)
+            folder.mkdir()
+            engine_log = folder / "engine.log"
+            engine_log.write_text("previous-session-marker\n", encoding="utf-8")
+            tokens = ",".join(map(str, self.tok.encode("hello") + [self.tok.ids["<|im_end|>"]]))
+            svc = self.start(log=str(engine_log), env={"STRATA_TEST_TOKENS": tokens,
+                "STRATA_TEST_STDERR": "1", "STRATA_ENGINE_CONSOLE": enabled})
+            status, response = svc.request("POST", "/v1/chat/completions", self.chat())
+            self.assertEqual(status, 200, response)
+            self.assertEqual(response["choices"][0]["message"]["content"], "hello")
+            # Mirror latency is bounded by its polling interval, without waiting
+            # for the engine to exit or loading a real model.
+            deadline = time.monotonic() + 3
+            while time.monotonic() < deadline:
+                output = Path(svc.log.name).read_text(encoding="utf-8")
+                if enabled == "0" or "fixture decode 12.5 tok/s" in output:
+                    break
+                time.sleep(.05)
+            log = engine_log.read_text(encoding="utf-8")
+            self.assertIn("previous-session-marker", log)
+            for message in ("fixture loading experts", "fixture decode 12.5 tok/s"):
+                self.assertIn(message, log)
+                self.assertEqual(output.count(message), int(enabled))
+            self.assertNotIn("previous-session-marker", output)
+            self.assertNotIn("DONE ", output)
+            self.assertNotIn("T ", output)
+            svc.close()
+            self.active.remove(svc)
+    def test_stream_preserves_indented_blank_lines(self):
+        text="```python\ndef search():\n    if True:\n        return -1\n    \n    left = 0\n    \n    return left\n```"
+        for native in (True,False):
+            for delay in ("0","1"):
+                scripted=",".join(map(str,self.tok.encode(text)+[self.tok.ids["<|im_end|>"]]))
+                environment={"STRATA_TEST_DELAY":delay,"STRATA_TEST_TOKENS":scripted}
+                trace=self.folder/("token-trace-"+delay+".log")
+                if native:environment["STRATA_NATIVE_TOKEN_TRACE"]=str(trace)
+                svc=self.start(text,native=native,env=environment)
+                status,stream=svc.request("POST","/v1/chat/completions",self.chat(stream=True))
+                self.assertEqual(status,200,stream)
+                chunks=[json.loads(line[6:]) for line in stream.splitlines() if line.startswith('data: {')]
+                self.assertEqual("".join(c["choices"][0]["delta"].get("content","") for c in chunks),text)
+                status,result=svc.request("POST","/v1/chat/completions",self.chat())
+                self.assertEqual(status,200,result)
+                self.assertEqual(result["choices"][0]["message"]["content"],text)
+                if native:
+                    lines=trace.read_text(encoding="utf-8").splitlines()
+                    self.assertTrue(all(line.startswith(("T ","DONE ")) for line in lines))
+                    ids=[int(line[2:]) for line in lines[:next(i for i,line in enumerate(lines) if line.startswith("DONE "))] if line.startswith("T ")]
+                    self.assertEqual(self.tok.decode([t for t in ids if t!=self.tok.ids["<|im_end|>"]]),text)
     def test_thinking_and_tools_python_parity(self):
         raw = 'analysis here</think>\n<tool_call>\n<function=weather>\n<parameter=city>上海</parameter>\n</function>\n</tool_call>'
         a, b = self.start(raw), self.start(raw, native=False)
@@ -533,7 +584,11 @@ class ServerTests(unittest.TestCase):
     def test_reasoning_repeat_unicode_corpus_python_parity(self):
         from serve.server import reasoning_repeat_coverage
         checker=ARGS.exe.resolve().with_name("strata-server-check.exe" if os.name=="nt" else "strata-server-check")
-        for text in ("Need maybe Agent support agent seven b. "*700," ".join(map(str,range(4000))),"中文 αβγ code_123 ! "*800):
+        for text in ("Need maybe Agent support agent seven b. "*700," ".join(map(str,range(4000))),"中文 αβγ code_123 ! "*800,
+                     "12345678901"*500, "😀你"*1300, "1"*2047, "1"*2048,
+                     "12345678901"*500+"x", "Abc"*1000, "ΑΣ"*1500,
+                     "İ"*1024, "İ"*2048, ("İ"+"a"*63)*100,
+                     "AΣ'α "*700, "Σʰα "*700):
             p=subprocess.run([str(checker)],input=json.dumps({"op":"reasoning_repeat","text":text})+"\n",capture_output=True,text=True,encoding="utf-8")
             self.assertAlmostEqual(json.loads(p.stdout)["result"],reasoning_repeat_coverage(text))
     def test_codex_title_turn_does_not_touch_engine(self):

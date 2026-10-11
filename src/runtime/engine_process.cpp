@@ -16,6 +16,8 @@
 #include "strata/runtime/engine_process.hpp"
 #include "strata/runtime/path.hpp"
 #include <algorithm>
+#include <atomic>
+#include <cstdio>
 #include <future>
 #include <cwctype>
 #include <fstream>
@@ -28,6 +30,8 @@ struct EngineProcess::Impl {
     std::string buffered;
     size_t maximum_line = 1u << 20;
     mutable int result = -1;
+    std::atomic<bool> stop_console{false};
+    std::thread console;
 #ifdef _WIN32
     HANDLE process = nullptr, job = nullptr, input = nullptr, output = nullptr;
 #else
@@ -68,6 +72,13 @@ EngineProcess::EngineProcess(const std::vector<std::string> &argv, const std::fi
     impl_->maximum_line = maximum_line;
     if (argv.empty())
         throw std::invalid_argument("empty engine command");
+    const auto console_setting = environment.find("STRATA_ENGINE_CONSOLE");
+    const bool console = console_setting != environment.end() && console_setting->second == "1";
+    if (console && log.empty())
+        throw std::invalid_argument("STRATA_ENGINE_CONSOLE requires an engine log path");
+    std::error_code log_error;
+    const auto log_size = console ? std::filesystem::file_size(log, log_error) : 0;
+    const auto log_start = log_error ? 0 : log_size;
 #ifdef _WIN32
     HANDLE child_in = nullptr, child_out = nullptr, err = nullptr;
     LPPROC_THREAD_ATTRIBUTE_LIST attributes = nullptr;
@@ -262,6 +273,42 @@ EngineProcess::EngineProcess(const std::vector<std::string> &argv, const std::fi
     fcntl(impl_->output, F_SETFD, FD_CLOEXEC);
     fcntl(impl_->input, F_SETFL, fcntl(impl_->input, F_GETFL) | O_NONBLOCK);
 #endif
+    if (console) {
+        try {
+            impl_->console = std::thread([this, log, log_start] {
+                // Read only newly appended stderr. stdout remains exclusively
+                // the engine protocol; the child still writes directly to its
+                // original log, so console output cannot stall inference.
+                std::ifstream file(log, std::ios::binary);
+                if (!file) {
+                    std::fputs("cannot mirror engine log to console\n", stderr);
+                    return;
+                }
+                file.seekg(static_cast<std::streamoff>(log_start));
+                for (;;) {
+                    const bool finishing = impl_->stop_console;
+                    char bytes[4096];
+                    file.read(bytes, sizeof(bytes));
+                    const auto count = file.gcount();
+                    if (count) {
+                        std::fwrite(bytes, 1, static_cast<size_t>(count), stderr);
+                        std::fflush(stderr);
+                    }
+                    if (file.bad())
+                        return;
+                    if (!file.eof())
+                        continue;
+                    file.clear();
+                    if (finishing)
+                        return;
+                    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+                }
+            });
+        } catch (...) {
+            close();
+            throw;
+        }
+    }
 }
 EngineProcess::~EngineProcess() { close(); }
 void EngineProcess::send(const std::string &line) {
@@ -470,5 +517,10 @@ void EngineProcess::close() noexcept {
         ::close(impl_->output);
     impl_->input = impl_->output = -1;
 #endif
+    // Terminate the writer first, then drain its final diagnostics before
+    // releasing the mirror. Repeated close() calls remain harmless.
+    impl_->stop_console = true;
+    if (impl_->console.joinable())
+        impl_->console.join();
 }
 } // namespace strata::runtime
