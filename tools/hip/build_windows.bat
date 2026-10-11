@@ -4,7 +4,7 @@ rem
 rem   tools\hip\build_windows.bat              build strata.exe + strata-device.exe and package dist\strata-windows-x64-hip.zip
 rem   tools\hip\build_windows.bat tests        also build the HIP unit tests (ctest in build-hip-win; they need an AMD GPU)
 rem   tools\hip\build_windows.bat network      also build and package the LAN expert worker library and checker
-rem   tools\hip\build_windows.bat native-network  package strata-host + engine + LAN DLL, without Python or diagnostic exes
+rem   tools\hip\build_windows.bat native-network  C++ builder, unpacked SDK, output DIST_DIR/host17 (no Python)
 rem
 rem Needs: Visual Studio 2022 (or 2019) Build Tools with the C++ workload (the linker, the CRT and the Windows SDK),
 rem Python 3.10+ and git.  No admin rights and no AMD GPU: ROCm comes from AMD's TheRock Python wheels (the same
@@ -26,6 +26,7 @@ rem   STRATA_NO_VISION     1 = skip the two picture readers (strata-vision.exe f
 rem   STRATA_ROCM_COMPILER_ROOT  optional compiler root; SDK libraries still come from rocm-sdk path --root
 rem   STRATA_BUILD_JOBS    compiler jobs, default 6
 rem   STRATA_ROCM_SKIP_INSTALL=1  use installed SDK only; never create a venv or download packages
+if /i "%~1"=="native-network" goto native_network
 setlocal EnableDelayedExpansion
 for %%I in ("%~dp0..\..") do set "SRC=%%~fI"
 if not defined STRATA_HIP_ARCHS set "STRATA_HIP_ARCHS=gfx1100;gfx1101;gfx1102;gfx1200;gfx1201;gfx1030;gfx1031;gfx1151"
@@ -40,10 +41,6 @@ set "NETWORK="
 set "NATIVE_HOST=OFF"
 if /i "%~1"=="tests" set "TESTS=ON"
 if /i "%~1"=="network" set "NETWORK=--network"
-if /i "%~1"=="native-network" (
-  set "NETWORK=--network --native-host"
-  set "NATIVE_HOST=ON"
-)
 
 rem ---- 1. ROCm (TheRock wheels: the compiler, the HIP runtime, hipBLAS/hipBLASLt/rocBLAS, a device package per arch)
 set "PY="
@@ -149,3 +146,14 @@ rem ---- 4. the zip: the programs, the ROCm DLLs they load (+ rocBLAS/hipBLASLt 
 echo.
 echo Done: %DIST_DIR%\strata-windows-x64-hip.zip
 endlocal
+exit /b 0
+
+:native_network
+setlocal EnableExtensions DisableDelayedExpansion
+for %%I in ("%~dp0..\..") do set "SRC=%%~fI"
+if not defined BUILD_DIR set "BUILD_DIR=%SRC%\build-cluster\host17"
+if not defined DIST_DIR set "DIST_DIR=%SRC%\dist\cluster-native"
+if not defined STRATA_BUILD_JOBS set "STRATA_BUILD_JOBS=6"
+if not defined STRATA_HIP_ARCHS set "STRATA_HIP_ARCHS=gfx1102;gfx1103"
+call "%SRC%\tools\build_cluster_native.bat" --hosts host17 --build-dir "host17=%BUILD_DIR%" --out-root "%DIST_DIR%" --jobs %STRATA_BUILD_JOBS% --hip-archs %STRATA_HIP_ARCHS:;= %
+exit /b %errorlevel%
