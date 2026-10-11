@@ -1,6 +1,8 @@
 #include "strata/runtime/server_recovery.hpp"
+#include "server_case_properties.hpp"
 #include "unicode.h"
 #include <algorithm>
+#include <iterator>
 #include <map>
 #include <sstream>
 namespace strata::runtime {
@@ -12,14 +14,40 @@ const std::string low = "Reasoning effort is set to low. Keep your thinking brie
                         "directly to the conclusion without unnecessary elaboration.";
 const std::string medium =
     "Reasoning effort is set to medium. Think as much as the task needs, without unnecessary elaboration.";
+template<size_t N>
+bool property(uint32_t c, const case_properties::Range (&ranges)[N]) {
+    const auto end = std::end(ranges);
+    const auto found = std::upper_bound(std::begin(ranges), end, c,
+        [](uint32_t value, const auto& range) { return value < range.first; });
+    return found != std::begin(ranges) && c <= std::prev(found)->last;
+}
+std::vector<uint32_t> lowercase(const std::vector<uint32_t>& text) {
+    std::vector<uint32_t> result;
+    result.reserve(text.size());
+    for (size_t i = 0; i < text.size(); ++i) {
+        const auto c = text[i];
+        if (c == 0x0130) {
+            // Python's full lowercase expands dotted capital I.
+            result.push_back('i'); result.push_back(0x0307);
+        } else if (c == 0x03a3) {
+            size_t before = i, after = i + 1;
+            while (before && property(text[before - 1], case_properties::ignorable)) --before;
+            while (after < text.size() && property(text[after], case_properties::ignorable)) ++after;
+            const bool final = before && property(text[before - 1], case_properties::cased) &&
+                (after == text.size() || !property(text[after], case_properties::cased));
+            result.push_back(final ? 0x03c2 : 0x03c3);
+        } else result.push_back(unicode_tolower(c));
+    }
+    return result;
+}
 std::vector<std::string> words(const std::string &text) {
     std::vector<std::string> result;
     std::string current;
-    for (auto c : unicode_cpts_from_utf8(text)) {
+    for (auto c : lowercase(unicode_cpts_from_utf8(text))) {
         const auto f = unicode_cpt_flags_from_cpt(c);
         const bool word = f.is_letter || f.is_number || c == '_';
         if (word) {
-            current += unicode_cpt_to_utf8(unicode_tolower(c));
+            current += unicode_cpt_to_utf8(c);
             continue;
         }
         if (!current.empty()) {
@@ -27,7 +55,7 @@ std::vector<std::string> words(const std::string &text) {
             current.clear();
         }
         if (!f.is_whitespace)
-            result.push_back(unicode_cpt_to_utf8(unicode_tolower(c)));
+            result.push_back(unicode_cpt_to_utf8(c));
     }
     if (!current.empty())
         result.push_back(current);
@@ -37,6 +65,17 @@ std::vector<std::string> words(const std::string &text) {
 }
 } // namespace
 double reasoning_repeat_coverage(const std::string &text) {
+    // Match the Python guard for short periodic tails, including one long word
+    // (for example a cycling digit string) that never fills the word window.
+    auto tail = unicode_cpts_from_utf8(text);
+    if (tail.size() > 2048)
+        tail.erase(tail.begin(), tail.end() - 2048);
+    tail = lowercase(tail);
+    if (tail.size() == 2048) {
+        for (size_t period = 1; period <= 64; ++period)
+            if (std::equal(tail.begin() + period, tail.end(), tail.begin()))
+                return 1;
+    }
     const auto tokens = words(text);
     if (tokens.size() < 2000)
         return 0;

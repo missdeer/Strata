@@ -340,16 +340,51 @@ class ProtocolParity(unittest.TestCase):
                 W.send(conn, 2, 2, body(((0, 32),)), 3); self.assertIn(b"unowned", W.frame(conn, 3)[2])
         finally: running.close()
 
+    @unittest.skipUnless(os.name == "nt", "Windows mapping working-set regression")
+    def test_preload_releases_source_mapping_pages(self):
+        total = self.blob_bytes * 512
+        if W.available_memory_bytes()[0] < total + (8 << 30) + (256 << 20):
+            self.skipTest("full assignment needs its RAM cache plus 8 GiB headroom")
+        running = RunningWorker(self.folder, "--pack", self.pack, "--library", self.library,
+                                "--index", 0, "--count", 1, "--port", free_port(),
+                                "--workers", 2, "--ram-cache-mib", (total + (1 << 20) - 1) >> 20,
+                                "--preload-experts")
+        try:
+            # The cache owns copies, so completed preload must not keep another
+            # whole assignment in the mapped-file working set.
+            class Counters(ctypes.Structure):
+                _fields_ = [("cb", ctypes.c_uint32), ("faults", ctypes.c_uint32)] + [
+                    (name, ctypes.c_size_t) for name in ("peak_rss", "rss", "peak_paged", "paged",
+                                                       "peak_nonpaged", "nonpaged", "pagefile", "peak_pagefile")]
+            kernel = ctypes.WinDLL("kernel32", use_last_error=True)
+            kernel.OpenProcess.argtypes = [ctypes.c_uint32, ctypes.c_int, ctypes.c_uint32]
+            kernel.OpenProcess.restype = ctypes.c_void_p
+            kernel.CloseHandle.argtypes = [ctypes.c_void_p]
+            handle = kernel.OpenProcess(0x410, False, running.process.pid)
+            self.assertTrue(handle, ctypes.get_last_error())
+            try:
+                info = Counters(); info.cb = ctypes.sizeof(info)
+                query = ctypes.WinDLL("psapi", use_last_error=True).GetProcessMemoryInfo
+                query.argtypes = [ctypes.c_void_p, ctypes.POINTER(Counters), ctypes.c_uint32]
+                self.assertTrue(query(handle, ctypes.byref(info), info.cb), ctypes.get_last_error())
+                self.assertLess(info.rss, total + (128 << 20), (info.rss, total))
+            finally:
+                kernel.CloseHandle(handle)
+        finally:
+            running.close()
+
 
 def real_parity():
     if not SETTINGS.pack: return
     source = W.ExpertFiles(SETTINGS.pack, SETTINGS.native, cache_mib=64)
-    backend = W.NativeBackend(SETTINGS.library, workers=2)
+    backend = W.NativeBackend(SETTINGS.library, workers=2,
+                              device=SETTINGS.gpu_device if SETTINGS.gpu_device is not None else -1)
     with tempfile.TemporaryDirectory(prefix="native-real-") as folder:
         port = free_port()
+        gpu_args = ["--backend", "gpu", "--device", SETTINGS.gpu_device] if SETTINGS.gpu_device is not None else []
         running = RunningWorker(folder, "--pack", SETTINGS.pack, "--native", SETTINGS.native,
                                 "--library", SETTINGS.library, "--index", 0, "--count", 1,
-                                "--port", port, "--workers", 2, "--ram-cache-mib", 64)
+                                "--port", port, "--workers", 2, "--ram-cache-mib", 64, *gpu_args)
         try:
             formats = {}
             for layer, fmt in enumerate(source.layers): formats.setdefault(fmt[:2], layer)
@@ -373,7 +408,7 @@ def real_parity():
                             actual = W.frame(conn, 10)
                             expected = backend.compute(source, *W.task(data, len(source.layers), 512, 0, 1, reduced=reduced))
                             assert actual == (seq, 132 if reduced else 130, expected), (layer, nt, reduced)
-            checker = SETTINGS.worker.parent / ("strata-network-check.exe" if os.name == "nt" else "strata-network-check")
+            checker = SETTINGS.checker or SETTINGS.worker.parent / ("strata-network-check.exe" if os.name == "nt" else "strata-network-check")
             for reduced in (False, True):
                 env = dict(os.environ, STRATA_NETWORK_KEY=KEY.decode())
                 if reduced: env["STRATA_NETWORK_REDUCE"] = "1"
@@ -394,6 +429,8 @@ if __name__ == "__main__":
     parser.add_argument("--library", required=True, type=Path)
     parser.add_argument("--pack")
     parser.add_argument("--native", default="")
+    parser.add_argument("--gpu-device", type=int, help="also exercise the real worker's CUDA/HIP backend")
+    parser.add_argument("--checker", type=Path, help="C++ coordinator check executable when testing a runtime package")
     SETTINGS = parser.parse_args()
     SETTINGS.worker = SETTINGS.worker.resolve(); SETTINGS.library = SETTINGS.library.resolve()
     suite = unittest.TestSuite([unittest.defaultTestLoader.loadTestsFromTestCase(c) for c in (ConfigParity, ProtocolParity)])
