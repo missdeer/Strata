@@ -81,3 +81,9 @@ dist-hip/
 /tmp/native-text-parity*.json
 /tmp/strata-native-text-*/
 /tmp/build-native-text*.cmd
+
+# Local native cluster build/package verification; never ship these fixtures.
+/tmp/stage5*/
+/tmp/stage5-*.json
+/tmp/build-stage5*.cmd
+/tmp/verify-stage5-*.py
