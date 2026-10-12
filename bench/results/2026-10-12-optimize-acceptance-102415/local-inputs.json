@@ -1,0 +1,20 @@
+[
+  {
+    "path": "D:\\Projects\\Strata\\data\\expert-profile.bin",
+    "bytes": 196632,
+    "mtime_ns": 1790692225125477600,
+    "sha256": "8f59b4aa8873209dff11c11e37bcda9529a1335b724a1afeea37bf6388975baf"
+  },
+  {
+    "path": "D:\\Projects\\Strata\\tmp\\dual-host-native\\server.json",
+    "bytes": 1557,
+    "mtime_ns": 1791720968915841500,
+    "sha256": "81c702a5a51e77e6756baf888d69473dff04e9b4bbacf58a8f1052b3cc1abd18"
+  },
+  {
+    "path": "D:\\Projects\\Strata-data\\packs\\iq3_s\\native_experts.txt",
+    "bytes": 3304,
+    "mtime_ns": 1791381046683797400,
+    "sha256": "d9ac2dfa3ee63c55c9c6a6db26f72da0cec0ee41733f007e5cbbbba71617aa5d"
+  }
+]

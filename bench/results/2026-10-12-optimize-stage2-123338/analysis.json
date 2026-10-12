@@ -1,0 +1,1311 @@
+{
+  "groups": {
+    "baseline": {
+      "measured_samples": 3,
+      "median_tok_s": 16.276186540356676,
+      "min_tok_s": 13.644600788828484,
+      "max_tok_s": 16.635583252646423,
+      "sample_p95_decode_ms": 18762.0,
+      "median_prompt_ms": 1319.6,
+      "median_prompt_plus_decode_ms": 17033.3,
+      "output_hashes": [
+        "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5"
+      ],
+      "engine_hashes": [
+        "82b111c65a753cb613cc7f7a0b378efe81d2eeb7b45815dbdcc5b3e1e5f61314"
+      ],
+      "gpu_cache_slots": [
+        3107
+      ],
+      "actual_ram_gib": [
+        0
+      ],
+      "workload_signatures": [
+        {
+          "drafts_accepted": 171,
+          "drafts_proposed": 218,
+          "gpu_cache_hits": 29244,
+          "gpu_cache_lookups": 146400,
+          "local_entries": 0,
+          "network": {
+            "entries": 117156,
+            "requests": 4176,
+            "rx_bytes": 150013824,
+            "tx_bytes": 151486512
+          },
+          "output_tokens": 256
+        }
+      ],
+      "sessions": [
+        {
+          "round": 1,
+          "median_tok_s": 16.276186540356676,
+          "worker_env": {},
+          "worker_usage": {
+            "before": {
+              "processes": [
+                {
+                  "Id": 19956,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.046875,
+                  "WorkingSet64": 8187904,
+                  "PrivateMemorySize64": 3645440
+                },
+                {
+                  "Id": 22336,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12251136,
+                  "PrivateMemorySize64": 6549504
+                },
+                {
+                  "Id": 13120,
+                  "ProcessName": "strata-host",
+                  "CPU": 35.390625,
+                  "WorkingSet64": 50375475200,
+                  "PrivateMemorySize64": 50578903040
+                }
+              ],
+              "utc": "2026-10-12T04:36:49.8306036Z"
+            },
+            "after": {
+              "processes": [
+                {
+                  "Id": 19956,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.046875,
+                  "WorkingSet64": 8265728,
+                  "PrivateMemorySize64": 3706880
+                },
+                {
+                  "Id": 22336,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12283904,
+                  "PrivateMemorySize64": 6610944
+                },
+                {
+                  "Id": 13120,
+                  "ProcessName": "strata-host",
+                  "CPU": 515.78125,
+                  "WorkingSet64": 50376065024,
+                  "PrivateMemorySize64": 50579267584
+                }
+              ],
+              "utc": "2026-10-12T04:38:49.6010235Z"
+            },
+            "wall_seconds": 119.77042,
+            "cpu_seconds": 480.390625,
+            "average_busy_cores": 4.010928783584461,
+            "idle_start": {
+              "processes": [
+                {
+                  "Id": 19956,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.046875,
+                  "WorkingSet64": 8265728,
+                  "PrivateMemorySize64": 3706880
+                },
+                {
+                  "Id": 22336,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12283904,
+                  "PrivateMemorySize64": 6610944
+                },
+                {
+                  "Id": 13120,
+                  "ProcessName": "strata-host",
+                  "CPU": 515.78125,
+                  "WorkingSet64": 50376065024,
+                  "PrivateMemorySize64": 50579267584
+                }
+              ],
+              "utc": "2026-10-12T04:38:52.2506413Z"
+            },
+            "idle_end": {
+              "processes": [
+                {
+                  "Id": 19956,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.046875,
+                  "WorkingSet64": 8265728,
+                  "PrivateMemorySize64": 3706880
+                },
+                {
+                  "Id": 22336,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12283904,
+                  "PrivateMemorySize64": 6610944
+                },
+                {
+                  "Id": 13120,
+                  "ProcessName": "strata-host",
+                  "CPU": 515.78125,
+                  "WorkingSet64": 50376065024,
+                  "PrivateMemorySize64": 50579267584
+                }
+              ],
+              "utc": "2026-10-12T04:38:54.8906870Z"
+            },
+            "idle_wall_seconds": 2.640046,
+            "idle_cpu_seconds": 0.0,
+            "idle_average_busy_cores": 0.0,
+            "note": "Whole engine session including launch/warmup/diagnostic reads; not decode-only CPU use. Idle follows a two-second settling interval."
+          }
+        }
+      ],
+      "median_change_percent": 0.0,
+      "output_matches_baseline": true,
+      "workload_matches_baseline": true,
+      "cache_and_binary_match_baseline": true
+    },
+    "tasks-16": {
+      "measured_samples": 3,
+      "median_tok_s": 13.586019137181642,
+      "min_tok_s": 13.528081337589043,
+      "max_tok_s": 14.836279339321935,
+      "sample_p95_decode_ms": 18923.6,
+      "median_prompt_ms": 1299.3,
+      "median_prompt_plus_decode_ms": 20179.0,
+      "output_hashes": [
+        "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5"
+      ],
+      "engine_hashes": [
+        "82b111c65a753cb613cc7f7a0b378efe81d2eeb7b45815dbdcc5b3e1e5f61314"
+      ],
+      "gpu_cache_slots": [
+        3107
+      ],
+      "actual_ram_gib": [
+        0
+      ],
+      "workload_signatures": [
+        {
+          "drafts_accepted": 171,
+          "drafts_proposed": 218,
+          "gpu_cache_hits": 29244,
+          "gpu_cache_lookups": 146400,
+          "local_entries": 0,
+          "network": {
+            "entries": 117156,
+            "requests": 4176,
+            "rx_bytes": 150013824,
+            "tx_bytes": 151486512
+          },
+          "output_tokens": 256
+        }
+      ],
+      "sessions": [
+        {
+          "round": 1,
+          "median_tok_s": 13.586019137181642,
+          "worker_env": {
+            "STRATA_NETWORK_POOL_TASKS": "16"
+          },
+          "worker_usage": {
+            "before": {
+              "processes": [
+                {
+                  "Id": 10096,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.0625,
+                  "WorkingSet64": 8257536,
+                  "PrivateMemorySize64": 3670016
+                },
+                {
+                  "Id": 15012,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12251136,
+                  "PrivateMemorySize64": 6541312
+                },
+                {
+                  "Id": 14220,
+                  "ProcessName": "strata-host",
+                  "CPU": 36.28125,
+                  "WorkingSet64": 50375467008,
+                  "PrivateMemorySize64": 50578903040
+                }
+              ],
+              "utc": "2026-10-12T04:42:12.9068901Z"
+            },
+            "after": {
+              "processes": [
+                {
+                  "Id": 10096,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.0625,
+                  "WorkingSet64": 8257536,
+                  "PrivateMemorySize64": 3670016
+                },
+                {
+                  "Id": 15012,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12251136,
+                  "PrivateMemorySize64": 6541312
+                },
+                {
+                  "Id": 14220,
+                  "ProcessName": "strata-host",
+                  "CPU": 529.03125,
+                  "WorkingSet64": 50375970816,
+                  "PrivateMemorySize64": 50579189760
+                }
+              ],
+              "utc": "2026-10-12T04:43:50.6933039Z"
+            },
+            "wall_seconds": 97.786413,
+            "cpu_seconds": 492.75,
+            "average_busy_cores": 5.03904361437207,
+            "idle_start": {
+              "processes": [
+                {
+                  "Id": 10096,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.0625,
+                  "WorkingSet64": 8257536,
+                  "PrivateMemorySize64": 3670016
+                },
+                {
+                  "Id": 15012,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12251136,
+                  "PrivateMemorySize64": 6541312
+                },
+                {
+                  "Id": 14220,
+                  "ProcessName": "strata-host",
+                  "CPU": 529.03125,
+                  "WorkingSet64": 50375970816,
+                  "PrivateMemorySize64": 50579189760
+                }
+              ],
+              "utc": "2026-10-12T04:43:53.3287018Z"
+            },
+            "idle_end": {
+              "processes": [
+                {
+                  "Id": 10096,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.0625,
+                  "WorkingSet64": 8257536,
+                  "PrivateMemorySize64": 3670016
+                },
+                {
+                  "Id": 15012,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12251136,
+                  "PrivateMemorySize64": 6541312
+                },
+                {
+                  "Id": 14220,
+                  "ProcessName": "strata-host",
+                  "CPU": 529.03125,
+                  "WorkingSet64": 50375970816,
+                  "PrivateMemorySize64": 50579189760
+                }
+              ],
+              "utc": "2026-10-12T04:43:55.9879913Z"
+            },
+            "idle_wall_seconds": 2.65929,
+            "idle_cpu_seconds": 0.0,
+            "idle_average_busy_cores": 0.0,
+            "note": "Whole engine session including launch/warmup/diagnostic reads; not decode-only CPU use. Idle follows a two-second settling interval."
+          }
+        }
+      ],
+      "median_change_percent": -16.52824140657755,
+      "output_matches_baseline": true,
+      "workload_matches_baseline": true,
+      "cache_and_binary_match_baseline": true
+    },
+    "tasks-48": {
+      "measured_samples": 3,
+      "median_tok_s": 16.469165347846783,
+      "min_tok_s": 13.997178693669555,
+      "max_tok_s": 16.6179811749432,
+      "sample_p95_decode_ms": 18289.4,
+      "median_prompt_ms": 1294.7,
+      "median_prompt_plus_decode_ms": 16852.4,
+      "output_hashes": [
+        "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5"
+      ],
+      "engine_hashes": [
+        "82b111c65a753cb613cc7f7a0b378efe81d2eeb7b45815dbdcc5b3e1e5f61314"
+      ],
+      "gpu_cache_slots": [
+        3107
+      ],
+      "actual_ram_gib": [
+        0
+      ],
+      "workload_signatures": [
+        {
+          "drafts_accepted": 171,
+          "drafts_proposed": 218,
+          "gpu_cache_hits": 29244,
+          "gpu_cache_lookups": 146400,
+          "local_entries": 0,
+          "network": {
+            "entries": 117156,
+            "requests": 4176,
+            "rx_bytes": 150013824,
+            "tx_bytes": 151486512
+          },
+          "output_tokens": 256
+        }
+      ],
+      "sessions": [
+        {
+          "round": 1,
+          "median_tok_s": 16.469165347846783,
+          "worker_env": {
+            "STRATA_NETWORK_POOL_TASKS": "48"
+          },
+          "worker_usage": {
+            "before": {
+              "processes": [
+                {
+                  "Id": 18312,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.0625,
+                  "WorkingSet64": 8200192,
+                  "PrivateMemorySize64": 3665920
+                },
+                {
+                  "Id": 13648,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12251136,
+                  "PrivateMemorySize64": 6545408
+                },
+                {
+                  "Id": 14156,
+                  "ProcessName": "strata-host",
+                  "CPU": 35.390625,
+                  "WorkingSet64": 50375536640,
+                  "PrivateMemorySize64": 50578968576
+                }
+              ],
+              "utc": "2026-10-12T04:47:13.6724391Z"
+            },
+            "after": {
+              "processes": [
+                {
+                  "Id": 18312,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.0625,
+                  "WorkingSet64": 8200192,
+                  "PrivateMemorySize64": 3665920
+                },
+                {
+                  "Id": 13648,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12251136,
+                  "PrivateMemorySize64": 6545408
+                },
+                {
+                  "Id": 14156,
+                  "ProcessName": "strata-host",
+                  "CPU": 502.328125,
+                  "WorkingSet64": 50376028160,
+                  "PrivateMemorySize64": 50579210240
+                }
+              ],
+              "utc": "2026-10-12T04:48:51.4225049Z"
+            },
+            "wall_seconds": 97.750065,
+            "cpu_seconds": 466.9375,
+            "average_busy_cores": 4.77685104352616,
+            "idle_start": {
+              "processes": [
+                {
+                  "Id": 18312,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.0625,
+                  "WorkingSet64": 8200192,
+                  "PrivateMemorySize64": 3665920
+                },
+                {
+                  "Id": 13648,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12251136,
+                  "PrivateMemorySize64": 6545408
+                },
+                {
+                  "Id": 14156,
+                  "ProcessName": "strata-host",
+                  "CPU": 502.328125,
+                  "WorkingSet64": 50376028160,
+                  "PrivateMemorySize64": 50579210240
+                }
+              ],
+              "utc": "2026-10-12T04:48:54.0952630Z"
+            },
+            "idle_end": {
+              "processes": [
+                {
+                  "Id": 18312,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.0625,
+                  "WorkingSet64": 8200192,
+                  "PrivateMemorySize64": 3665920
+                },
+                {
+                  "Id": 13648,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12251136,
+                  "PrivateMemorySize64": 6545408
+                },
+                {
+                  "Id": 14156,
+                  "ProcessName": "strata-host",
+                  "CPU": 502.328125,
+                  "WorkingSet64": 50376028160,
+                  "PrivateMemorySize64": 50579210240
+                }
+              ],
+              "utc": "2026-10-12T04:48:56.7664018Z"
+            },
+            "idle_wall_seconds": 2.671138,
+            "idle_cpu_seconds": 0.0,
+            "idle_average_busy_cores": 0.0,
+            "note": "Whole engine session including launch/warmup/diagnostic reads; not decode-only CPU use. Idle follows a two-second settling interval."
+          }
+        }
+      ],
+      "median_change_percent": 1.185651239690677,
+      "output_matches_baseline": true,
+      "workload_matches_baseline": true,
+      "cache_and_binary_match_baseline": true
+    },
+    "spin-50": {
+      "measured_samples": 3,
+      "median_tok_s": 12.76820716416124,
+      "min_tok_s": 10.093045260999842,
+      "max_tok_s": 14.797773397534089,
+      "sample_p95_decode_ms": 25364.0,
+      "median_prompt_ms": 1424.2,
+      "median_prompt_plus_decode_ms": 21470.7,
+      "output_hashes": [
+        "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5"
+      ],
+      "engine_hashes": [
+        "82b111c65a753cb613cc7f7a0b378efe81d2eeb7b45815dbdcc5b3e1e5f61314"
+      ],
+      "gpu_cache_slots": [
+        3107
+      ],
+      "actual_ram_gib": [
+        0
+      ],
+      "workload_signatures": [
+        {
+          "drafts_accepted": 171,
+          "drafts_proposed": 218,
+          "gpu_cache_hits": 29244,
+          "gpu_cache_lookups": 146400,
+          "local_entries": 0,
+          "network": {
+            "entries": 117156,
+            "requests": 4176,
+            "rx_bytes": 150013824,
+            "tx_bytes": 151486512
+          },
+          "output_tokens": 256
+        }
+      ],
+      "sessions": [
+        {
+          "round": 1,
+          "median_tok_s": 12.76820716416124,
+          "worker_env": {
+            "STRATA_POOL_SPIN_US": "50"
+          },
+          "worker_usage": {
+            "before": {
+              "processes": [
+                {
+                  "Id": 8652,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.078125,
+                  "WorkingSet64": 8273920,
+                  "PrivateMemorySize64": 3739648
+                },
+                {
+                  "Id": 22400,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12255232,
+                  "PrivateMemorySize64": 6557696
+                },
+                {
+                  "Id": 13756,
+                  "ProcessName": "strata-host",
+                  "CPU": 34.6875,
+                  "WorkingSet64": 50375614464,
+                  "PrivateMemorySize64": 50579054592
+                }
+              ],
+              "utc": "2026-10-12T04:52:14.7353879Z"
+            },
+            "after": {
+              "processes": [
+                {
+                  "Id": 8652,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.078125,
+                  "WorkingSet64": 8355840,
+                  "PrivateMemorySize64": 3805184
+                },
+                {
+                  "Id": 22400,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12292096,
+                  "PrivateMemorySize64": 6619136
+                },
+                {
+                  "Id": 13756,
+                  "ProcessName": "strata-host",
+                  "CPU": 293.984375,
+                  "WorkingSet64": 50376261632,
+                  "PrivateMemorySize64": 50579496960
+                }
+              ],
+              "utc": "2026-10-12T04:54:12.5787515Z"
+            },
+            "wall_seconds": 117.843364,
+            "cpu_seconds": 259.296875,
+            "average_busy_cores": 2.2003519434492724,
+            "idle_start": {
+              "processes": [
+                {
+                  "Id": 8652,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.078125,
+                  "WorkingSet64": 8355840,
+                  "PrivateMemorySize64": 3805184
+                },
+                {
+                  "Id": 22400,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12292096,
+                  "PrivateMemorySize64": 6619136
+                },
+                {
+                  "Id": 13756,
+                  "ProcessName": "strata-host",
+                  "CPU": 293.984375,
+                  "WorkingSet64": 50376261632,
+                  "PrivateMemorySize64": 50579496960
+                }
+              ],
+              "utc": "2026-10-12T04:54:15.2197594Z"
+            },
+            "idle_end": {
+              "processes": [
+                {
+                  "Id": 8652,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.078125,
+                  "WorkingSet64": 8355840,
+                  "PrivateMemorySize64": 3805184
+                },
+                {
+                  "Id": 22400,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12292096,
+                  "PrivateMemorySize64": 6619136
+                },
+                {
+                  "Id": 13756,
+                  "ProcessName": "strata-host",
+                  "CPU": 293.984375,
+                  "WorkingSet64": 50376261632,
+                  "PrivateMemorySize64": 50579496960
+                }
+              ],
+              "utc": "2026-10-12T04:54:17.8903463Z"
+            },
+            "idle_wall_seconds": 2.670587,
+            "idle_cpu_seconds": 0.0,
+            "idle_average_busy_cores": 0.0,
+            "note": "Whole engine session including launch/warmup/diagnostic reads; not decode-only CPU use. Idle follows a two-second settling interval."
+          }
+        }
+      ],
+      "median_change_percent": -21.55283344472263,
+      "output_matches_baseline": true,
+      "workload_matches_baseline": true,
+      "cache_and_binary_match_baseline": true
+    },
+    "spin-500": {
+      "measured_samples": 3,
+      "median_tok_s": 14.996807320316574,
+      "min_tok_s": 13.009055522242438,
+      "max_tok_s": 15.263807485228092,
+      "sample_p95_decode_ms": 19678.6,
+      "median_prompt_ms": 1324.5,
+      "median_prompt_plus_decode_ms": 18401.1,
+      "output_hashes": [
+        "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5"
+      ],
+      "engine_hashes": [
+        "82b111c65a753cb613cc7f7a0b378efe81d2eeb7b45815dbdcc5b3e1e5f61314"
+      ],
+      "gpu_cache_slots": [
+        3107
+      ],
+      "actual_ram_gib": [
+        0
+      ],
+      "workload_signatures": [
+        {
+          "drafts_accepted": 171,
+          "drafts_proposed": 218,
+          "gpu_cache_hits": 29244,
+          "gpu_cache_lookups": 146400,
+          "local_entries": 0,
+          "network": {
+            "entries": 117156,
+            "requests": 4176,
+            "rx_bytes": 150013824,
+            "tx_bytes": 151486512
+          },
+          "output_tokens": 256
+        }
+      ],
+      "sessions": [
+        {
+          "round": 1,
+          "median_tok_s": 14.996807320316574,
+          "worker_env": {
+            "STRATA_POOL_SPIN_US": "500"
+          },
+          "worker_usage": {
+            "before": {
+              "processes": [
+                {
+                  "Id": 21412,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.0625,
+                  "WorkingSet64": 8265728,
+                  "PrivateMemorySize64": 3727360
+                },
+                {
+                  "Id": 9944,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12247040,
+                  "PrivateMemorySize64": 6545408
+                },
+                {
+                  "Id": 22220,
+                  "ProcessName": "strata-host",
+                  "CPU": 34.328125,
+                  "WorkingSet64": 50375561216,
+                  "PrivateMemorySize64": 50579021824
+                }
+              ],
+              "utc": "2026-10-12T04:57:33.8042652Z"
+            },
+            "after": {
+              "processes": [
+                {
+                  "Id": 21412,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.0625,
+                  "WorkingSet64": 8265728,
+                  "PrivateMemorySize64": 3727360
+                },
+                {
+                  "Id": 9944,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12251136,
+                  "PrivateMemorySize64": 6545408
+                },
+                {
+                  "Id": 22220,
+                  "ProcessName": "strata-host",
+                  "CPU": 348.9375,
+                  "WorkingSet64": 50376048640,
+                  "PrivateMemorySize64": 50579255296
+                }
+              ],
+              "utc": "2026-10-12T04:59:13.9850236Z"
+            },
+            "wall_seconds": 100.180758,
+            "cpu_seconds": 314.609375,
+            "average_busy_cores": 3.1404171946872275,
+            "idle_start": {
+              "processes": [
+                {
+                  "Id": 21412,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.0625,
+                  "WorkingSet64": 8265728,
+                  "PrivateMemorySize64": 3727360
+                },
+                {
+                  "Id": 9944,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12251136,
+                  "PrivateMemorySize64": 6545408
+                },
+                {
+                  "Id": 22220,
+                  "ProcessName": "strata-host",
+                  "CPU": 348.9375,
+                  "WorkingSet64": 50376048640,
+                  "PrivateMemorySize64": 50579255296
+                }
+              ],
+              "utc": "2026-10-12T04:59:17.2662517Z"
+            },
+            "idle_end": {
+              "processes": [
+                {
+                  "Id": 21412,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.0625,
+                  "WorkingSet64": 8265728,
+                  "PrivateMemorySize64": 3727360
+                },
+                {
+                  "Id": 9944,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12251136,
+                  "PrivateMemorySize64": 6545408
+                },
+                {
+                  "Id": 22220,
+                  "ProcessName": "strata-host",
+                  "CPU": 348.9375,
+                  "WorkingSet64": 50376048640,
+                  "PrivateMemorySize64": 50579255296
+                }
+              ],
+              "utc": "2026-10-12T04:59:19.9224360Z"
+            },
+            "idle_wall_seconds": 2.656185,
+            "idle_cpu_seconds": 0.0,
+            "idle_average_busy_cores": 0.0,
+            "note": "Whole engine session including launch/warmup/diagnostic reads; not decode-only CPU use. Idle follows a two-second settling interval."
+          }
+        }
+      ],
+      "median_change_percent": -7.8604359618752895,
+      "output_matches_baseline": true,
+      "workload_matches_baseline": true,
+      "cache_and_binary_match_baseline": true
+    },
+    "fast-coordinator": {
+      "measured_samples": 3,
+      "median_tok_s": 14.003533704208172,
+      "min_tok_s": 13.894240945676774,
+      "max_tok_s": 16.27566914616314,
+      "sample_p95_decode_ms": 18424.9,
+      "median_prompt_ms": 1318.8,
+      "median_prompt_plus_decode_ms": 19599.899999999998,
+      "output_hashes": [
+        "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5"
+      ],
+      "engine_hashes": [
+        "82b111c65a753cb613cc7f7a0b378efe81d2eeb7b45815dbdcc5b3e1e5f61314"
+      ],
+      "gpu_cache_slots": [
+        3107
+      ],
+      "actual_ram_gib": [
+        0
+      ],
+      "workload_signatures": [
+        {
+          "drafts_accepted": 171,
+          "drafts_proposed": 218,
+          "gpu_cache_hits": 29244,
+          "gpu_cache_lookups": 146400,
+          "local_entries": 0,
+          "network": {
+            "entries": 117156,
+            "requests": 4176,
+            "rx_bytes": 150013824,
+            "tx_bytes": 151486512
+          },
+          "output_tokens": 256
+        }
+      ],
+      "sessions": [
+        {
+          "round": 1,
+          "median_tok_s": 14.003533704208172,
+          "worker_env": {},
+          "worker_usage": {
+            "before": {
+              "processes": [
+                {
+                  "Id": 14724,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.0625,
+                  "WorkingSet64": 8204288,
+                  "PrivateMemorySize64": 3674112
+                },
+                {
+                  "Id": 5744,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12251136,
+                  "PrivateMemorySize64": 6549504
+                },
+                {
+                  "Id": 16440,
+                  "ProcessName": "strata-host",
+                  "CPU": 37.140625,
+                  "WorkingSet64": 50375479296,
+                  "PrivateMemorySize64": 50578882560
+                }
+              ],
+              "utc": "2026-10-12T05:02:37.3135036Z"
+            },
+            "after": {
+              "processes": [
+                {
+                  "Id": 14724,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.0625,
+                  "WorkingSet64": 8286208,
+                  "PrivateMemorySize64": 3739648
+                },
+                {
+                  "Id": 5744,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12288000,
+                  "PrivateMemorySize64": 6610944
+                },
+                {
+                  "Id": 16440,
+                  "ProcessName": "strata-host",
+                  "CPU": 509.75,
+                  "WorkingSet64": 50376126464,
+                  "PrivateMemorySize64": 50579333120
+                }
+              ],
+              "utc": "2026-10-12T05:04:34.7663942Z"
+            },
+            "wall_seconds": 117.452891,
+            "cpu_seconds": 472.609375,
+            "average_busy_cores": 4.023820707827447,
+            "idle_start": {
+              "processes": [
+                {
+                  "Id": 14724,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.0625,
+                  "WorkingSet64": 8286208,
+                  "PrivateMemorySize64": 3739648
+                },
+                {
+                  "Id": 5744,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12288000,
+                  "PrivateMemorySize64": 6610944
+                },
+                {
+                  "Id": 16440,
+                  "ProcessName": "strata-host",
+                  "CPU": 509.75,
+                  "WorkingSet64": 50376126464,
+                  "PrivateMemorySize64": 50579333120
+                }
+              ],
+              "utc": "2026-10-12T05:04:37.4068623Z"
+            },
+            "idle_end": {
+              "processes": [
+                {
+                  "Id": 14724,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.0625,
+                  "WorkingSet64": 8286208,
+                  "PrivateMemorySize64": 3739648
+                },
+                {
+                  "Id": 5744,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12288000,
+                  "PrivateMemorySize64": 6610944
+                },
+                {
+                  "Id": 16440,
+                  "ProcessName": "strata-host",
+                  "CPU": 509.75,
+                  "WorkingSet64": 50376126464,
+                  "PrivateMemorySize64": 50579333120
+                }
+              ],
+              "utc": "2026-10-12T05:04:40.0787476Z"
+            },
+            "idle_wall_seconds": 2.671885,
+            "idle_cpu_seconds": 0.0,
+            "idle_average_busy_cores": 0.0,
+            "note": "Whole engine session including launch/warmup/diagnostic reads; not decode-only CPU use. Idle follows a two-second settling interval."
+          }
+        }
+      ],
+      "median_change_percent": -13.963054739594439,
+      "output_matches_baseline": true,
+      "workload_matches_baseline": true,
+      "cache_and_binary_match_baseline": true
+    },
+    "fast-worker": {
+      "measured_samples": 3,
+      "median_tok_s": 13.655518216247932,
+      "min_tok_s": 13.169537214231331,
+      "max_tok_s": 16.004201102789484,
+      "sample_p95_decode_ms": 19438.8,
+      "median_prompt_ms": 1310.6,
+      "median_prompt_plus_decode_ms": 20065.9,
+      "output_hashes": [
+        "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5"
+      ],
+      "engine_hashes": [
+        "82b111c65a753cb613cc7f7a0b378efe81d2eeb7b45815dbdcc5b3e1e5f61314"
+      ],
+      "gpu_cache_slots": [
+        3107
+      ],
+      "actual_ram_gib": [
+        0
+      ],
+      "workload_signatures": [
+        {
+          "drafts_accepted": 171,
+          "drafts_proposed": 218,
+          "gpu_cache_hits": 29244,
+          "gpu_cache_lookups": 146400,
+          "local_entries": 0,
+          "network": {
+            "entries": 117156,
+            "requests": 4176,
+            "rx_bytes": 150013824,
+            "tx_bytes": 151486512
+          },
+          "output_tokens": 256
+        }
+      ],
+      "sessions": [
+        {
+          "round": 1,
+          "median_tok_s": 13.655518216247932,
+          "worker_env": {
+            "STRATA_NETWORK_FAST_IO": "1"
+          },
+          "worker_usage": {
+            "before": {
+              "processes": [
+                {
+                  "Id": 18384,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.09375,
+                  "WorkingSet64": 8327168,
+                  "PrivateMemorySize64": 3743744
+                },
+                {
+                  "Id": 12208,
+                  "ProcessName": "conhost",
+                  "CPU": 0.03125,
+                  "WorkingSet64": 12259328,
+                  "PrivateMemorySize64": 6553600
+                },
+                {
+                  "Id": 13680,
+                  "ProcessName": "strata-host",
+                  "CPU": 36.984375,
+                  "WorkingSet64": 50375618560,
+                  "PrivateMemorySize64": 50579058688
+                }
+              ],
+              "utc": "2026-10-12T05:07:56.1416599Z"
+            },
+            "after": {
+              "processes": [
+                {
+                  "Id": 18384,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.09375,
+                  "WorkingSet64": 8368128,
+                  "PrivateMemorySize64": 3809280
+                },
+                {
+                  "Id": 12208,
+                  "ProcessName": "conhost",
+                  "CPU": 0.03125,
+                  "WorkingSet64": 12296192,
+                  "PrivateMemorySize64": 6610944
+                },
+                {
+                  "Id": 13680,
+                  "ProcessName": "strata-host",
+                  "CPU": 528.734375,
+                  "WorkingSet64": 50376257536,
+                  "PrivateMemorySize64": 50579476480
+                }
+              ],
+              "utc": "2026-10-12T05:09:57.8757185Z"
+            },
+            "wall_seconds": 121.734059,
+            "cpu_seconds": 491.75,
+            "average_busy_cores": 4.039543280159581,
+            "idle_start": {
+              "processes": [
+                {
+                  "Id": 18384,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.09375,
+                  "WorkingSet64": 8368128,
+                  "PrivateMemorySize64": 3809280
+                },
+                {
+                  "Id": 12208,
+                  "ProcessName": "conhost",
+                  "CPU": 0.03125,
+                  "WorkingSet64": 12296192,
+                  "PrivateMemorySize64": 6610944
+                },
+                {
+                  "Id": 13680,
+                  "ProcessName": "strata-host",
+                  "CPU": 528.734375,
+                  "WorkingSet64": 50376257536,
+                  "PrivateMemorySize64": 50579476480
+                }
+              ],
+              "utc": "2026-10-12T05:10:00.5267165Z"
+            },
+            "idle_end": {
+              "processes": [
+                {
+                  "Id": 18384,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.09375,
+                  "WorkingSet64": 8368128,
+                  "PrivateMemorySize64": 3809280
+                },
+                {
+                  "Id": 12208,
+                  "ProcessName": "conhost",
+                  "CPU": 0.03125,
+                  "WorkingSet64": 12296192,
+                  "PrivateMemorySize64": 6610944
+                },
+                {
+                  "Id": 13680,
+                  "ProcessName": "strata-host",
+                  "CPU": 528.734375,
+                  "WorkingSet64": 50376257536,
+                  "PrivateMemorySize64": 50579476480
+                }
+              ],
+              "utc": "2026-10-12T05:10:03.1725853Z"
+            },
+            "idle_wall_seconds": 2.645869,
+            "idle_cpu_seconds": 0.0,
+            "idle_average_busy_cores": 0.0,
+            "note": "Whole engine session including launch/warmup/diagnostic reads; not decode-only CPU use. Idle follows a two-second settling interval."
+          }
+        }
+      ],
+      "median_change_percent": -16.101242865525144,
+      "output_matches_baseline": true,
+      "workload_matches_baseline": true,
+      "cache_and_binary_match_baseline": true
+    },
+    "fast-spin-50": {
+      "measured_samples": 3,
+      "median_tok_s": 12.898739853579148,
+      "min_tok_s": 12.791046267612671,
+      "max_tok_s": 15.202893300631276,
+      "sample_p95_decode_ms": 20014.0,
+      "median_prompt_ms": 1323.9,
+      "median_prompt_plus_decode_ms": 21181.7,
+      "output_hashes": [
+        "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5"
+      ],
+      "engine_hashes": [
+        "82b111c65a753cb613cc7f7a0b378efe81d2eeb7b45815dbdcc5b3e1e5f61314"
+      ],
+      "gpu_cache_slots": [
+        3107
+      ],
+      "actual_ram_gib": [
+        0
+      ],
+      "workload_signatures": [
+        {
+          "drafts_accepted": 171,
+          "drafts_proposed": 218,
+          "gpu_cache_hits": 29244,
+          "gpu_cache_lookups": 146400,
+          "local_entries": 0,
+          "network": {
+            "entries": 117156,
+            "requests": 4176,
+            "rx_bytes": 150013824,
+            "tx_bytes": 151486512
+          },
+          "output_tokens": 256
+        }
+      ],
+      "sessions": [
+        {
+          "round": 1,
+          "median_tok_s": 12.898739853579148,
+          "worker_env": {
+            "STRATA_NETWORK_FAST_IO": "1",
+            "STRATA_POOL_SPIN_US": "50"
+          },
+          "worker_usage": {
+            "before": {
+              "processes": [
+                {
+                  "Id": 18148,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.0625,
+                  "WorkingSet64": 8265728,
+                  "PrivateMemorySize64": 3731456
+                },
+                {
+                  "Id": 3440,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12275712,
+                  "PrivateMemorySize64": 6549504
+                },
+                {
+                  "Id": 5924,
+                  "ProcessName": "strata-host",
+                  "CPU": 35.8125,
+                  "WorkingSet64": 50375544832,
+                  "PrivateMemorySize64": 50578952192
+                }
+              ],
+              "utc": "2026-10-12T05:13:19.2664791Z"
+            },
+            "after": {
+              "processes": [
+                {
+                  "Id": 18148,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.0625,
+                  "WorkingSet64": 8265728,
+                  "PrivateMemorySize64": 3731456
+                },
+                {
+                  "Id": 3440,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12275712,
+                  "PrivateMemorySize64": 6549504
+                },
+                {
+                  "Id": 5924,
+                  "ProcessName": "strata-host",
+                  "CPU": 292.609375,
+                  "WorkingSet64": 50376032256,
+                  "PrivateMemorySize64": 50579206144
+                }
+              ],
+              "utc": "2026-10-12T05:14:59.7879115Z"
+            },
+            "wall_seconds": 100.521432,
+            "cpu_seconds": 256.796875,
+            "average_busy_cores": 2.5546479978518413,
+            "idle_start": {
+              "processes": [
+                {
+                  "Id": 18148,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.0625,
+                  "WorkingSet64": 8265728,
+                  "PrivateMemorySize64": 3731456
+                },
+                {
+                  "Id": 3440,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12275712,
+                  "PrivateMemorySize64": 6549504
+                },
+                {
+                  "Id": 5924,
+                  "ProcessName": "strata-host",
+                  "CPU": 292.609375,
+                  "WorkingSet64": 50376032256,
+                  "PrivateMemorySize64": 50579206144
+                }
+              ],
+              "utc": "2026-10-12T05:15:02.4538792Z"
+            },
+            "idle_end": {
+              "processes": [
+                {
+                  "Id": 18148,
+                  "ProcessName": "strata-host",
+                  "CPU": 0.0625,
+                  "WorkingSet64": 8265728,
+                  "PrivateMemorySize64": 3731456
+                },
+                {
+                  "Id": 3440,
+                  "ProcessName": "conhost",
+                  "CPU": 0.015625,
+                  "WorkingSet64": 12275712,
+                  "PrivateMemorySize64": 6549504
+                },
+                {
+                  "Id": 5924,
+                  "ProcessName": "strata-host",
+                  "CPU": 292.609375,
+                  "WorkingSet64": 50376032256,
+                  "PrivateMemorySize64": 50579206144
+                }
+              ],
+              "utc": "2026-10-12T05:15:05.0631983Z"
+            },
+            "idle_wall_seconds": 2.609319,
+            "idle_cpu_seconds": 0.0,
+            "idle_average_busy_cores": 0.0,
+            "note": "Whole engine session including launch/warmup/diagnostic reads; not decode-only CPU use. Idle follows a two-second settling interval."
+          }
+        }
+      ],
+      "median_change_percent": -20.750847739445454,
+      "output_matches_baseline": true,
+      "workload_matches_baseline": true,
+      "cache_and_binary_match_baseline": true
+    }
+  },
+  "errors": [],
+  "notes": [
+    "Warmups excluded from performance summaries; all measured outputs retained.",
+    "p95 uses nearest rank on whole-request decode times, not socket latency.",
+    "Small samples and session drift cannot establish a reliable speedup."
+  ]
+}
