@@ -1,0 +1,25 @@
+[
+  {
+    "warmup": true,
+    "output_tokens": 256,
+    "decode_ms": 18922,
+    "tok_s": 13.5,
+    "token_sha256": "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5",
+    "request_seconds": 25.078,
+    "done": "DONE 256 36 6143.0 18922.0 length 172 219 0 29262 146400 0 0 0.0 36 0",
+    "verify_windows": 86,
+    "window_sha256": "14ee453fd0be01d9338a54e35a04a38de6c24a3a9ee9482a51987475543eb4d1",
+    "suffix_windows": 1,
+    "suffix_accepted": 1,
+    "suffix_proposed": 3,
+    "prompt_tokens": 36,
+    "reused_tokens": 0,
+    "read_tokens": 36,
+    "prompt_ms": 6143,
+    "drafts_accepted": 172,
+    "drafts_proposed": 219,
+    "gpu_cache_hit_percent": 20.0,
+    "gpu_cache_hits": 29262,
+    "gpu_cache_lookups": 146400
+  }
+]
