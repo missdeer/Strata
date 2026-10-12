@@ -2349,7 +2349,7 @@ int main(int argc, char** argv) {
     if (!o.network_workers.empty()) {
         const char* key = std::getenv("STRATA_NETWORK_KEY");
         if (!o.serve || o.native_preset.empty() || o.no_pool || !o.layer_split.empty() ||
-            o.peer_device >= 0 || o.expert_cache_remote[0] > 0 || o.batch != 0 || o.pipeline_windows != 0 ||
+            o.peer_device >= 0 || o.expert_cache_remote[0] > 0 || o.batch != 0 || o.pipeline_windows > 0 ||
             key == nullptr || std::strlen(key) < 16 || std::strlen(key) > 256 ||
             o.network_timeout_ms < 100 || o.network_timeout_ms > 60000) {
             std::fprintf(stderr, "strata: --network-workers requires --serve, --native, the expert pool, "
