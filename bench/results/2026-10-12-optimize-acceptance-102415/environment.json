@@ -1,0 +1,7 @@
+{
+  "local_os": "Windows-11-10.0.26200-SP0",
+  "python": "3.13.0 (tags/v3.13.0:60403a5, Oct  7 2024, 09:38:07) [MSC v.1941 64 bit (AMD64)]",
+  "physical_ram_bytes": 34107224064,
+  "remote_os_cpu_binary_hashes_worker_memory": "{\"Caption\":\"Microsoft Windows 10 \u4e13\u4e1a\u7248\",\"Version\":\"10.0.19045\",\"FreePhysicalMemory\":45790108,\"FreeVirtualMemory\":55894172,\"TotalVisibleMemorySize\":66950656,\"TotalVirtualMemorySize\":76912128}\r\n{\"Name\":\"Intel(R) Core(TM) i7-10700 CPU @ 2.90GHz\",\"NumberOfCores\":8,\"NumberOfLogicalProcessors\":16}\r\n[{\"Algorithm\":\"SHA256\",\"Hash\":\"93ACF20478EC7CB785A2C1722FE8414BCA5884838F13A5592ABB35F1F35564BB\",\"Path\":\"D:\\\\Strata\\\\stage6-native-build-20261011\\\\build-native\\\\strata-host.exe\"},{\"Algorithm\":\"SHA256\",\"Hash\":\"F7DB4FF82C48A6F262353BFC919CAB172B18D6E6CA2053C38E4B5DA5E3F28825\",\"Path\":\"D:\\\\Strata\\\\stage6-native-build-20261011\\\\build-native\\\\strata_network_backend.dll\"}]\r\n[{\"Id\":15268,\"WorkingSet64\":8200192,\"PrivateMemorySize64\":3661824},{\"Id\":21312,\"WorkingSet64\":14847340544,\"PrivateMemorySize64\":14207127552}]",
+  "gpu": "NVIDIA GeForce RTX 4060 Ti, 610.88, 16380 MiB"
+}

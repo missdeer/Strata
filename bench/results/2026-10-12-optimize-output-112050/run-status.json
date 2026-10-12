@@ -1,0 +1,4 @@
+{
+  "status": "partial-diagnostic",
+  "reason": "Completed baseline/fast-io/mtp-only/mtp-only-fast (six generations each). Plain serve startup rejected spec=0; plain and unreduced controls rerun separately. No performance acceptance."
+}
