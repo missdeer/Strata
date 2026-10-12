@@ -922,6 +922,17 @@ API 在 16 的 `127.0.0.1:18080` 启动，并启用认证。
 `start-host16.bat --check` 只检查准备状态并显示接入参数；`--check` 放在其他参数之后也会直接退出，
 保留检查的退出码。`--help` 同样直接退出；双击普通启动则在服务停止后保留窗口。
 
+原生入口为 `start-host16-native.bat`，直接运行 `build-intel/strata-host.exe` 的 `cluster` 子命令，
+引擎固定使用同目录的 `strata.exe`，默认提示词分块为 `auto:8192`。先在 11 运行
+`D:\Strata\start-host11-native.bat` 并等待 `worker ready`，再在 16 双击该入口。
+运行不需要 Python；原生 API 监听 `127.0.0.1`，不要求 API key，专家连接仍要求共享密钥。
+默认共享计划为 `tmp/dual-host-native/cluster.json`，必须与 11 的计划一致；
+本机 server 配置的 `lib_dirs` 和 `web_root` 应指向当前运行库与 `serve/web`，不应依赖历史测试包。
+密钥优先读环境变量 `STRATA_NETWORK_KEY`，否则读 `tmp/dual-host-test/network.key`，不会打印密钥。
+可用 `--config FILE`、`--key-file FILE` 和 `--prefill VALUE` 覆盖这些本机设置。
+`start-host16-native.bat --check` 检查共享计划、原生 tokenizer/模板和 API 参数，不启动模型或服务，
+也不检查 11 的监听状态；`--help` 显示用法。这两种调用直接返回退出码，不停在 `pause`。
+
 真实 agent 对话应保留提示词缓存（`--prompt-cache 6`，引擎默认值）；`--prompt-cache 0`
 会让后续轮次也从头计算全部输入，只适合不复用缓存的对照测量。
 当前 `start-host16.bat` 使用 `--prefill auto:8192`，主机按显存选择最多 8192-token 的提示词块。
