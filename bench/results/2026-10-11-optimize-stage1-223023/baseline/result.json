@@ -1,0 +1,93 @@
+{
+  "case": {
+    "name": "baseline",
+    "ram": 0
+  },
+  "samples": [
+    {
+      "warmup": true,
+      "output_tokens": 256,
+      "decode_ms": 20172,
+      "tok_s": 12.7,
+      "token_sha256": "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5"
+    },
+    {
+      "warmup": false,
+      "output_tokens": 256,
+      "decode_ms": 16043,
+      "tok_s": 16.0,
+      "token_sha256": "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5"
+    },
+    {
+      "warmup": false,
+      "output_tokens": 256,
+      "decode_ms": 17262,
+      "tok_s": 14.8,
+      "token_sha256": "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5"
+    },
+    {
+      "warmup": false,
+      "output_tokens": 256,
+      "decode_ms": 17661,
+      "tok_s": 14.5,
+      "token_sha256": "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5"
+    }
+  ],
+  "actual_ram_gib": 0,
+  "local_entries": 0,
+  "engine_sha256": "df32e4bc1371e24da768cc03f22c6b530030bd8fd9354524b376a2f0adad5ef9",
+  "context": 131072,
+  "prompt_tokens": 36,
+  "argv": [
+    "--pack",
+    "D:\\Projects\\Strata-data\\packs\\iq3_s",
+    "--native",
+    "D:\\Projects\\Strata-data\\models\\IQ3_S\\Qwen3.8-Flash-Next-GSQ-RCO-IQ3_S-00001-of-00002.gguf",
+    "--ple-gguf",
+    "D:\\Projects\\Strata-data\\models\\IQ3_S\\Qwen3.8-Flash-Next-GSQ-RCO-IQ3_S-00002-of-00002.gguf",
+    "--expert-profile",
+    "D:\\Projects\\Strata\\data\\expert-profile.bin",
+    "--expert-cache",
+    "2400",
+    "--spec",
+    "4",
+    "--mtp",
+    "D:\\Projects\\Strata-data\\mtp\\rt",
+    "--kv",
+    "int8",
+    "--spec-min-p",
+    "0.5",
+    "--prompt-cache",
+    "6",
+    "--adapt-every",
+    "0",
+    "--vram-reserve-mib",
+    "1200",
+    "--pool-affinity",
+    "p-cores",
+    "--network-workers",
+    "192.168.233.126:18520",
+    "--network-timeout-ms",
+    "5000",
+    "--mmap-experts",
+    "--pcie-frac",
+    "0",
+    "--short-read",
+    "0",
+    "--max-context",
+    "131072",
+    "--prefill",
+    "512",
+    "--network-reduce",
+    "--prefill",
+    "512",
+    "--network-assignment",
+    "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "--network-config-id",
+    "3707685201700af0c1f236b2959f7f9a00a79b918e6e758ba36aa0064779dcd9",
+    "--prompt-cache",
+    "0"
+  ],
+  "median_tok_s": 14.8,
+  "max_decode_ms": 17661
+}

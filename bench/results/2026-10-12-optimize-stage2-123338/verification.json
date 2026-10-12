@@ -1,0 +1,18 @@
+{
+  "files": {
+    "tools/benchmark_cluster_optimizations.py": "73532f43b5e96fc98dacd7c2220e2ab41c74ff2246774beafca3b493b5682831",
+    "tools/diagnose_cluster_output.py": "9d8496ea301b06c430a305e7656b9b209136df76d56e55259688cee5228ca2a5",
+    "tools/analyze_cluster_optimizations.py": "2710a36faa7d37a55e58790f737e3ffc708e759924dcb3a47a8078f5abfef751",
+    "tools/test_cluster_benchmark_capture.py": "69c54768f2a9119e9492fe87506ed9f2ed11ae5f9a00172336a86b28ce0343ab"
+  },
+  "validation": [
+    "Python compile checks passed",
+    "17 cluster-config tests passed",
+    "18 protocol tests passed",
+    "1 delayed-stderr/no-MTP regression passed",
+    "24 ABBA and 32 scheduling full outputs/workloads/cache/worker hashes verified"
+  ],
+  "test_processes_exited": true,
+  "engine_source_changed": false,
+  "defaults_changed": false
+}

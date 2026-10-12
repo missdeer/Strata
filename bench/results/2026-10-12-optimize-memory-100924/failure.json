@@ -1,0 +1,10 @@
+{
+  "phase": "isolated worker startup, before coordinator launch",
+  "error": "worker startup failed: expert preload needs more available RAM/commit plus 8 GiB headroom",
+  "evidence": "benchmark_cluster_memory.py exception returned in the task tool output; remote worker.err.log was subsequently overwritten by the next test run",
+  "worker_preload_gib": 46.8384,
+  "reserve_gib": 8,
+  "coordinator_samples": 0,
+  "worker_cleanup": "worker_start called worker_stop before raising",
+  "system_settings_changed": false
+}

@@ -1,0 +1,302 @@
+{
+  "at_utc": "2026-10-12T05:30:46.515830+00:00",
+  "result": "Optimization attempt failed; stopped by user.",
+  "restored_tracked_files": [
+    "docs/MULTI_HOST.md",
+    "include/strata/core/network_backend.h",
+    "include/strata/core/network_experts.hpp",
+    "include/strata/kernels/cpu/pool.hpp",
+    "src/core/network_experts.cpp",
+    "src/kernels/cpu/pool.cpp",
+    "src/program/generate.cpp",
+    "src/program/network_backend.cpp",
+    "src/program/network_worker.cpp",
+    "tools/network_check.cpp",
+    "tools/test_network_experts.py"
+  ],
+  "retired_files": [
+    "include/strata/core/network_iocp.hpp",
+    "tools/analyze_cluster_optimizations.py",
+    "tools/benchmark_cluster_memory.py",
+    "tools/benchmark_cluster_optimizations.py",
+    "tools/benchmark_network_cpu.py",
+    "tools/diagnose_cluster_output.py",
+    "tools/test_cluster_benchmark_capture.py",
+    "tools/test_network_optimizations.py",
+    "tmp/analyze-current-network-timing.py",
+    "tmp/analyze-optimize-acceptance.py",
+    "tmp/analyze-optimize-memory.py",
+    "tmp/build-optimize-host11.py",
+    "tmp/build-optimize-sycl.cmd",
+    "tmp/capture-optimize-environment.py",
+    "tmp/capture-optimize-local-inputs.py",
+    "tmp/configure-optimize-pagefile.ps1",
+    "tmp/prepare-optimize-package.py",
+    "tmp/prepare-network-timing-package.py",
+    "tmp/probe-optimize-host11-memory.py",
+    "tmp/probe-optimize-resources.py",
+    "tmp/run-optimize-acceptance.py",
+    "tmp/run-optimize-cpu-bench.py",
+    "tmp/build-network-timing-cpu.cmd",
+    "tmp/build-network-timing-cuda.cmd",
+    "tmp/build-network-timing-hip.cmd",
+    "tmp/dual-host-native/start-host16-optimize.bat",
+    "tmp/dual-host-native/start-host11-optimize.bat",
+    "tmp/dual-host-native/start-host16-profile.bat",
+    "tmp/dual-host-native/start-host11-profile.bat"
+  ],
+  "retired_packages": [
+    {
+      "path": "tmp/dual-host-native/optimize-host16",
+      "manifests": {
+        "CLUSTER_BUILD.json": {
+          "backend": "cuda",
+          "build_directory": "D:\\Projects\\Strata\\build-intel",
+          "built_at_utc": "2026-10-11T11:15:53Z",
+          "c_release_flags": "/O3 /DNDEBUG /QxHost /fp:precise",
+          "compiler": "C:/Program Files (x86)/Intel/oneAPI/compiler/2026.1/bin/icx-cl.exe",
+          "cxx_release_flags": "/O3 /DNDEBUG /QxHost /fp:precise",
+          "files": {
+            "MSVCP140.dll": "0f885b509a685d2bbfa652fed26b5fb31d88fbdab0a978c641d1c7b8aa460aa9",
+            "MSVCP140_ATOMIC_WAIT.dll": "640b2aefced484d0368eea5bdd06addd0658a3a70a49256e560d6923b404a479",
+            "RUN.txt": "7442c7c394a12d76cf8aaee4f1b6b744231e82238d4c73b4ea960fa08d908947",
+            "VCRUNTIME140.dll": "d5e4d9a3e835fa679450145d6a7d94e36573a509317111904d9b3712c30d9066",
+            "VCRUNTIME140_1.dll": "1f2d41c4aa5db0bc33ebf7b66d72943a817d7ce6cbe880502a9403823633093f",
+            "chat_template.jinja": "12827f24b742ea4e80cdc12dbcf9622227056b9f797252a3149263d4f9aaadce",
+            "configs/cluster-2hosts.json": "ca774ca3b83c1a9059e646d196a4ed4e5cae10d20850ac74152cc4776870141f",
+            "configs/cluster-3hosts.json": "7feb0c0a59982e8a791cca8d17123f91e826966dfa20ccb339bf79d80b6fe0b9",
+            "configs/cluster-4hosts.example.json": "91ae3dff01db2ed9e533499ead3a25435f538b0949bd7c8debbdc467fa476500",
+            "cublas64_13.dll": "60bbba8868290311e9c1657b2193ddec667744eb555ff843f87acb7c039f9efa",
+            "cublasLt64_13.dll": "cad63434448e7141629e240ea093ad596a7ef6a0f67b468ba9bc1df6e1eeee33",
+            "libmmd.dll": "516abae34161df7051fbf854f28e4471fc2e772dd743599caadd9c8fe2ee86d4",
+            "licenses/RUNTIME-NOTICE.txt": "0e4e20b906019ec1d6b457f120f734988351533f19f4adcb0265a7405eda2838",
+            "licenses/Strata-LICENSE.txt": "949b9b0aada7476006469e58ee4ffb0e0f68c2d9137e90a356757b61a09d37f0",
+            "licenses/cuda/EULA.txt": "7771f1ef8e9300ba175cf58e9dcc1df55d9dd82d3fc960c4c6db0c66354e418c",
+            "licenses/cuda/LICENSE": "088381bc2d891e719a2a9398645b00bb45f3b24231473a8283ac7e3e66b8a028",
+            "licenses/intel-compiler/LICENSE.rtf": "4e96f3006c9d51b38561f9802da896480dc48e7703a76c206292bf6d6d11a781",
+            "licenses/intel-compiler/third-party-programs.txt": "a81491a0243fa1d072aa636c890a6dd082ca403aca4681672cf6f69d3d516f79",
+            "licenses/native-host/aom-3.14.1-LICENSE.txt": "4764a286d8b2faeaf42f4418e7d7a28d58fc8fd4d00a3d0a7f44b0a4099de7f2",
+            "licenses/native-host/aom-3.14.1-PATENTS.txt": "661fb8e504744e95587b556b94a58343448300606a41bea8c7a9b97125696e61",
+            "licenses/native-host/cpp-httplib-LICENSE.txt": "4b45cbe16d7b71b89ae6127e26e0d90a029198ca5e958ad8e3d0b8bbed364d8b",
+            "licenses/native-host/jsoncons-LICENSE.txt": "97550c71a0bdfc20bf85c6c5167d7b7785f9bd3448baee048fbedf742ed52270",
+            "licenses/native-host/libavif-1.4.2-LICENSE.txt": "165abf92cc04b39e80d29cadea7a6a7e8fddf59407d4ad2616507a7ebe8216f9",
+            "licenses/native-host/libwebp-1.6.0-COPYING.txt": "5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf",
+            "licenses/native-host/libwebp-1.6.0-PATENTS.txt": "cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c",
+            "licenses/native-host/libyuv-LICENSE.txt": "2b2cc1180c7e6988328ad2033b04b80117419db9c4c584918bbb3cfec7e9364f",
+            "licenses/native-host/llama.cpp-LICENSE.txt": "94f29bbed6a22c35b992c5c6ebf0e7c92f13b836b90f36f461c9cf2f0f1d010d",
+            "licenses/native-host/miniaudio-LICENSE.txt": "c87e0d5dc588ad657b87ce92873c872601c8874d1e5df90b2d95e985edb24afd",
+            "licenses/native-host/stb_image-LICENSE.txt": "06f6b081941f054102bfc696d7f09b8905fee176d1ed08d334e4bad5c1d751c2",
+            "licenses/native-host/subprocess-LICENSE.txt": "eefdb47861e5b54943a30d2f34bdf659257ea6e437d15ef7968f2a1451e74ebe",
+            "strata-host.exe": "7e6578cdca7bcde920f2d561034828f06e2411bd641691e356ca9f6b21353c0f",
+            "strata.exe": "82b111c65a753cb613cc7f7a0b378efe81d2eeb7b45815dbdcc5b3e1e5f61314",
+            "strata_network_backend.dll": "b15ac1c26e629f084be19c14396c34024c31de0f3d826524c1e3709d32bac9dc",
+            "svml_dispmd.dll": "9bd8f71bb3ec5e649a20c2ae543fb21d5a9bfe1626b36f13f20f93f6f75d30ab",
+            "web/app.css": "b63d65731454f8861066c9efc2419da4971f3c1d9a8fed52532cf3db74b76d6c",
+            "web/app.js": "48b374fe44e05347caf09c983e49c224efba57ee1dba9caa251ae2737d6f0ab9",
+            "web/components.css": "e4b4895a62193c27bbe9fd8eb651c93bd9f50bf638e073620d47886b2c2c2f8b",
+            "web/favicon.svg": "51a9a37beb1be2c061c7889feb7d129591cf572041bdf759f0d4fc679494b534",
+            "web/fonts/OFL.txt": "c676351bf8576b9aba743cd5eaa8c0e7ee0d51f805d720447b4df4ddb6a2e416",
+            "web/fonts/outfit-latin-ext-wght.woff2": "0f53d1c03b3918d744a843b5039001ee31695ca1e255e3914188df81beb461e9",
+            "web/fonts/outfit-latin-wght.woff2": "6c18d579fd87c3776be068b762cbc83fde3acb543d49eabd3ade842eb987e887",
+            "web/index.html": "467737925c513291cf622c55b7bb1fb727676c1af444dd81351f5e11206b8ce3",
+            "web/monitor.html": "6922ac0a8d236b3ecc363212695d5f8b99fb32753d65ec05d04c1b537e40fec5",
+            "web/monitor.js": "b8dfd3cef3a3cd206bd777186ed7b8cc0b926abfc66cc77f9097f81cb938106c",
+            "web/sprite.svg": "bbbd3a03a8cdcc8453934508010202bc492505f39aa0f696f51341b260255094",
+            "web/tokens.css": "73ad21bfdd4145fae697dec37c2909ecec67d610f96cb2267c29a5526ed13256"
+          },
+          "hip_archs": [],
+          "native_host": true,
+          "node": "host16",
+          "portable": false,
+          "programs": {
+            "strata-host.exe": "7e6578cdca7bcde920f2d561034828f06e2411bd641691e356ca9f6b21353c0f",
+            "strata.exe": "82b111c65a753cb613cc7f7a0b378efe81d2eeb7b45815dbdcc5b3e1e5f61314",
+            "strata_network_backend.dll": "b15ac1c26e629f084be19c14396c34024c31de0f3d826524c1e3709d32bac9dc"
+          },
+          "host_updated_at_utc": "2026-10-11T12:22:39Z",
+          "engine_console_supported": true,
+          "optimization_candidates": {
+            "staged_at_utc": "2026-10-11T14:59:02.758039+00:00",
+            "default_disabled": true,
+            "switches": [
+              "STRATA_NETWORK_FAST_IO",
+              "STRATA_NETWORK_IOCP",
+              "STRATA_NETWORK_PIN_HOST",
+              "STRATA_NETWORK_POOL_TASKS",
+              "STRATA_NETWORK_PARALLEL_QUANT",
+              "STRATA_NETWORK_CPU_PROFILE"
+            ]
+          }
+        }
+      },
+      "binaries": {
+        "strata-host.exe": "7e6578cdca7bcde920f2d561034828f06e2411bd641691e356ca9f6b21353c0f",
+        "strata.exe": "82b111c65a753cb613cc7f7a0b378efe81d2eeb7b45815dbdcc5b3e1e5f61314"
+      }
+    },
+    {
+      "path": "tmp/dual-host-native/profile-host16",
+      "manifests": {
+        "CLUSTER_BUILD.json": {
+          "backend": "cuda",
+          "build_directory": "D:\\Projects\\Strata\\build-intel",
+          "built_at_utc": "2026-10-11T11:15:53Z",
+          "c_release_flags": "/O3 /DNDEBUG /QxHost /fp:precise",
+          "compiler": "C:/Program Files (x86)/Intel/oneAPI/compiler/2026.1/bin/icx-cl.exe",
+          "cxx_release_flags": "/O3 /DNDEBUG /QxHost /fp:precise",
+          "files": {
+            "MSVCP140.dll": "0f885b509a685d2bbfa652fed26b5fb31d88fbdab0a978c641d1c7b8aa460aa9",
+            "MSVCP140_ATOMIC_WAIT.dll": "640b2aefced484d0368eea5bdd06addd0658a3a70a49256e560d6923b404a479",
+            "RUN.txt": "7442c7c394a12d76cf8aaee4f1b6b744231e82238d4c73b4ea960fa08d908947",
+            "VCRUNTIME140.dll": "d5e4d9a3e835fa679450145d6a7d94e36573a509317111904d9b3712c30d9066",
+            "VCRUNTIME140_1.dll": "1f2d41c4aa5db0bc33ebf7b66d72943a817d7ce6cbe880502a9403823633093f",
+            "chat_template.jinja": "12827f24b742ea4e80cdc12dbcf9622227056b9f797252a3149263d4f9aaadce",
+            "configs/cluster-2hosts.json": "ca774ca3b83c1a9059e646d196a4ed4e5cae10d20850ac74152cc4776870141f",
+            "configs/cluster-3hosts.json": "7feb0c0a59982e8a791cca8d17123f91e826966dfa20ccb339bf79d80b6fe0b9",
+            "configs/cluster-4hosts.example.json": "91ae3dff01db2ed9e533499ead3a25435f538b0949bd7c8debbdc467fa476500",
+            "cublas64_13.dll": "60bbba8868290311e9c1657b2193ddec667744eb555ff843f87acb7c039f9efa",
+            "cublasLt64_13.dll": "cad63434448e7141629e240ea093ad596a7ef6a0f67b468ba9bc1df6e1eeee33",
+            "libmmd.dll": "516abae34161df7051fbf854f28e4471fc2e772dd743599caadd9c8fe2ee86d4",
+            "licenses/RUNTIME-NOTICE.txt": "0e4e20b906019ec1d6b457f120f734988351533f19f4adcb0265a7405eda2838",
+            "licenses/Strata-LICENSE.txt": "949b9b0aada7476006469e58ee4ffb0e0f68c2d9137e90a356757b61a09d37f0",
+            "licenses/cuda/EULA.txt": "7771f1ef8e9300ba175cf58e9dcc1df55d9dd82d3fc960c4c6db0c66354e418c",
+            "licenses/cuda/LICENSE": "088381bc2d891e719a2a9398645b00bb45f3b24231473a8283ac7e3e66b8a028",
+            "licenses/intel-compiler/LICENSE.rtf": "4e96f3006c9d51b38561f9802da896480dc48e7703a76c206292bf6d6d11a781",
+            "licenses/intel-compiler/third-party-programs.txt": "a81491a0243fa1d072aa636c890a6dd082ca403aca4681672cf6f69d3d516f79",
+            "licenses/native-host/aom-3.14.1-LICENSE.txt": "4764a286d8b2faeaf42f4418e7d7a28d58fc8fd4d00a3d0a7f44b0a4099de7f2",
+            "licenses/native-host/aom-3.14.1-PATENTS.txt": "661fb8e504744e95587b556b94a58343448300606a41bea8c7a9b97125696e61",
+            "licenses/native-host/cpp-httplib-LICENSE.txt": "4b45cbe16d7b71b89ae6127e26e0d90a029198ca5e958ad8e3d0b8bbed364d8b",
+            "licenses/native-host/jsoncons-LICENSE.txt": "97550c71a0bdfc20bf85c6c5167d7b7785f9bd3448baee048fbedf742ed52270",
+            "licenses/native-host/libavif-1.4.2-LICENSE.txt": "165abf92cc04b39e80d29cadea7a6a7e8fddf59407d4ad2616507a7ebe8216f9",
+            "licenses/native-host/libwebp-1.6.0-COPYING.txt": "5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf",
+            "licenses/native-host/libwebp-1.6.0-PATENTS.txt": "cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c",
+            "licenses/native-host/libyuv-LICENSE.txt": "2b2cc1180c7e6988328ad2033b04b80117419db9c4c584918bbb3cfec7e9364f",
+            "licenses/native-host/llama.cpp-LICENSE.txt": "94f29bbed6a22c35b992c5c6ebf0e7c92f13b836b90f36f461c9cf2f0f1d010d",
+            "licenses/native-host/miniaudio-LICENSE.txt": "c87e0d5dc588ad657b87ce92873c872601c8874d1e5df90b2d95e985edb24afd",
+            "licenses/native-host/stb_image-LICENSE.txt": "06f6b081941f054102bfc696d7f09b8905fee176d1ed08d334e4bad5c1d751c2",
+            "licenses/native-host/subprocess-LICENSE.txt": "eefdb47861e5b54943a30d2f34bdf659257ea6e437d15ef7968f2a1451e74ebe",
+            "strata-host.exe": "9717e94beaf64cc5edd90a80a972b6b1642940c7107b76acbdd4aa6a964f57e7",
+            "strata.exe": "df32e4bc1371e24da768cc03f22c6b530030bd8fd9354524b376a2f0adad5ef9",
+            "strata_network_backend.dll": "cc79e07766df293e99730b423e2ea5105e3950b3db89638a72d70363d31b0917",
+            "svml_dispmd.dll": "9bd8f71bb3ec5e649a20c2ae543fb21d5a9bfe1626b36f13f20f93f6f75d30ab",
+            "web/app.css": "b63d65731454f8861066c9efc2419da4971f3c1d9a8fed52532cf3db74b76d6c",
+            "web/app.js": "48b374fe44e05347caf09c983e49c224efba57ee1dba9caa251ae2737d6f0ab9",
+            "web/components.css": "e4b4895a62193c27bbe9fd8eb651c93bd9f50bf638e073620d47886b2c2c2f8b",
+            "web/favicon.svg": "51a9a37beb1be2c061c7889feb7d129591cf572041bdf759f0d4fc679494b534",
+            "web/fonts/OFL.txt": "c676351bf8576b9aba743cd5eaa8c0e7ee0d51f805d720447b4df4ddb6a2e416",
+            "web/fonts/outfit-latin-ext-wght.woff2": "0f53d1c03b3918d744a843b5039001ee31695ca1e255e3914188df81beb461e9",
+            "web/fonts/outfit-latin-wght.woff2": "6c18d579fd87c3776be068b762cbc83fde3acb543d49eabd3ade842eb987e887",
+            "web/index.html": "467737925c513291cf622c55b7bb1fb727676c1af444dd81351f5e11206b8ce3",
+            "web/monitor.html": "6922ac0a8d236b3ecc363212695d5f8b99fb32753d65ec05d04c1b537e40fec5",
+            "web/monitor.js": "b8dfd3cef3a3cd206bd777186ed7b8cc0b926abfc66cc77f9097f81cb938106c",
+            "web/sprite.svg": "bbbd3a03a8cdcc8453934508010202bc492505f39aa0f696f51341b260255094",
+            "web/tokens.css": "73ad21bfdd4145fae697dec37c2909ecec67d610f96cb2267c29a5526ed13256"
+          },
+          "hip_archs": [],
+          "native_host": true,
+          "node": "host16",
+          "portable": false,
+          "programs": {
+            "strata-host.exe": "9717e94beaf64cc5edd90a80a972b6b1642940c7107b76acbdd4aa6a964f57e7",
+            "strata.exe": "df32e4bc1371e24da768cc03f22c6b530030bd8fd9354524b376a2f0adad5ef9",
+            "strata_network_backend.dll": "cc79e07766df293e99730b423e2ea5105e3950b3db89638a72d70363d31b0917"
+          },
+          "host_updated_at_utc": "2026-10-11T12:22:39Z",
+          "engine_console_supported": true,
+          "profiling_patch": {
+            "staged_at_utc": "2026-10-11T13:23:58.207515+00:00",
+            "engine_source": "D:\\Projects\\Strata\\build-intel\\strata.exe",
+            "source_engine_sha256": "2fafffdca7c4cc833af83e49320a5ffd395e94cd8fe7cc6f299996f599ae54e1",
+            "switches": [
+              "STRATA_DECODE_TIMING",
+              "STRATA_VERIFY_PROFILE",
+              "STRATA_NETWORK_TIMING",
+              "STRATA_NETWORK_TRACE"
+            ]
+          }
+        }
+      },
+      "binaries": {
+        "strata-host.exe": "9717e94beaf64cc5edd90a80a972b6b1642940c7107b76acbdd4aa6a964f57e7",
+        "strata.exe": "df32e4bc1371e24da768cc03f22c6b530030bd8fd9354524b376a2f0adad5ef9"
+      }
+    }
+  ],
+  "remote_binaries": [
+    {
+      "before": "93ACF20478EC7CB785A2C1722FE8414BCA5884838F13A5592ABB35F1F35564BB",
+      "name": "strata-host.exe",
+      "restored": "06FFB05B30547EDCE3111D5D3C274CAA4A60EFEE05143FBD03BD48AB1868E851"
+    },
+    {
+      "before": "F7DB4FF82C48A6F262353BFC919CAB172B18D6E6CA2053C38E4B5DA5E3F28825",
+      "name": "strata_network_backend.dll",
+      "restored": "45CE885B1284216222781367C8CFE5C3430E776CBC977FD53537748C6E7B88C6"
+    },
+    {
+      "before": "5780F036F587EBB24A5FDF6B8D34E02D8AAB7426B2DDCD4037AADB653F1CD045",
+      "name": "strata-network-check.exe",
+      "restored": "2A9AB57B1715BF69A5217E9BC9F944ADAE630386E2E4F04F054EEF01FAD52CF0"
+    }
+  ],
+  "remote_sources": [
+    {
+      "sha256": "15B107D0E0ACD760EAE06FE5819CB10BB87DB80F77ADFF02656F87AEDF023ECF",
+      "name": "include/strata/core/network_backend.h"
+    },
+    {
+      "sha256": "D261CF4A5C394237C3192CA807071FDFA9D11D1C71793967A99AB8EDBC1904B2",
+      "name": "include/strata/core/network_experts.hpp"
+    },
+    {
+      "sha256": "5F7E7EE3F48CE6505AD25975C320310E647551DF3304A87052CE3C7E2B414936",
+      "name": "include/strata/kernels/cpu/pool.hpp"
+    },
+    {
+      "sha256": "2BC3E75932074ADE9823C933FD68EA355584DF408623509478AFF7EAA5B58D76",
+      "name": "src/core/network_experts.cpp"
+    },
+    {
+      "sha256": "F0CDD86B4025489888F6ED5083C88EADBFD61222A99AA8C9F79B977FE9A51345",
+      "name": "src/program/network_backend.cpp"
+    },
+    {
+      "sha256": "19D0CEE4FC043D2D613EE40F43FF6830CDFE78E74D7F7FCA0642A35953751578",
+      "name": "src/program/network_worker.cpp"
+    },
+    {
+      "sha256": "4B9B8EC1EEAABCA0524A3A4AEF39907AD90583E798D1E03A2AE1F6318E9105BC",
+      "name": "src/kernels/cpu/pool.cpp"
+    }
+  ],
+  "note": "Measurements retained. Original deployment/settings are not changed. No commit or push.",
+  "remote_additional_restored_sources": [
+    "tools/network_check.cpp",
+    "tools/test_network_experts.py"
+  ],
+  "remote_test_processes_exited": true,
+  "verification": {
+    "CPU": "passed",
+    "CUDA": "passed",
+    "HIP": "passed",
+    "SYCL shared CPU pool and host": "passed",
+    "SYCL full engine": "not rebuilt; pre-existing failure retained",
+    "cluster config": "17 passed",
+    "Python protocol": "18 passed",
+    "native worker": "16 passed"
+  },
+  "rebuilt_binaries": {
+    "build-network\\strata-host.exe": "ee08ffffabcc2964cc0f39171c28328f120190ee5116cfddff281d95333a5340",
+    "build-network\\strata_network_backend.dll": "a24d907d634cdcfcf13912bf0d1f2ba85f9e488ed2d2e314f32e32ea98f7b52e",
+    "build-network\\strata-network-check.exe": "bf539696fee62d0c29a8ef2ef39463d73fc7ef490d1c547d4dea666a3ec8d6f9",
+    "build-intel\\strata.exe": "6d09ab932ab7d0ee1fb43474b6982430d7a9586c3d55ee63894099552f7fb64c",
+    "build-intel\\strata-host.exe": "db7f191f8c743ffcb1c7634d7d36c1c24a4ff9d476f5b2f7f856861e031ac4f6",
+    "build-intel\\strata_network_backend.dll": "8caba7bff5d5ddcd44df9b1360da464d6d156673ecdfa6a2110c4c0dabda4178",
+    "build-intel\\strata-network-check.exe": "d16b9365f513fbf4605e4228d14f1255ffbca8723684cccdcd1c62d79f1814e6",
+    "build-cluster\\host17-core\\strata.exe": "2d3ec9d965a7e9416928111e18e594123860d03546caea026fd54f3148db6c70",
+    "build-cluster\\host17-core\\strata-host.exe": "e8a95b0a8a0dc8bf988060851813828e34ddf02d5c5dec2248220e3922cc9dea",
+    "build-cluster\\host17-core\\strata_network_backend.dll": "2183a16a3146c1d5b2b0b6ccfbdef064b418266fa14d2858d8108d055bce2b39",
+    "build-cluster\\host17-core\\strata-network-check.exe": "bf97f5fb9dac6d822fc1e7b1d12a932f4cdad7a6a3a945a909f99a60a6ad042c",
+    "build-sycl-text\\strata-host.exe": "2e4ea6bb18f8d87e48c8951d09c447cf2472188d6d1532aa85558ee1ba87609e"
+  }
+}

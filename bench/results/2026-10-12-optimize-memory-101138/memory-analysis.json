@@ -1,0 +1,332 @@
+[
+  {
+    "case": "ctx-131072-ram-0",
+    "before_commit_gib": 11.841,
+    "ready_commit_gib": 30.294,
+    "ready_available_commit_gib": 5.971,
+    "ready_engine_private_gib": 17.272,
+    "ready_engine_working_set_gib": 3.4,
+    "peak_system_commit_gib": 30.586,
+    "minimum_available_commit_gib": 5.679,
+    "gpu_cache_slots": 3107,
+    "actual_ram_gib": 0,
+    "local_entries": 0,
+    "stages": [
+      {
+        "elapsed_s": 4.115,
+        "log": "strata generate: 1466 MiB of weights loaded from D:\\Projects\\Strata-data\\packs\\iq3_s in 0.6 s (302 canonical tensors skipped: served natively)",
+        "system_commit_gib": 14.69919204711914,
+        "engine_private_gib": 2.7448387145996094
+      },
+      {
+        "elapsed_s": 8.694,
+        "log": "strata mtp: draft layer loaded, 950 MiB of VRAM (experts 675, dense 111), files read in 0.80 s (984 MiB/s)",
+        "system_commit_gib": 20.215190887451172,
+        "engine_private_gib": 8.224681854248047
+      },
+      {
+        "elapsed_s": 73.951,
+        "log": "strata generate: pre-filled 3107 of 3107 slots from the profile in 64.3 s (99 MB/s); slot 0 verified",
+        "system_commit_gib": 27.8238525390625,
+        "engine_private_gib": 14.782119750976562
+      },
+      {
+        "elapsed_s": 76.322,
+        "log": "strata generate: session is up (engine 0.1.42)",
+        "system_commit_gib": 27.822586059570312,
+        "engine_private_gib": 14.782588958740234
+      },
+      {
+        "elapsed_s": 81.055,
+        "log": "strata verify: window up to 6 tokens, 75.1 MiB of device buffers",
+        "system_commit_gib": 30.277599334716797,
+        "engine_private_gib": 17.25619888305664
+      },
+      {
+        "elapsed_s": 81.353,
+        "log": "strata serve: 1474 MiB of VRAM free with everything loaded",
+        "system_commit_gib": 30.29123306274414,
+        "engine_private_gib": 17.271942138671875
+      },
+      {
+        "elapsed_s": 102.631,
+        "log": "strata verify: capturing the 3-token window (1330 MiB of VRAM free)",
+        "system_commit_gib": 30.249465942382812,
+        "engine_private_gib": 17.57846450805664
+      },
+      {
+        "elapsed_s": 102.896,
+        "log": "strata verify: captured the 4-token window (upload no error, sync no error)",
+        "system_commit_gib": 30.280471801757812,
+        "engine_private_gib": 17.607662200927734
+      },
+      {
+        "elapsed_s": 103.69,
+        "log": "strata verify: captured the 2-token window (upload no error, sync no error)",
+        "system_commit_gib": 30.282039642333984,
+        "engine_private_gib": 17.642227172851562
+      },
+      {
+        "elapsed_s": 136.469,
+        "log": "strata verify: captured the 6-token window (upload no error, sync no error)",
+        "system_commit_gib": 29.307151794433594,
+        "engine_private_gib": 17.670997619628906
+      }
+    ],
+    "output_hashes": [
+      "2a0faae42c05ab9fb2f625e1c9780478dc642b7a6c91869124f4e99dd71137fe",
+      "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5"
+    ],
+    "prompt_cpu_share_enabled": true,
+    "last_generation_private_gib": 17.673,
+    "last_generation_working_set_gib": 11.235
+  },
+  {
+    "case": "ctx-131072-ram-1024",
+    "before_commit_gib": 11.604,
+    "ready_commit_gib": 29.963,
+    "ready_available_commit_gib": 6.302,
+    "ready_engine_private_gib": 18.39,
+    "ready_engine_working_set_gib": 2.755,
+    "peak_system_commit_gib": 31.835,
+    "minimum_available_commit_gib": 4.43,
+    "gpu_cache_slots": 3107,
+    "actual_ram_gib": 1.0,
+    "local_entries": 12785,
+    "stages": [
+      {
+        "elapsed_s": 3.21,
+        "log": "strata generate: 1466 MiB of weights loaded from D:\\Projects\\Strata-data\\packs\\iq3_s in 0.7 s (302 canonical tensors skipped: served natively)",
+        "system_commit_gib": 14.380348205566406,
+        "engine_private_gib": 2.7696380615234375
+      },
+      {
+        "elapsed_s": 4.739,
+        "log": "strata generate: 300 native projection matrices, 2018.88 MiB of weights, in 1.7 s",
+        "system_commit_gib": 16.378299713134766,
+        "engine_private_gib": 4.769134521484375
+      },
+      {
+        "elapsed_s": 5.751,
+        "log": "strata mtp: draft layer loaded, 950 MiB of VRAM (experts 675, dense 111), files read in 0.54 s (1456 MiB/s)",
+        "system_commit_gib": 19.322830200195312,
+        "engine_private_gib": 7.749286651611328
+      },
+      {
+        "elapsed_s": 15.952,
+        "log": "strata serve: 1474 MiB of VRAM free with everything loaded",
+        "system_commit_gib": 29.962112426757812,
+        "engine_private_gib": 18.389606475830078
+      },
+      {
+        "elapsed_s": 23.307,
+        "log": "strata verify: captured the 1-token window (upload no error, sync no error)",
+        "system_commit_gib": 30.96426010131836,
+        "engine_private_gib": 19.39380645751953
+      },
+      {
+        "elapsed_s": 23.561,
+        "log": "strata verify: captured the 3-token window (upload no error, sync no error)",
+        "system_commit_gib": 30.997695922851562,
+        "engine_private_gib": 19.427005767822266
+      },
+      {
+        "elapsed_s": 23.815,
+        "log": "strata verify: captured the 4-token window (upload no error, sync no error)",
+        "system_commit_gib": 31.030513763427734,
+        "engine_private_gib": 19.45824432373047
+      },
+      {
+        "elapsed_s": 24.334,
+        "log": "strata verify: captured the 2-token window (upload no error, sync no error)",
+        "system_commit_gib": 31.06359100341797,
+        "engine_private_gib": 19.49087142944336
+      },
+      {
+        "elapsed_s": 37.634,
+        "log": "strata verify: captured the 6-token window (upload no error, sync no error)",
+        "system_commit_gib": 31.627315521240234,
+        "engine_private_gib": 19.519561767578125
+      },
+      {
+        "elapsed_s": 63.786,
+        "log": "strata verify: captured the 5-token window (upload no error, sync no error)",
+        "system_commit_gib": 31.510868072509766,
+        "engine_private_gib": 19.57546615600586
+      }
+    ],
+    "output_hashes": [
+      "7799d933b365263b2ad9e0f7a8934740955b1369fdaf34ac8fb8f2a82df4791b",
+      "b9be43458abffee31b385a274e77cd12d32ecc04f5249145ca23b6c4c2f6fdd9",
+      "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5"
+    ],
+    "prompt_cpu_share_enabled": true,
+    "last_generation_private_gib": 19.599,
+    "last_generation_working_set_gib": 4.16
+  },
+  {
+    "case": "ctx-65536-ram-0",
+    "before_commit_gib": 11.527,
+    "ready_commit_gib": 27.986,
+    "ready_available_commit_gib": 8.279,
+    "ready_engine_private_gib": 16.316,
+    "ready_engine_working_set_gib": 3.4,
+    "peak_system_commit_gib": 29.33,
+    "minimum_available_commit_gib": 6.935,
+    "gpu_cache_slots": 3107,
+    "actual_ram_gib": 0,
+    "local_entries": 0,
+    "stages": [
+      {
+        "elapsed_s": 2.97,
+        "log": "strata generate: 1466 MiB of weights loaded from D:\\Projects\\Strata-data\\packs\\iq3_s in 0.5 s (302 canonical tensors skipped: served natively)",
+        "system_commit_gib": 14.45456314086914,
+        "engine_private_gib": 2.6604042053222656
+      },
+      {
+        "elapsed_s": 7.086,
+        "log": "strata mtp: draft layer loaded, 876 MiB of VRAM (experts 675, dense 111), files read in 0.50 s (1568 MiB/s)",
+        "system_commit_gib": 18.951873779296875,
+        "engine_private_gib": 7.275424957275391
+      },
+      {
+        "elapsed_s": 32.181,
+        "log": "strata generate: pre-filled 3107 of 3107 slots from the profile in 24.2 s (264 MB/s); slot 0 verified",
+        "system_commit_gib": 25.48351287841797,
+        "engine_private_gib": 13.832706451416016
+      },
+      {
+        "elapsed_s": 32.939,
+        "log": "strata generate: session is up (engine 0.1.42)",
+        "system_commit_gib": 25.482322692871094,
+        "engine_private_gib": 13.833137512207031
+      },
+      {
+        "elapsed_s": 38.006,
+        "log": "strata verify: window up to 6 tokens, 74.7 MiB of device buffers",
+        "system_commit_gib": 27.97842025756836,
+        "engine_private_gib": 16.308372497558594
+      },
+      {
+        "elapsed_s": 38.29,
+        "log": "strata serve: 1816 MiB of VRAM free with everything loaded",
+        "system_commit_gib": 27.982837677001953,
+        "engine_private_gib": 16.316287994384766
+      },
+      {
+        "elapsed_s": 44.748,
+        "log": "strata verify: capturing the 1-token window (1808 MiB of VRAM free)",
+        "system_commit_gib": 28.182125091552734,
+        "engine_private_gib": 16.558971405029297
+      },
+      {
+        "elapsed_s": 45.003,
+        "log": "strata verify: captured the 3-token window (upload no error, sync no error)",
+        "system_commit_gib": 28.246097564697266,
+        "engine_private_gib": 16.621505737304688
+      },
+      {
+        "elapsed_s": 45.254,
+        "log": "strata verify: captured the 4-token window (upload no error, sync no error)",
+        "system_commit_gib": 28.27252197265625,
+        "engine_private_gib": 16.650951385498047
+      },
+      {
+        "elapsed_s": 46.013,
+        "log": "strata verify: captured the 2-token window (upload no error, sync no error)",
+        "system_commit_gib": 28.307159423828125,
+        "engine_private_gib": 16.685436248779297
+      }
+    ],
+    "output_hashes": [
+      "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5"
+    ],
+    "prompt_cpu_share_enabled": true,
+    "last_generation_private_gib": 16.685,
+    "last_generation_working_set_gib": 11.214
+  },
+  {
+    "case": "ctx-65536-ram-1024",
+    "before_commit_gib": 12.632,
+    "ready_commit_gib": 30.043,
+    "ready_available_commit_gib": 6.221,
+    "ready_engine_private_gib": 17.399,
+    "ready_engine_working_set_gib": 2.755,
+    "peak_system_commit_gib": 30.961,
+    "minimum_available_commit_gib": 5.304,
+    "gpu_cache_slots": 3107,
+    "actual_ram_gib": 1.0,
+    "local_entries": 13431,
+    "stages": [
+      {
+        "elapsed_s": 2.954,
+        "log": "strata generate: 1466 MiB of weights loaded from D:\\Projects\\Strata-data\\packs\\iq3_s in 0.6 s (302 canonical tensors skipped: served natively)",
+        "system_commit_gib": 15.185771942138672,
+        "engine_private_gib": 2.580982208251953
+      },
+      {
+        "elapsed_s": 3.974,
+        "log": "strata generate: 300 native projection matrices, 2018.88 MiB of weights, in 0.9 s",
+        "system_commit_gib": 17.37778091430664,
+        "engine_private_gib": 4.775333404541016
+      },
+      {
+        "elapsed_s": 4.478,
+        "log": "strata mtp: draft layer loaded, 876 MiB of VRAM (experts 675, dense 111), files read in 0.27 s (2945 MiB/s)",
+        "system_commit_gib": 19.937030792236328,
+        "engine_private_gib": 7.285305023193359
+      },
+      {
+        "elapsed_s": 9.55,
+        "log": "strata generate: pre-filled 3107 of 3107 slots from the profile in 4.9 s (1317 MB/s); slot 0 verified",
+        "system_commit_gib": 26.503978729248047,
+        "engine_private_gib": 13.90774154663086
+      },
+      {
+        "elapsed_s": 14.461,
+        "log": "strata serve: 1808 MiB of VRAM free with everything loaded",
+        "system_commit_gib": 30.042545318603516,
+        "engine_private_gib": 17.399208068847656
+      },
+      {
+        "elapsed_s": 22.334,
+        "log": "strata verify: captured the 1-token window (upload no error, sync no error)",
+        "system_commit_gib": 30.849994659423828,
+        "engine_private_gib": 18.395004272460938
+      },
+      {
+        "elapsed_s": 22.6,
+        "log": "strata verify: capturing the 4-token window (1738 MiB of VRAM free)",
+        "system_commit_gib": 30.872081756591797,
+        "engine_private_gib": 18.452945709228516
+      },
+      {
+        "elapsed_s": 22.851,
+        "log": "strata verify: captured the 4-token window (upload no error, sync no error)",
+        "system_commit_gib": 30.888362884521484,
+        "engine_private_gib": 18.458065032958984
+      },
+      {
+        "elapsed_s": 23.356,
+        "log": "strata verify: captured the 2-token window (upload no error, sync no error)",
+        "system_commit_gib": 30.91910171508789,
+        "engine_private_gib": 18.490509033203125
+      },
+      {
+        "elapsed_s": 35.847,
+        "log": "strata verify: captured the 6-token window (upload no error, sync no error)",
+        "system_commit_gib": 30.03963851928711,
+        "engine_private_gib": 18.51944351196289
+      }
+    ],
+    "output_hashes": [
+      "424afcd7b2e9e0e732d2fb26eca809e1bc91d31ebd6dbba624ce7dd4ace4fabb",
+      "b9be43458abffee31b385a274e77cd12d32ecc04f5249145ca23b6c4c2f6fdd9",
+      "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5",
+      "e2125038e8481128f882c8c6b97e0d0ba1217b6ee7baf6fabbcc9e34304d3454"
+    ],
+    "prompt_cpu_share_enabled": true,
+    "last_generation_private_gib": 18.578,
+    "last_generation_working_set_gib": 4.122
+  }
+]
