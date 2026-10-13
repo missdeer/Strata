@@ -90,34 +90,8 @@ node_modules/
 /apps/host/docs/evidence/
 /apps/host/docs/checkpoints/
 
-# Local SDK downloads, generated smoke binaries and cluster credentials.
-/tmp/hip-pip-cache/
-/tmp/cluster-hip-preflight/
-/tmp/cluster-hip-build/
-/tmp/*.exe*
-/tmp/dual-host-test/*.key
-/tmp/dual-host-test/*.pid
-/tmp/commit_message.txt
-
-# Native text migration build/test dependencies and generated parity reports.
-/tmp/jsoncons-source/
-/tmp/jsoncons-v1.7.0.zip
-/tmp/native-text-test-deps/
-/tmp/native-text-parity*.json
-/tmp/strata-native-text-*/
-/tmp/build-native-text*.cmd
-
-# Local native cluster build/package verification; never ship these fixtures.
-/tmp/stage5*/
-/tmp/stage5-*.json
-/tmp/build-stage5*.cmd
-/tmp/verify-stage5-*.py
-
-# Stage 6 local packages, source transfer archives, temporary configs and drivers.
-/tmp/stage6/
-/tmp/stage6-*.py
-/tmp/stage6-*.cmd
-/tmp/stage6-known-hosts
+# Local temporary files, downloads, credentials, and verification artifacts.
+/tmp/
 
 # Keep local build drivers under version control, but ignore build products.
 !/build/
