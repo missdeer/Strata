@@ -93,3 +93,11 @@ dist-hip/
 /tmp/stage6-*.py
 /tmp/stage6-*.cmd
 /tmp/stage6-known-hosts
+
+# Keep local build drivers under version control, but ignore build products.
+!/build/
+/build/*
+!/build/README.md
+!/build/*.cmd
+!/build/*.py
+!/build/*.hip
