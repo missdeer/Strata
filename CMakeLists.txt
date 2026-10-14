@@ -1481,6 +1481,11 @@ if(STRATA_NATIVE_EXPERTS)
   if(MSVC)
     set_source_files_properties(src/kernels/cpu/iq_avx512.cpp src/kernels/cpu/nvfp4_avx512.cpp
                                 PROPERTIES COMPILE_OPTIONS "/arch:AVX512")
+    if(CMAKE_CXX_COMPILER_ID MATCHES "^(Clang|IntelLLVM)$")
+      # clang-cl/icx-cl's /arch:AVX512 does not enable the NVFP4 kernel's VNNI dot product.
+      set_property(SOURCE src/kernels/cpu/nvfp4_avx512.cpp APPEND PROPERTY COMPILE_OPTIONS
+                   /clang:-mavx512vnni)
+    endif()
     set_source_files_properties(src/kernels/cpu/iq_avx2.cpp PROPERTIES COMPILE_OPTIONS "/arch:AVX2")
     set_source_files_properties(src/kernels/cpu/kq_avx2.cpp PROPERTIES COMPILE_OPTIONS "/arch:AVX2")
     set_source_files_properties(src/kernels/cpu/nvfp4_avx2.cpp PROPERTIES COMPILE_OPTIONS "/arch:AVX2")
