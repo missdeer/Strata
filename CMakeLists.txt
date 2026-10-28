@@ -1912,15 +1912,21 @@ if(STRATA_NATIVE_EXPERTS)
     set_source_files_properties(src/kernels/cpu/iq_avx512.cpp src/kernels/cpu/nvfp4_avx512.cpp
                                 PROPERTIES COMPILE_OPTIONS "/arch:AVX512")
     if(CMAKE_CXX_COMPILER_ID MATCHES "^(Clang|IntelLLVM)$")
-      # clang-cl/icx-cl's /arch:AVX512 does not enable the NVFP4 kernel's VNNI dot product.
+      # clang-cl/icx-cl's /arch:AVX512 does not enable the kernels' extra feature bits.
       set_property(SOURCE src/kernels/cpu/nvfp4_avx512.cpp APPEND PROPERTY COMPILE_OPTIONS
                    /clang:-mavx512vnni)
+      set_property(SOURCE src/kernels/cpu/iq_avx512.cpp APPEND PROPERTY COMPILE_OPTIONS
+                   /clang:-mavx512vnni /clang:-mavx512vpopcntdq)
     endif()
     set_source_files_properties(src/kernels/cpu/iq_avx2.cpp PROPERTIES COMPILE_OPTIONS "/arch:AVX2")
     set_source_files_properties(src/kernels/cpu/kq_avx2.cpp PROPERTIES COMPILE_OPTIONS "/arch:AVX2")
     set_source_files_properties(src/kernels/cpu/nvfp4_avx2.cpp PROPERTIES COMPILE_OPTIONS "/arch:AVX2")
     set_source_files_properties(src/kernels/cpu/tq_avx2.cpp PROPERTIES COMPILE_OPTIONS "/arch:AVX2")
     set_source_files_properties(src/kernels/cpu/tq_avx512.cpp PROPERTIES COMPILE_OPTIONS "/arch:AVX512")
+    if(CMAKE_CXX_COMPILER_ID MATCHES "^(Clang|IntelLLVM)$")
+      set_property(SOURCE src/kernels/cpu/tq_avx512.cpp APPEND PROPERTY COMPILE_OPTIONS
+                   /clang:-mavx512vnni /clang:-mavx512vbmi)
+    endif()
     # the router lookahead's AVX1 dot (older CPUs; called behind cpu_avx1_ok): no FMA, no 256-bit integer ops
     set_source_files_properties(src/kernels/cpu/kq_avx1.cpp PROPERTIES COMPILE_OPTIONS "/arch:AVX")
     # the older CPUs' Q2_0 rows and activation quantizer (q2_avx1.cpp, issue #1699): 128-bit integer lanes,
