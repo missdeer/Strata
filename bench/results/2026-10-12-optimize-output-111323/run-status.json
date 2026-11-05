@@ -1,0 +1,4 @@
+{
+  "status": "partial-diagnostic",
+  "reason": "Stopped after capture tool read stderr before request summary arrived. One output captured; a second generation completed in engine.log but token capture was not saved. No performance acceptance."
+}

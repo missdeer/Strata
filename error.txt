@@ -1,0 +1,48 @@
+[1/8] Building CXX object CMakeFiles\strata_kernels_cpu.dir\src\kernels\cpu\expert.cpp.obj
+icx-cl: warning: overriding '-QxHost' option with '-arch:AVX512' [-Woverriding-option]
+D:\Projects\Strata\src\kernels\cpu\expert.cpp(153,31): warning: 'getenv' is deprecated: This function or variable may be unsafe. Consider using _dupenv_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [-Wdeprecated-declarations]
+  153 | static const bool kZmm = std::getenv("STRATA_CPU_YMM") == nullptr;
+      |                               ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\stdlib.h(1183,20): note: 'getenv' has been explicitly marked deprecated here
+ 1183 |     _Check_return_ _CRT_INSECURE_DEPRECATE(_dupenv_s)
+      |                    ^
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vcruntime.h(368,55): note: expanded from macro '_CRT_INSECURE_DEPRECATE'
+  368 |         #define _CRT_INSECURE_DEPRECATE(_Replacement) _CRT_DEPRECATE_TEXT(    \
+      |                                                       ^
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vcruntime.h(358,47): note: expanded from macro '_CRT_DEPRECATE_TEXT'
+  358 | #define _CRT_DEPRECATE_TEXT(_Text) __declspec(deprecated(_Text))
+      |                                               ^
+1 warning generated.
+[2/8] Building C object ggml\src\CMakeFiles\ggml-base.dir\ggml.c.obj
+[3/8] Linking CXX static library ggml\src\ggml-base.lib
+[4/8] Building CXX object CMakeFiles\strata_kernels_cpu.dir\src\kernels\cpu\iq_avx512.cpp.obj
+icx-cl: warning: overriding '-QxHost' option with '-arch:AVX512' [-Woverriding-option]
+D:\Projects\Strata\src\kernels\cpu\iq_avx512.cpp(33,26): warning: 'getenv' is deprecated: This function or variable may be unsafe. Consider using _dupenv_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [-Wdeprecated-declarations]
+   33 | const bool gather = std::getenv("STRATA_IQ_GATHER") != nullptr;
+      |                          ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\stdlib.h(1183,20): note: 'getenv' has been explicitly marked deprecated here
+ 1183 |     _Check_return_ _CRT_INSECURE_DEPRECATE(_dupenv_s)
+      |                    ^
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vcruntime.h(368,55): note: expanded from macro '_CRT_INSECURE_DEPRECATE'
+  368 |         #define _CRT_INSECURE_DEPRECATE(_Replacement) _CRT_DEPRECATE_TEXT(    \
+      |                                                       ^
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vcruntime.h(358,47): note: expanded from macro '_CRT_DEPRECATE_TEXT'
+  358 | #define _CRT_DEPRECATE_TEXT(_Text) __declspec(deprecated(_Text))
+      |                                               ^
+D:\Projects\Strata\src\kernels\cpu\iq_avx512.cpp(37,26): warning: 'getenv' is deprecated: This function or variable may be unsafe. Consider using _dupenv_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [-Wdeprecated-declarations]
+   37 |     const char* v = std::getenv("STRATA_IQ_PREFETCH");
+      |                          ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\stdlib.h(1183,20): note: 'getenv' has been explicitly marked deprecated here
+ 1183 |     _Check_return_ _CRT_INSECURE_DEPRECATE(_dupenv_s)
+      |                    ^
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vcruntime.h(368,55): note: expanded from macro '_CRT_INSECURE_DEPRECATE'
+  368 |         #define _CRT_INSECURE_DEPRECATE(_Replacement) _CRT_DEPRECATE_TEXT(    \
+      |                                                       ^
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vcruntime.h(358,47): note: expanded from macro '_CRT_DEPRECATE_TEXT'
+  358 | #define _CRT_DEPRECATE_TEXT(_Text) __declspec(deprecated(_Text))
+      |                                               ^
+2 warnings generated.
+[5/8] Linking CXX static library strata_kernels_cpu.lib
+[6/8] Linking CXX static library strata_engine.lib
+[7/8] Linking CXX static library strata_prefill.lib
+[8/8] Linking CXX executable strata.exe

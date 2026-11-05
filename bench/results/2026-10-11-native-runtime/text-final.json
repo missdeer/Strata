@@ -1,0 +1,21 @@
+{
+  "tests": 15,
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "native_operations": {
+    "parse": 984,
+    "existing_parser_tests": 41,
+    "forced_call": 21,
+    "render": 21,
+    "capabilities": 1,
+    "prompt": 3,
+    "normalize": 23,
+    "encode": 727,
+    "decode": 120,
+    "stop": 84,
+    "structured": 131,
+    "utf8": 136,
+    "detokenize": 1
+  }
+}

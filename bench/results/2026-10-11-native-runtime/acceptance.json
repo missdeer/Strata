@@ -1,0 +1,198 @@
+{
+  "started_at_utc": "2026-10-11T06:20:47.579213+00:00",
+  "remote_directory": "D:/Strata/stage6-56326559ec19",
+  "packages": {
+    "host11": {
+      "files_verified": 33,
+      "artifacts": {},
+      "host_sha256": "d86575bdcbf4b846e404236334621ab13cfebf562f6a2c15033730ae4ae4f5bd",
+      "backend_sha256": "6838df87db944acbdf53b0046d5f21c3cb511c0f024e1af81d885c716ee50055",
+      "engine_sha256": null,
+      "cxx_release_flags": "/O3 /DNDEBUG /fp:precise"
+    },
+    "host16": {
+      "files_verified": 46,
+      "artifacts": {},
+      "host_sha256": "a3e756c68738bd70b486eab849fc34322f2388fce471304d2bd171f955adec02",
+      "backend_sha256": "cc79e07766df293e99730b423e2ea5105e3950b3db89638a72d70363d31b0917",
+      "engine_sha256": "2fafffdca7c4cc833af83e49320a5ffd395e94cd8fe7cc6f299996f599ae54e1",
+      "cxx_release_flags": "/O3 /DNDEBUG /QxHost /fp:precise"
+    }
+  },
+  "source_plan_sha256": "dca62f17f1310adc8b5ec1d8a69b288ce8d77d03f2764058da24a91ba165af48",
+  "runs": {
+    "python": {
+      "passed": true,
+      "worker_pid": 16224,
+      "coordinator_pid": 12152
+    },
+    "native": {
+      "passed": false,
+      "reason": "six output whitespace hashes differed; experts/usage/golden passed"
+    }
+  },
+  "complete": false,
+  "scope": "Windows CUDA coordinator + LAN CPU worker; no HIP/SYCL execution",
+  "config_sha256": "62ec61c4a84a2a026788035f842573ee4536c660e56070f9477d0fdbce97a120",
+  "coordinator_ipv4": "192.168.233.136",
+  "settings": {
+    "context": 8192,
+    "prefill": 512,
+    "worker_threads": 7,
+    "ram_cache_mib": 49152,
+    "preload_experts": true,
+    "network_reduce": true,
+    "max_tokens": 128,
+    "sampling_temperature": 0,
+    "network_profile": 0,
+    "task_logging": false,
+    "resource_sample_interval_seconds": 0.5
+  },
+  "worker_hardware": {
+    "cpu": "Intel(R) Core(TM) i7-10700 CPU @ 2.90GHz",
+    "os": "Microsoft Windows 10 专业版",
+    "ram_kib": 66950656
+  },
+  "engine_args": [
+    "--pack",
+    "D:\\Projects\\Strata-data\\packs\\iq3_s",
+    "--native",
+    "D:\\Projects\\Strata-data\\models\\IQ3_S\\Qwen3.8-Flash-Next-GSQ-RCO-IQ3_S-00001-of-00002.gguf",
+    "--ple-gguf",
+    "D:\\Projects\\Strata-data\\models\\IQ3_S\\Qwen3.8-Flash-Next-GSQ-RCO-IQ3_S-00002-of-00002.gguf",
+    "--expert-profile",
+    "D:\\Projects\\Strata\\data\\expert-profile.bin",
+    "--expert-cache",
+    "2400",
+    "--spec",
+    "4",
+    "--mtp",
+    "D:\\Projects\\Strata-data\\mtp\\rt",
+    "--kv",
+    "int8",
+    "--spec-min-p",
+    "0.5",
+    "--prompt-cache",
+    "6",
+    "--adapt-every",
+    "0",
+    "--vram-reserve-mib",
+    "1200",
+    "--pool-affinity",
+    "p-cores",
+    "--network-workers",
+    "192.168.233.126:18506",
+    "--network-timeout-ms",
+    "5000",
+    "--mmap-experts",
+    "--pcie-frac",
+    "0",
+    "--short-read",
+    "0",
+    "--max-context",
+    "8192",
+    "--prefill",
+    "512",
+    "--network-reduce",
+    "--network-local-ram-mib",
+    "1024",
+    "--prefill",
+    "512",
+    "--network-assignment",
+    "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "--network-config-id",
+    "62ec61c4a84a2a026788035f842573ee4536c660e56070f9477d0fdbce97a120",
+    "--network-timeout-ms",
+    "5000"
+  ],
+  "engine_environment_settings": {
+    "STRATA_FILE_RELEASE": "1",
+    "STRATA_POOL_SPIN_US": "50",
+    "STRATA_UNBUFFERED_LOAD": "1"
+  },
+  "expert_outputs_equal": true,
+  "api_outputs_and_usage_equal": false,
+  "native_worker_tree_has_python": false,
+  "native_refresh_history": [
+    {
+      "packages": {
+        "host11": {
+          "files_verified": 33,
+          "artifacts": {},
+          "host_sha256": "bc72c830300350da79cf0bd818191f5c44f455dea940bfbd825b715f3b16b979",
+          "backend_sha256": "6838df87db944acbdf53b0046d5f21c3cb511c0f024e1af81d885c716ee50055",
+          "engine_sha256": null,
+          "cxx_release_flags": "/O3 /DNDEBUG /fp:precise"
+        },
+        "host16": {
+          "files_verified": 46,
+          "artifacts": {},
+          "host_sha256": "85d3a0e2de4e5e0f5d8a40c7d54e14541ed5aee60412ac7fe24ab1df4e65a070",
+          "backend_sha256": "cc79e07766df293e99730b423e2ea5105e3950b3db89638a72d70363d31b0917",
+          "engine_sha256": "2fafffdca7c4cc833af83e49320a5ffd395e94cd8fe7cc6f299996f599ae54e1",
+          "cxx_release_flags": "/O3 /DNDEBUG /QxHost /fp:precise"
+        }
+      },
+      "run": {
+        "passed": true,
+        "worker_pid": 6900,
+        "coordinator_pid": 9692
+      },
+      "at_utc": "2026-10-11T06:49:23.518947+00:00"
+    },
+    {
+      "packages": {
+        "host11": {
+          "files_verified": 33,
+          "artifacts": {},
+          "host_sha256": "d86575bdcbf4b846e404236334621ab13cfebf562f6a2c15033730ae4ae4f5bd",
+          "backend_sha256": "6838df87db944acbdf53b0046d5f21c3cb511c0f024e1af81d885c716ee50055",
+          "engine_sha256": null,
+          "cxx_release_flags": "/O3 /DNDEBUG /fp:precise"
+        },
+        "host16": {
+          "files_verified": 46,
+          "artifacts": {},
+          "host_sha256": "a3e756c68738bd70b486eab849fc34322f2388fce471304d2bd171f955adec02",
+          "backend_sha256": "cc79e07766df293e99730b423e2ea5105e3950b3db89638a72d70363d31b0917",
+          "engine_sha256": "2fafffdca7c4cc833af83e49320a5ffd395e94cd8fe7cc6f299996f599ae54e1",
+          "cxx_release_flags": "/O3 /DNDEBUG /QxHost /fp:precise"
+        }
+      },
+      "run": {
+        "passed": true,
+        "worker_pid": 14616,
+        "coordinator_pid": 18836
+      },
+      "at_utc": "2026-10-11T07:55:40.312815+00:00"
+    },
+    {
+      "packages": {
+        "host11": {
+          "files_verified": 33,
+          "artifacts": {},
+          "host_sha256": "d86575bdcbf4b846e404236334621ab13cfebf562f6a2c15033730ae4ae4f5bd",
+          "backend_sha256": "6838df87db944acbdf53b0046d5f21c3cb511c0f024e1af81d885c716ee50055",
+          "engine_sha256": null,
+          "cxx_release_flags": "/O3 /DNDEBUG /fp:precise"
+        },
+        "host16": {
+          "files_verified": 46,
+          "artifacts": {},
+          "host_sha256": "edeb55ed34c5d628dfc3926ed11214e67d5a35581a3dec0bf464adb9f9bbb936",
+          "backend_sha256": "cc79e07766df293e99730b423e2ea5105e3950b3db89638a72d70363d31b0917",
+          "engine_sha256": "2fafffdca7c4cc833af83e49320a5ffd395e94cd8fe7cc6f299996f599ae54e1",
+          "cxx_release_flags": "/O3 /DNDEBUG /QxHost /fp:precise"
+        }
+      },
+      "run": {
+        "passed": true,
+        "worker_pid": 12692,
+        "coordinator_pid": 7268
+      },
+      "at_utc": "2026-10-11T11:17:26.613935+00:00"
+    }
+  ],
+  "diagnostic_token_trace": false,
+  "measurement_native_source": "tmp/stage6/lan-quiet/native-repeat-071607"
+}

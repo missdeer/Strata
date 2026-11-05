@@ -1,0 +1,464 @@
+{
+  "config": "D:\\Projects\\Strata\\tmp\\stage6\\lan-quiet\\runtime.json",
+  "runs": {
+    "native": {
+      "short": {
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "Hello world"
+            },
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 18,
+          "completion_tokens": 3,
+          "total_tokens": 21,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        }
+      },
+      "long": {
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "The sky is blue."
+            },
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 2029,
+          "completion_tokens": 6,
+          "total_tokens": 2035,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        }
+      },
+      "turn1": {
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "OK"
+            },
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 24,
+          "completion_tokens": 2,
+          "total_tokens": 26,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        }
+      },
+      "turn2": {
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "violet"
+            },
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 51,
+          "completion_tokens": 3,
+          "total_tokens": 54,
+          "prompt_tokens_details": {
+            "cached_tokens": 17
+          }
+        }
+      },
+      "tools": {
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": null,
+              "tool_calls": [
+                {
+                  "id": "CALL",
+                  "type": "function",
+                  "function": {
+                    "name": "echo",
+                    "arguments": {
+                      "text": "hello"
+                    }
+                  }
+                }
+              ]
+            },
+            "finish_reason": "tool_calls"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 272,
+          "completion_tokens": 25,
+          "total_tokens": 297,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        }
+      },
+      "responses": {
+        "object": "response",
+        "status": "completed",
+        "background": false,
+        "error": null,
+        "incomplete_details": null,
+        "instructions": null,
+        "max_output_tokens": 32,
+        "model": "qwen3.8-flash-next-iq3_s-network",
+        "output": [
+          {
+            "type": "message",
+            "status": "completed",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "Hello world",
+                "annotations": [],
+                "logprobs": []
+              }
+            ]
+          }
+        ],
+        "parallel_tool_calls": true,
+        "previous_response_id": null,
+        "reasoning": {
+          "effort": "none",
+          "summary": null
+        },
+        "store": false,
+        "temperature": 0,
+        "text": {
+          "format": {
+            "type": "text"
+          }
+        },
+        "tool_choice": "auto",
+        "tools": [],
+        "top_p": null,
+        "truncation": "disabled",
+        "usage": {
+          "input_tokens": 18,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens": 3,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 21
+        },
+        "user": null,
+        "metadata": {}
+      },
+      "anthropic": {
+        "type": "message",
+        "role": "assistant",
+        "model": "qwen3.8-flash-next-iq3_s-network",
+        "content": [
+          {
+            "type": "text",
+            "text": "Hello world"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 7,
+          "cache_read_input_tokens": 11,
+          "output_tokens": 3
+        }
+      },
+      "disconnect": {
+        "next_request_completed": true
+      }
+    },
+    "python": {
+      "short": {
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "Hello world"
+            },
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 18,
+          "completion_tokens": 3,
+          "total_tokens": 21,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        }
+      },
+      "long": {
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "The sky is blue."
+            },
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 2029,
+          "completion_tokens": 6,
+          "total_tokens": 2035,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        }
+      },
+      "turn1": {
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "OK"
+            },
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 24,
+          "completion_tokens": 2,
+          "total_tokens": 26,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        }
+      },
+      "turn2": {
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "violet"
+            },
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 51,
+          "completion_tokens": 3,
+          "total_tokens": 54,
+          "prompt_tokens_details": {
+            "cached_tokens": 17
+          }
+        }
+      },
+      "tools": {
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": null,
+              "tool_calls": [
+                {
+                  "id": "CALL",
+                  "type": "function",
+                  "function": {
+                    "name": "echo",
+                    "arguments": {
+                      "text": "hello"
+                    }
+                  }
+                }
+              ]
+            },
+            "finish_reason": "tool_calls"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 272,
+          "completion_tokens": 25,
+          "total_tokens": 297,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        }
+      },
+      "responses": {
+        "object": "response",
+        "status": "completed",
+        "background": false,
+        "error": null,
+        "incomplete_details": null,
+        "instructions": null,
+        "max_output_tokens": 32,
+        "model": "qwen3.8-flash-next-iq3_s-network",
+        "output": [
+          {
+            "type": "message",
+            "status": "completed",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "Hello world",
+                "annotations": [],
+                "logprobs": []
+              }
+            ]
+          }
+        ],
+        "parallel_tool_calls": true,
+        "previous_response_id": null,
+        "reasoning": {
+          "effort": "none",
+          "summary": null
+        },
+        "store": false,
+        "temperature": 0,
+        "text": {
+          "format": {
+            "type": "text"
+          }
+        },
+        "tool_choice": "auto",
+        "tools": [],
+        "top_p": null,
+        "truncation": "disabled",
+        "usage": {
+          "input_tokens": 18,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens": 3,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 21
+        },
+        "user": null,
+        "metadata": {}
+      },
+      "anthropic": {
+        "type": "message",
+        "role": "assistant",
+        "model": "qwen3.8-flash-next-iq3_s-network",
+        "content": [
+          {
+            "type": "text",
+            "text": "Hello world"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 7,
+          "output_tokens": 3,
+          "cache_read_input_tokens": 11
+        }
+      },
+      "disconnect": {
+        "next_request_completed": true
+      }
+    }
+  },
+  "performance_claim": false,
+  "parallel": 1,
+  "ports": {
+    "native": 18085,
+    "python": 54566
+  },
+  "engines": {
+    "native": {
+      "version": "0.1.42",
+      "logit_bias": 1,
+      "context": 8192,
+      "kv": "int8",
+      "kv_resident": 0,
+      "expert_slots": 3107,
+      "expert_cache_mib": 6092,
+      "expert_slots_primary": 3107,
+      "expert_cache_primary_mib": 6092,
+      "spec": 6,
+      "mtp_max": 4,
+      "lookup": 3,
+      "vram_free_mib": 2862,
+      "cvec": 0,
+      "arena_mib": 1023,
+      "pool_workers": 5,
+      "pcie_frac": "0.00",
+      "spec_min_p": "0.50",
+      "conversation_cache_mib": 0,
+      "conversation_cache_slots": 4,
+      "conversation_cache_min_free_mib": 2560,
+      "conversation_cache_min_tokens": 0,
+      "tail_role_token": -1,
+      "vram_elastic": 0,
+      "engine": "0.1.42",
+      "model": "qwen3.8-flash-next-iq3_s-network",
+      "max_context": 8192,
+      "images": false,
+      "native": true
+    },
+    "python": {
+      "model": "qwen3.8-flash-next-iq3_s-network",
+      "max_context": 8192,
+      "images": false,
+      "version": "0.1.42",
+      "logit_bias": 1,
+      "context": 8192,
+      "kv": "int8",
+      "kv_resident": 0,
+      "expert_slots": 3107,
+      "expert_cache_mib": 6092,
+      "expert_slots_primary": 3107,
+      "expert_cache_primary_mib": 6092,
+      "spec": 6,
+      "mtp_max": 4,
+      "lookup": 3,
+      "vram_free_mib": 2979,
+      "cvec": 0,
+      "arena_mib": 1023,
+      "pool_workers": 5,
+      "pcie_frac": "0.00",
+      "spec_min_p": "0.50",
+      "conversation_cache_mib": 0,
+      "conversation_cache_slots": 4,
+      "conversation_cache_min_free_mib": 2560,
+      "conversation_cache_min_tokens": 0,
+      "tail_role_token": -1,
+      "vram_elastic": 0,
+      "engine": "0.1.42"
+    }
+  },
+  "equal": {
+    "short": true,
+    "long": true,
+    "turn1": true,
+    "turn2": true,
+    "tools": true,
+    "responses": true,
+    "anthropic": true,
+    "disconnect": true
+  }
+}

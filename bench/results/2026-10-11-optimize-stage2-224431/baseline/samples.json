@@ -1,0 +1,30 @@
+[
+  {
+    "warmup": true,
+    "output_tokens": 256,
+    "decode_ms": 15252,
+    "tok_s": 16.8,
+    "token_sha256": "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5"
+  },
+  {
+    "warmup": false,
+    "output_tokens": 256,
+    "decode_ms": 18183,
+    "tok_s": 14.1,
+    "token_sha256": "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5"
+  },
+  {
+    "warmup": false,
+    "output_tokens": 256,
+    "decode_ms": 15528,
+    "tok_s": 16.5,
+    "token_sha256": "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5"
+  },
+  {
+    "warmup": false,
+    "output_tokens": 256,
+    "decode_ms": 17817,
+    "tok_s": 14.4,
+    "token_sha256": "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5"
+  }
+]

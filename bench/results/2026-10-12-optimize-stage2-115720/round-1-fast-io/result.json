@@ -1,0 +1,391 @@
+{
+  "case": {
+    "name": "fast-io",
+    "env": {
+      "STRATA_NETWORK_FAST_IO": "1"
+    }
+  },
+  "samples": [
+    {
+      "warmup": true,
+      "output_tokens": 256,
+      "decode_ms": 18677.7,
+      "tok_s": 13.706184380303783,
+      "token_sha256": "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5",
+      "request_seconds": 21.41,
+      "done": "DONE 256 36 2720.7 18677.7 length 171 218 0 29244 146400 0 0 0.0 36 0",
+      "prompt_ms_exact": 2720.7,
+      "decode_ms_exact": 18677.7,
+      "finish": "length",
+      "ram_blob_reads": 0,
+      "file_blob_reads": 0,
+      "file_read_mb": 0.0,
+      "network_delta": {
+        "requests": 4176,
+        "entries": 117156,
+        "tx_bytes": 151486512,
+        "rx_bytes": 150013824,
+        "roundtrip_ms": 15623.541
+      },
+      "local_entries_delta": 0,
+      "prompt_tokens": 36,
+      "reused_tokens": 0,
+      "read_tokens": 36,
+      "prompt_ms": 2721,
+      "drafts_accepted": 171,
+      "drafts_proposed": 218,
+      "gpu_cache_hit_percent": 20.0,
+      "gpu_cache_hits": 29244,
+      "gpu_cache_lookups": 146400
+    },
+    {
+      "warmup": false,
+      "output_tokens": 256,
+      "decode_ms": 16184.6,
+      "tok_s": 15.817505529948223,
+      "token_sha256": "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5",
+      "request_seconds": 17.516,
+      "done": "DONE 256 36 1330.3 16184.6 length 171 218 0 29244 146400 0 0 0.0 36 0",
+      "prompt_ms_exact": 1330.3,
+      "decode_ms_exact": 16184.6,
+      "finish": "length",
+      "ram_blob_reads": 0,
+      "file_blob_reads": 0,
+      "file_read_mb": 0.0,
+      "network_delta": {
+        "requests": 4176,
+        "entries": 117156,
+        "tx_bytes": 151486512,
+        "rx_bytes": 150013824,
+        "roundtrip_ms": 13267.695000000002
+      },
+      "local_entries_delta": 0,
+      "prompt_tokens": 36,
+      "reused_tokens": 0,
+      "read_tokens": 36,
+      "prompt_ms": 1330,
+      "drafts_accepted": 171,
+      "drafts_proposed": 218,
+      "gpu_cache_hit_percent": 20.0,
+      "gpu_cache_hits": 29244,
+      "gpu_cache_lookups": 146400
+    },
+    {
+      "warmup": false,
+      "output_tokens": 256,
+      "decode_ms": 18800.2,
+      "tok_s": 13.616876416208338,
+      "token_sha256": "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5",
+      "request_seconds": 20.152,
+      "done": "DONE 256 36 1350.5 18800.2 length 171 218 0 29244 146400 0 0 0.0 36 0",
+      "prompt_ms_exact": 1350.5,
+      "decode_ms_exact": 18800.2,
+      "finish": "length",
+      "ram_blob_reads": 0,
+      "file_blob_reads": 0,
+      "file_read_mb": 0.0,
+      "network_delta": {
+        "requests": 4176,
+        "entries": 117156,
+        "tx_bytes": 151486512,
+        "rx_bytes": 150013824,
+        "roundtrip_ms": 15861.378
+      },
+      "local_entries_delta": 0,
+      "prompt_tokens": 36,
+      "reused_tokens": 0,
+      "read_tokens": 36,
+      "prompt_ms": 1351,
+      "drafts_accepted": 171,
+      "drafts_proposed": 218,
+      "gpu_cache_hit_percent": 20.0,
+      "gpu_cache_hits": 29244,
+      "gpu_cache_lookups": 146400
+    },
+    {
+      "warmup": false,
+      "output_tokens": 256,
+      "decode_ms": 16383.6,
+      "tok_s": 15.625381479040016,
+      "token_sha256": "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5",
+      "request_seconds": 17.753,
+      "done": "DONE 256 36 1368.5 16383.6 length 171 218 0 29244 146400 0 0 0.0 36 0",
+      "prompt_ms_exact": 1368.5,
+      "decode_ms_exact": 16383.6,
+      "finish": "length",
+      "ram_blob_reads": 0,
+      "file_blob_reads": 0,
+      "file_read_mb": 0.0,
+      "network_delta": {
+        "requests": 4176,
+        "entries": 117156,
+        "tx_bytes": 151486512,
+        "rx_bytes": 150013824,
+        "roundtrip_ms": 13374.994999999995
+      },
+      "local_entries_delta": 0,
+      "prompt_tokens": 36,
+      "reused_tokens": 0,
+      "read_tokens": 36,
+      "prompt_ms": 1368,
+      "drafts_accepted": 171,
+      "drafts_proposed": 218,
+      "gpu_cache_hit_percent": 20.0,
+      "gpu_cache_hits": 29244,
+      "gpu_cache_lookups": 146400
+    },
+    {
+      "warmup": false,
+      "output_tokens": 256,
+      "decode_ms": 19093.1,
+      "tok_s": 13.407985083616596,
+      "token_sha256": "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5",
+      "request_seconds": 20.464,
+      "done": "DONE 256 36 1369.2 19093.1 length 171 218 0 29244 146400 0 0 0.0 36 0",
+      "prompt_ms_exact": 1369.2,
+      "decode_ms_exact": 19093.1,
+      "finish": "length",
+      "ram_blob_reads": 0,
+      "file_blob_reads": 0,
+      "file_read_mb": 0.0,
+      "network_delta": {
+        "requests": 4176,
+        "entries": 117156,
+        "tx_bytes": 151486512,
+        "rx_bytes": 150013824,
+        "roundtrip_ms": 16177.665999999997
+      },
+      "local_entries_delta": 0,
+      "prompt_tokens": 36,
+      "reused_tokens": 0,
+      "read_tokens": 36,
+      "prompt_ms": 1369,
+      "drafts_accepted": 171,
+      "drafts_proposed": 218,
+      "gpu_cache_hit_percent": 20.0,
+      "gpu_cache_hits": 29244,
+      "gpu_cache_lookups": 146400
+    },
+    {
+      "warmup": false,
+      "output_tokens": 256,
+      "decode_ms": 16303.9,
+      "tok_s": 15.701764608467913,
+      "token_sha256": "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5",
+      "request_seconds": 17.645,
+      "done": "DONE 256 36 1339.9 16303.9 length 171 218 0 29244 146400 0 0 0.0 36 0",
+      "prompt_ms_exact": 1339.9,
+      "decode_ms_exact": 16303.9,
+      "finish": "length",
+      "ram_blob_reads": 0,
+      "file_blob_reads": 0,
+      "file_read_mb": 0.0,
+      "network_delta": {
+        "requests": 4176,
+        "entries": 117156,
+        "tx_bytes": 151486512,
+        "rx_bytes": 150013824,
+        "roundtrip_ms": 13374.985
+      },
+      "local_entries_delta": 0,
+      "prompt_tokens": 36,
+      "reused_tokens": 0,
+      "read_tokens": 36,
+      "prompt_ms": 1340,
+      "drafts_accepted": 171,
+      "drafts_proposed": 218,
+      "gpu_cache_hit_percent": 20.0,
+      "gpu_cache_hits": 29244,
+      "gpu_cache_lookups": 146400
+    }
+  ],
+  "actual_ram_gib": 0,
+  "local_entries": 0,
+  "engine_sha256": "82b111c65a753cb613cc7f7a0b378efe81d2eeb7b45815dbdcc5b3e1e5f61314",
+  "actual_gpu_cache_slots": 3107,
+  "actual_gpu_cache_gib": 5.95,
+  "context": 131072,
+  "prompt_tokens": 36,
+  "argv": [
+    "--pack",
+    "D:\\Projects\\Strata-data\\packs\\iq3_s",
+    "--native",
+    "D:\\Projects\\Strata-data\\models\\IQ3_S\\Qwen3.8-Flash-Next-GSQ-RCO-IQ3_S-00001-of-00002.gguf",
+    "--ple-gguf",
+    "D:\\Projects\\Strata-data\\models\\IQ3_S\\Qwen3.8-Flash-Next-GSQ-RCO-IQ3_S-00002-of-00002.gguf",
+    "--expert-profile",
+    "D:\\Projects\\Strata\\data\\expert-profile.bin",
+    "--expert-cache",
+    "2400",
+    "--spec",
+    "4",
+    "--mtp",
+    "D:\\Projects\\Strata-data\\mtp\\rt",
+    "--kv",
+    "int8",
+    "--spec-min-p",
+    "0.5",
+    "--prompt-cache",
+    "6",
+    "--adapt-every",
+    "0",
+    "--vram-reserve-mib",
+    "1200",
+    "--pool-affinity",
+    "p-cores",
+    "--network-workers",
+    "192.168.233.126:18520",
+    "--network-timeout-ms",
+    "5000",
+    "--mmap-experts",
+    "--pcie-frac",
+    "0",
+    "--short-read",
+    "0",
+    "--max-context",
+    "131072",
+    "--prefill",
+    "512",
+    "--network-reduce",
+    "--prefill",
+    "512",
+    "--network-assignment",
+    "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "--network-config-id",
+    "3707685201700af0c1f236b2959f7f9a00a79b918e6e758ba36aa0064779dcd9",
+    "--prompt-cache",
+    "0",
+    "--suffix-draft",
+    "0",
+    "--lookup-chain",
+    "0"
+  ],
+  "request_options": "temperature=0 seed=42",
+  "benchmark_env": {
+    "STRATA_POOL_SPIN_US": "50",
+    "STRATA_FILE_RELEASE": "1",
+    "STRATA_UNBUFFERED_LOAD": "1",
+    "STRATA_PREFILL_CPU_SHARE": "0",
+    "STRATA_NETWORK_FAST_IO": "1"
+  },
+  "median_tok_s": 15.625381479040016,
+  "max_decode_ms": 19093.1,
+  "p95_per_token_ms": 74.582421875,
+  "worker_usage": {
+    "before": {
+      "processes": [
+        {
+          "Id": 21872,
+          "ProcessName": "strata-host",
+          "CPU": 0.046875,
+          "WorkingSet64": 8286208,
+          "PrivateMemorySize64": 3747840
+        },
+        {
+          "Id": 20744,
+          "ProcessName": "conhost",
+          "CPU": 0.015625,
+          "WorkingSet64": 12247040,
+          "PrivateMemorySize64": 6545408
+        },
+        {
+          "Id": 1072,
+          "ProcessName": "strata-host",
+          "CPU": 36.71875,
+          "WorkingSet64": 50375577600,
+          "PrivateMemorySize64": 50579013632
+        }
+      ],
+      "utc": "2026-10-12T04:06:04.5953338Z"
+    },
+    "after": {
+      "processes": [
+        {
+          "Id": 21872,
+          "ProcessName": "strata-host",
+          "CPU": 0.046875,
+          "WorkingSet64": 8364032,
+          "PrivateMemorySize64": 3813376
+        },
+        {
+          "Id": 20744,
+          "ProcessName": "conhost",
+          "CPU": 0.015625,
+          "WorkingSet64": 12283904,
+          "PrivateMemorySize64": 6606848
+        },
+        {
+          "Id": 1072,
+          "ProcessName": "strata-host",
+          "CPU": 768.96875,
+          "WorkingSet64": 50376232960,
+          "PrivateMemorySize64": 50579460096
+        }
+      ],
+      "utc": "2026-10-12T04:08:21.1727874Z"
+    },
+    "wall_seconds": 136.577454,
+    "cpu_seconds": 732.25,
+    "average_busy_cores": 5.361426637810953,
+    "idle_start": {
+      "processes": [
+        {
+          "Id": 21872,
+          "ProcessName": "strata-host",
+          "CPU": 0.046875,
+          "WorkingSet64": 8364032,
+          "PrivateMemorySize64": 3813376
+        },
+        {
+          "Id": 20744,
+          "ProcessName": "conhost",
+          "CPU": 0.015625,
+          "WorkingSet64": 12283904,
+          "PrivateMemorySize64": 6606848
+        },
+        {
+          "Id": 1072,
+          "ProcessName": "strata-host",
+          "CPU": 768.96875,
+          "WorkingSet64": 50376232960,
+          "PrivateMemorySize64": 50579460096
+        }
+      ],
+      "utc": "2026-10-12T04:08:23.9061400Z"
+    },
+    "idle_end": {
+      "processes": [
+        {
+          "Id": 21872,
+          "ProcessName": "strata-host",
+          "CPU": 0.046875,
+          "WorkingSet64": 8364032,
+          "PrivateMemorySize64": 3813376
+        },
+        {
+          "Id": 20744,
+          "ProcessName": "conhost",
+          "CPU": 0.015625,
+          "WorkingSet64": 12283904,
+          "PrivateMemorySize64": 6606848
+        },
+        {
+          "Id": 1072,
+          "ProcessName": "strata-host",
+          "CPU": 768.96875,
+          "WorkingSet64": 50376232960,
+          "PrivateMemorySize64": 50579460096
+        }
+      ],
+      "utc": "2026-10-12T04:08:26.5788035Z"
+    },
+    "idle_wall_seconds": 2.672663,
+    "idle_cpu_seconds": 0.0,
+    "idle_average_busy_cores": 0.0,
+    "note": "Whole engine session including launch/warmup/diagnostic reads; not decode-only CPU use. Idle follows a two-second settling interval."
+  },
+  "round": 1,
+  "worker_env": {
+    "STRATA_NETWORK_FAST_IO": "1"
+  }
+}

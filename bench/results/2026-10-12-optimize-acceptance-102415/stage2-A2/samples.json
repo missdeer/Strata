@@ -1,0 +1,74 @@
+[
+  {
+    "warmup": true,
+    "output_tokens": 256,
+    "decode_ms": 15964,
+    "tok_s": 16.0,
+    "token_sha256": "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5",
+    "drafts_accepted": 172,
+    "drafts_proposed": 219,
+    "gpu_cache_hit_percent": 20.0,
+    "gpu_cache_hits": 29262,
+    "gpu_cache_lookups": 146400
+  },
+  {
+    "warmup": false,
+    "output_tokens": 256,
+    "decode_ms": 19342,
+    "tok_s": 13.2,
+    "token_sha256": "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5",
+    "drafts_accepted": 172,
+    "drafts_proposed": 219,
+    "gpu_cache_hit_percent": 20.0,
+    "gpu_cache_hits": 29262,
+    "gpu_cache_lookups": 146400
+  },
+  {
+    "warmup": false,
+    "output_tokens": 256,
+    "decode_ms": 15642,
+    "tok_s": 16.4,
+    "token_sha256": "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5",
+    "drafts_accepted": 172,
+    "drafts_proposed": 219,
+    "gpu_cache_hit_percent": 20.0,
+    "gpu_cache_hits": 29246,
+    "gpu_cache_lookups": 146400
+  },
+  {
+    "warmup": false,
+    "output_tokens": 256,
+    "decode_ms": 16138,
+    "tok_s": 15.9,
+    "token_sha256": "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5",
+    "drafts_accepted": 172,
+    "drafts_proposed": 219,
+    "gpu_cache_hit_percent": 20.0,
+    "gpu_cache_hits": 29246,
+    "gpu_cache_lookups": 146400
+  },
+  {
+    "warmup": false,
+    "output_tokens": 256,
+    "decode_ms": 17790,
+    "tok_s": 14.4,
+    "token_sha256": "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5",
+    "drafts_accepted": 172,
+    "drafts_proposed": 219,
+    "gpu_cache_hit_percent": 20.0,
+    "gpu_cache_hits": 29246,
+    "gpu_cache_lookups": 146400
+  },
+  {
+    "warmup": false,
+    "output_tokens": 256,
+    "decode_ms": 17241,
+    "tok_s": 14.8,
+    "token_sha256": "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5",
+    "drafts_accepted": 171,
+    "drafts_proposed": 220,
+    "gpu_cache_hit_percent": 20.0,
+    "gpu_cache_hits": 29450,
+    "gpu_cache_lookups": 147360
+  }
+]

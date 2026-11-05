@@ -1,0 +1,35 @@
+# Build the encoder into strata-host, sharing the engine's pinned CPU ggml.
+# Include only llama/mtmd libraries: no second ggml or upstream CLI targets.
+function(strata_add_native_vision llama_root)
+  set(BUILD_SHARED_LIBS OFF)
+  foreach(_option COMMON TOOLS TESTS EXAMPLES SERVER APP)
+    set(LLAMA_BUILD_${_option} OFF CACHE BOOL "" FORCE)
+  endforeach()
+  set(LLAMA_BUILD_MTMD ON CACHE BOOL "" FORCE)
+  set(LLAMA_SUBPROCESS OFF CACHE BOOL "" FORCE)
+  set(LLAMA_OPENSSL OFF CACHE BOOL "" FORCE)
+  set(LLAMA_CURL OFF CACHE BOOL "" FORCE)
+  # Upstream skips its ggml subdirectory when the parent already provides ggml.
+  add_subdirectory("${llama_root}" "${CMAKE_BINARY_DIR}/native-vision" EXCLUDE_FROM_ALL)
+  # The HTTP image decoder also implements stb_image. Keep mtmd's copy private.
+  target_compile_definitions(mtmd PRIVATE STB_IMAGE_STATIC)
+  target_sources(strata-host PRIVATE "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../tools/vision/strata_vision.cpp")
+  target_compile_definitions(strata-host PRIVATE STRATA_HOST_BUILD=1)
+  target_link_libraries(strata-host PRIVATE mtmd llama)
+  # These header-only dependencies carry their licenses in the source headers.
+  foreach(_header stb/stb_image.h miniaudio/miniaudio.h sheredom/subprocess.h)
+    get_filename_component(_name "${_header}" NAME_WE)
+    file(READ "${llama_root}/vendor/${_header}" _text)
+    if(_name STREQUAL "subprocess")
+      string(FIND "${_text}" "This is free and unencumbered software" _begin)
+      # The first license comment ends before the implementation.
+      string(SUBSTRING "${_text}" ${_begin} -1 _license)
+      string(FIND "${_license}" "*/" _end)
+      string(SUBSTRING "${_license}" 0 ${_end} _license)
+    else()
+      string(FIND "${_text}" "This software is available" _begin REVERSE)
+      string(SUBSTRING "${_text}" ${_begin} -1 _license)
+    endif()
+    file(WRITE "${CMAKE_BINARY_DIR}/native-text-licenses/${_name}-LICENSE.txt" "${_license}")
+  endforeach()
+endfunction()

@@ -3,6 +3,9 @@
 This page is for people with two or more graphics cards of the same make in one PC. A layer split puts one model on
 several cards. NVIDIA is described here; AMD limits and measurements are in [AMD_HIP.md](AMD_HIP.md).
 
+Cards in different PCs use a separate experimental LAN expert-worker path:
+[MULTI_HOST.md](MULTI_HOST.md). The layer split on this page shares RAM inside one PC.
+
 > **On this page:** [Using it](#using-it) · [Main, Helper, Off](#main-helper-off) · [How the split works](#how-the-split-works) ·
 > [Tuning options](#tuning-options) · [Pipeline windows](#pipeline-windows) · [Two models on two cards](#two-models-on-two-cards) ·
 > [DeepSeek](#deepseek-v41-flash) · [Limits](#limits) · [History](#history--older-measurements)

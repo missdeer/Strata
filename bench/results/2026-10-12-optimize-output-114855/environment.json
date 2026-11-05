@@ -1,0 +1,31 @@
+{
+  "measured_at_utc": "2026-10-12T03:48:55.293750+00:00",
+  "command": "tools/diagnose_cluster_output.py --cases plain,unreduced --repeats 3",
+  "os": "Windows-11-10.0.26200-SP0",
+  "cpu": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+  "ram_bytes": 34107224064,
+  "gpu": "NVIDIA GeForce RTX 4060 Ti, 610.88, 16380 MiB",
+  "files": [
+    {
+      "path": "D:\\Projects\\Strata\\tmp\\dual-host-native\\optimize-host16\\strata.exe",
+      "sha256": "82b111c65a753cb613cc7f7a0b378efe81d2eeb7b45815dbdcc5b3e1e5f61314",
+      "bytes": 54127104
+    },
+    {
+      "path": "D:\\Projects\\Strata\\data\\expert-profile.bin",
+      "sha256": "8f59b4aa8873209dff11c11e37bcda9529a1335b724a1afeea37bf6388975baf",
+      "bytes": 196632
+    },
+    {
+      "path": "D:\\Projects\\Strata\\tmp\\dual-host-native\\server.json",
+      "sha256": "81c702a5a51e77e6756baf888d69473dff04e9b4bbacf58a8f1052b3cc1abd18",
+      "bytes": 1557
+    },
+    {
+      "path": "D:\\Projects\\Strata-data\\packs\\iq3_s\\native_experts.txt",
+      "sha256": "d9ac2dfa3ee63c55c9c6a6db26f72da0cec0ee41733f007e5cbbbba71617aa5d",
+      "bytes": 3304
+    }
+  ],
+  "remote": "{\"Name\":\"Intel(R) Core(TM) i7-10700 CPU @ 2.90GHz\",\"NumberOfCores\":8,\"NumberOfLogicalProcessors\":16}"
+}

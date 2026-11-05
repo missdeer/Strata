@@ -1,0 +1,9 @@
+{
+  "status": "completed-diagnostic",
+  "cases": [
+    "plain",
+    "unreduced"
+  ],
+  "generations_per_case": 4,
+  "performance_acceptance": false
+}

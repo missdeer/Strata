@@ -701,6 +701,7 @@ if(STRATA_ENABLE_CUDA OR STRATA_ENABLE_HIP)
   # library is the honest shape of the dependency graph: core knows about devices and weights, kernels know
   # about arithmetic, and this one knows the ORDER the arithmetic happens in.
   add_library(strata_engine STATIC src/core/layer.cpp src/core/session.cpp src/core/expert_source.cpp src/core/remote_experts.cpp
+    src/core/network_experts.cpp
     src/core/remote_expert_opt.cu
     src/core/expert_cache.cpp src/core/native_head.cpp src/core/native_dense.cpp src/core/verify.cpp src/core/mtp.cpp src/core/dflash2.cpp
     src/core/conversation_snapshot.cpp src/core/conversation_state.cpp src/core/conversation_memory.cpp src/core/peer_experts.cpp
@@ -713,6 +714,9 @@ if(STRATA_ENABLE_CUDA OR STRATA_ENABLE_HIP)
     target_link_libraries(host_graph_launch_test PRIVATE CUDA::cudart Threads::Threads)
     add_test(NAME host_graph_launch_test COMMAND host_graph_launch_test)
     set_tests_properties(host_graph_launch_test PROPERTIES TIMEOUT 30)
+  endif()
+  if(WIN32)
+    target_link_libraries(strata_engine PUBLIC ws2_32)
   endif()
   if(STRATA_BUILD_TESTS AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/core/exchange_storage_test.cpp")
     add_executable(exchange_storage_test tests/core/exchange_storage_test.cpp)
@@ -2004,6 +2008,11 @@ target_include_directories(strata_kernels_cpu PUBLIC include)
 # and the engine picks the kernels at run time (cpu_avx512_ok).
 if(MSVC)
   set_source_files_properties(src/kernels/cpu/expert.cpp PROPERTIES COMPILE_OPTIONS "/arch:AVX512")
+  if(CMAKE_CXX_COMPILER_ID MATCHES "^(Clang|IntelLLVM)$")
+    # clang-cl/icx-cl's /arch:AVX512 does not include VNNI or VBMI, both used by this kernel.
+    set_property(SOURCE src/kernels/cpu/expert.cpp APPEND PROPERTY COMPILE_OPTIONS
+                 /clang:-mavx512vnni /clang:-mavx512vbmi)
+  endif()
   set_source_files_properties(src/kernels/cpu/q2_avx2.cpp PROPERTIES COMPILE_OPTIONS "/arch:AVX2")
 else()
   # GCC/Clang spell it differently, and `-mavx512vnni` alone is not enough: VBMI is a separate feature bit.
@@ -2132,11 +2141,22 @@ if(STRATA_NATIVE_EXPERTS)
   if(MSVC)
     set_source_files_properties(src/kernels/cpu/iq_avx512.cpp src/kernels/cpu/nvfp4_avx512.cpp
                                 PROPERTIES COMPILE_OPTIONS "/arch:AVX512")
+    if(CMAKE_CXX_COMPILER_ID MATCHES "^(Clang|IntelLLVM)$")
+      # clang-cl/icx-cl's /arch:AVX512 does not enable the kernels' extra feature bits.
+      set_property(SOURCE src/kernels/cpu/nvfp4_avx512.cpp APPEND PROPERTY COMPILE_OPTIONS
+                   /clang:-mavx512vnni)
+      set_property(SOURCE src/kernels/cpu/iq_avx512.cpp APPEND PROPERTY COMPILE_OPTIONS
+                   /clang:-mavx512vnni /clang:-mavx512vpopcntdq)
+    endif()
     set_source_files_properties(src/kernels/cpu/iq_avx2.cpp PROPERTIES COMPILE_OPTIONS "/arch:AVX2")
     set_source_files_properties(src/kernels/cpu/kq_avx2.cpp PROPERTIES COMPILE_OPTIONS "/arch:AVX2")
     set_source_files_properties(src/kernels/cpu/nvfp4_avx2.cpp PROPERTIES COMPILE_OPTIONS "/arch:AVX2")
     set_source_files_properties(src/kernels/cpu/tq_avx2.cpp PROPERTIES COMPILE_OPTIONS "/arch:AVX2")
     set_source_files_properties(src/kernels/cpu/tq_avx512.cpp PROPERTIES COMPILE_OPTIONS "/arch:AVX512")
+    if(CMAKE_CXX_COMPILER_ID MATCHES "^(Clang|IntelLLVM)$")
+      set_property(SOURCE src/kernels/cpu/tq_avx512.cpp APPEND PROPERTY COMPILE_OPTIONS
+                   /clang:-mavx512vnni /clang:-mavx512vbmi)
+    endif()
     # the router lookahead's AVX1 dot (older CPUs; called behind cpu_avx1_ok): no FMA, no 256-bit integer ops
     set_source_files_properties(src/kernels/cpu/kq_avx1.cpp PROPERTIES COMPILE_OPTIONS "/arch:AVX")
     # the older CPUs' Q2_0 rows and activation quantizer (q2_avx1.cpp, issue #1699): 128-bit integer lanes,
@@ -2173,6 +2193,41 @@ if(STRATA_NATIVE_EXPERTS)
   endif()
   target_link_libraries(strata_kernels_cpu PUBLIC ggml-cpu ggml-base)
   target_compile_definitions(strata_kernels_cpu PUBLIC STRATA_NATIVE_EXPERTS=1)
+  # The helper PCs load only expert kernels through this C ABI, with no engine/session allocations.
+  option(STRATA_BUILD_NETWORK_BACKEND "Build the LAN expert worker library" ON)
+  option(STRATA_BUILD_NATIVE_CLUSTER "Build the native LAN launcher, worker and configuration runtime" OFF)
+  if(STRATA_BUILD_NETWORK_BACKEND)
+    set_target_properties(strata_kernels_cpu PROPERTIES POSITION_INDEPENDENT_CODE ON)
+    add_library(strata_network_backend SHARED src/program/network_backend.cpp)
+    target_link_libraries(strata_network_backend PRIVATE strata_kernels_cpu strata_warnings)
+    if(STRATA_ENABLE_CUDA OR STRATA_ENABLE_HIP)
+      set_target_properties(strata_kernels strata_core PROPERTIES POSITION_INDEPENDENT_CODE ON)
+      target_compile_definitions(strata_network_backend PRIVATE STRATA_NETWORK_GPU=1)
+      target_include_directories(strata_network_backend PRIVATE ${_strata_gpu_include_directories})
+      target_link_libraries(strata_network_backend PRIVATE strata_kernels ${_strata_gpu_runtime_target})
+    endif()
+    add_executable(strata-network-check tools/network_check.cpp src/core/network_experts.cpp)
+    target_link_libraries(strata-network-check PRIVATE strata_network_backend strata_kernels_cpu strata_warnings)
+    if(WIN32)
+      target_link_libraries(strata-network-check PRIVATE ws2_32)
+    endif()
+    if(STRATA_BUILD_NATIVE_CLUSTER)
+      # Reuse the JSON and public-domain SHA256 bundled with the same pinned
+      # llama.cpp checkout as ggml. No additional dependency download/version.
+      if(STRATA_GGML_DIR)
+        set(_strata_runtime_vendor "${STRATA_GGML_DIR}/vendor")
+      else()
+        set(_strata_runtime_vendor "${strata_llamacpp_SOURCE_DIR}/vendor")
+      endif()
+      if(NOT EXISTS "${_strata_runtime_vendor}/nlohmann/json.hpp" OR
+         NOT EXISTS "${_strata_runtime_vendor}/hash/sha256/sha256.c")
+        message(FATAL_ERROR "Native cluster needs vendor/nlohmann and vendor/hash/sha256 from the pinned llama.cpp checkout")
+      endif()
+      get_filename_component(_strata_text_llama "${_strata_runtime_vendor}" DIRECTORY)
+      include(cmake/native_text.cmake)
+      strata_add_native_text("${_strata_text_llama}")
+    endif()
+  endif()
   if(STRATA_BUILD_TESTS)
     # the Q5_1 block dequantizer (a Q5_1 PLE table) against ggml's, synthetic blocks: no model, no GPU
     add_executable(dequant_q5_1_test tests/core/dequant_q5_1_test.cpp)

@@ -95,3 +95,14 @@ node_modules/
 /build-spark/
 /build-vision-spark/
 /.venv-build/
+
+# Local temporary files, downloads, credentials, and verification artifacts.
+/tmp/
+
+# Keep local build drivers under version control, but ignore build products.
+!/build/
+/build/*
+!/build/README.md
+!/build/*.cmd
+!/build/*.py
+!/build/*.hip

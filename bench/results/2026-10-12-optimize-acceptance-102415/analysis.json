@@ -1,0 +1,151 @@
+{
+  "groups": {
+    "stage1-baseline": {
+      "measured_samples": 5,
+      "median_tok_s": 13.7427528451793,
+      "min_tok_s": 13.102001125953223,
+      "max_tok_s": 16.16365702740245,
+      "sample_p95_decode_ms": 19539,
+      "median_prompt_ms": 1331,
+      "median_prompt_plus_decode_ms": 19986,
+      "output_hashes": [
+        "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5"
+      ],
+      "engine_hashes": [
+        "82b111c65a753cb613cc7f7a0b378efe81d2eeb7b45815dbdcc5b3e1e5f61314"
+      ],
+      "actual_gpu_cache_slots": [
+        3107
+      ],
+      "actual_ram_gib": [
+        0
+      ],
+      "local_entries": 0,
+      "session_medians": [
+        13.7
+      ],
+      "drafts_accepted": [
+        171,
+        172
+      ],
+      "drafts_proposed": [
+        218,
+        219,
+        220
+      ]
+    },
+    "stage1-local-1g": {
+      "measured_samples": 5,
+      "median_tok_s": 13.807238013052155,
+      "min_tok_s": 13.296629096764141,
+      "max_tok_s": 16.137165910237016,
+      "sample_p95_decode_ms": 19253,
+      "median_prompt_ms": 5434,
+      "median_prompt_plus_decode_ms": 24045,
+      "output_hashes": [
+        "b9be43458abffee31b385a274e77cd12d32ecc04f5249145ca23b6c4c2f6fdd9",
+        "c86b0f2dda0ec518720beb6a8c5c961897c6237d4211a2bc9dbdf23b5c075d1a",
+        "e68c4437bcf032eed108453d4e35b449a795364a7fc089f7b5b36c8685b68adf"
+      ],
+      "engine_hashes": [
+        "82b111c65a753cb613cc7f7a0b378efe81d2eeb7b45815dbdcc5b3e1e5f61314"
+      ],
+      "actual_gpu_cache_slots": [
+        3107
+      ],
+      "actual_ram_gib": [
+        1.0
+      ],
+      "local_entries": 15201,
+      "session_medians": [
+        13.8
+      ],
+      "drafts_accepted": [
+        172,
+        177,
+        180,
+        181
+      ],
+      "drafts_proposed": [
+        207,
+        210,
+        217,
+        223
+      ]
+    },
+    "stage2-baseline": {
+      "measured_samples": 10,
+      "median_tok_s": 15.355753367533312,
+      "min_tok_s": 13.235446179298934,
+      "max_tok_s": 16.488470951951566,
+      "sample_p95_decode_ms": 19342,
+      "median_prompt_ms": 1300.5,
+      "median_prompt_plus_decode_ms": 17996.5,
+      "output_hashes": [
+        "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5"
+      ],
+      "engine_hashes": [
+        "82b111c65a753cb613cc7f7a0b378efe81d2eeb7b45815dbdcc5b3e1e5f61314"
+      ],
+      "actual_gpu_cache_slots": [
+        3107
+      ],
+      "actual_ram_gib": [
+        0
+      ],
+      "local_entries": 0,
+      "session_medians": [
+        16.0,
+        14.8
+      ],
+      "drafts_accepted": [
+        171,
+        172
+      ],
+      "drafts_proposed": [
+        218,
+        219,
+        220
+      ]
+    },
+    "stage2-fast-io": {
+      "measured_samples": 10,
+      "median_tok_s": 15.885515299624341,
+      "min_tok_s": 13.26631082551692,
+      "max_tok_s": 16.467258458767528,
+      "sample_p95_decode_ms": 19297,
+      "median_prompt_ms": 1309.0,
+      "median_prompt_plus_decode_ms": 17461.5,
+      "output_hashes": [
+        "2a0faae42c05ab9fb2f625e1c9780478dc642b7a6c91869124f4e99dd71137fe",
+        "cc4ad7a4a8bbd902c389f8b60400133445b64c7fd5ca494bcecf973c7b2c85b5"
+      ],
+      "engine_hashes": [
+        "82b111c65a753cb613cc7f7a0b378efe81d2eeb7b45815dbdcc5b3e1e5f61314"
+      ],
+      "actual_gpu_cache_slots": [
+        3107
+      ],
+      "actual_ram_gib": [
+        0
+      ],
+      "local_entries": 0,
+      "session_medians": [
+        16.2,
+        15.7
+      ],
+      "drafts_accepted": [
+        171,
+        172
+      ],
+      "drafts_proposed": [
+        218,
+        219,
+        220
+      ]
+    }
+  },
+  "stage2_median_change_percent": 3.4499247247035347,
+  "stage2_output_hashes_match": false,
+  "stage2_cache_slots_match": true
+}
